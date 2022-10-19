@@ -279,7 +279,7 @@ vendors.js
 *.min.js
 .env
 .envs/*
-.envs/.local/*
-.local/*
+!.envs/.local/*
+
 
 .vscode/

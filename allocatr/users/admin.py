@@ -15,15 +15,16 @@ class UserAdmin(BaseUserAdmin):
     form = UserAdminChangeForm
     model = User
     list_display = [
-        "id",
+        "get_full_name",
         "email",
         "username",
         "first_name",
         "last_name",
         "is_staff",
         "is_active",
+        "is_superuser",
     ]
-    list_display_links = ["id", "email"]
+    list_display_links = ["get_full_name", "email"]
     list_filter = ["email", "username", "first_name", "last_name", "is_staff"]
     fieldsets = (
         (

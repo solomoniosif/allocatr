@@ -43,5 +43,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     def get_full_name(self):
         return f"{self.first_name.title()} {self.last_name.title()}"
 
+    get_full_name.fget.short_description = "Full name"
+
     def get_short_name(self):
         return self.first_name
