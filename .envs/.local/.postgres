@@ -1,7 +1,0 @@
-# PostgreSQL
-# ------------------------------------------------------------------------------
-POSTGRES_HOST=localhost
-POSTGRES_PORT=5432
-POSTGRES_DB=allocatr
-POSTGRES_USER=iosifs
-POSTGRES_PASSWORD=
