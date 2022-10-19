@@ -43,4 +43,4 @@ class Category(TimeStampedUUIDModel):
         ordering = ["group", "name"]
 
     def __str__(self):
-        return f"{self.get_group_display().upper()} / {self.name}"
+        return self.name

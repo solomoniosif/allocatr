@@ -23,7 +23,7 @@ class Budget(TimeStampedUUIDModel):
     start_day = models.DateField(verbose_name=_("Start day"))
     end_day = models.DateField(verbose_name=_("End day"))
     amount = models.DecimalField(
-        verbose_name=_("Amount"), max_digits=10, decimal_places=2, default=0
+        verbose_name=_("Budgeted mount"), max_digits=10, decimal_places=2, default=0
     )
 
     def __str__(self):
