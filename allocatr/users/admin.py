@@ -1,23 +1,46 @@
 from django.contrib import admin
-from django.contrib.auth import admin as auth_admin
 from django.contrib.auth import get_user_model
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.translation import gettext_lazy as _
 
-from allocatr.users.forms import UserAdminChangeForm, UserAdminCreationForm
+from .forms import UserAdminChangeForm, UserAdminCreationForm
 
 User = get_user_model()
 
 
 @admin.register(User)
-class UserAdmin(auth_admin.UserAdmin):
-
-    form = UserAdminChangeForm
+class UserAdmin(BaseUserAdmin):
+    ordering = ["email"]
     add_form = UserAdminCreationForm
+    form = UserAdminChangeForm
+    model = User
+    list_display = [
+        "id",
+        "email",
+        "username",
+        "first_name",
+        "last_name",
+        "is_staff",
+        "is_active",
+    ]
+    list_display_links = ["id", "email"]
+    list_filter = ["email", "username", "first_name", "last_name", "is_staff"]
     fieldsets = (
-        (None, {"fields": ("username", "password")}),
-        (_("Personal info"), {"fields": ("name", "email")}),
         (
-            _("Permissions"),
+            _("Login Credentials"),
+            {
+                "fields": (
+                    "email",
+                    "password",
+                )
+            },
+        ),
+        (
+            _("Personal Information"),
+            {"fields": ("username", "first_name", "last_name")},
+        ),
+        (
+            _("Permissions and Groups"),
             {
                 "fields": (
                     "is_active",
@@ -25,10 +48,18 @@ class UserAdmin(auth_admin.UserAdmin):
                     "is_superuser",
                     "groups",
                     "user_permissions",
-                ),
+                )
             },
         ),
-        (_("Important dates"), {"fields": ("last_login", "date_joined")}),
+        (_("Important Dates"), {"fields": ("last_login", "date_joined")}),
     )
-    list_display = ["username", "name", "is_superuser"]
-    search_fields = ["name"]
+    add_fieldsets = (
+        (
+            None,
+            {
+                "classes": ("wide",),
+                "fields": ("email", "password1", "password2", "is_staff", "is_active"),
+            },
+        ),
+    )
+    search_fields = ["email", "username", "first_name", "last_name"]

@@ -71,10 +71,13 @@ THIRD_PARTY_APPS = [
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
+    "colorfield",
 ]
 
 LOCAL_APPS = [
     "allocatr.users",
+    "allocatr.common",
+    "allocatr.core",
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
