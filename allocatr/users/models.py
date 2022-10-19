@@ -19,19 +19,22 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(
         verbose_name=_("email address"), db_index=True, unique=True
     )
+    profile_photo = models.ImageField(
+        verbose_name=_("User profile photo"), default="images/default_profile_icon.png"
+    )
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
 
     date_joined = models.DateTimeField(default=timezone.now)
 
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["username", "first_name", "last_name"]
+    REQUIRED_FIELDS = ["username", "first_name", "last_name", "email"]
 
     objects = CustomUserManager()
 
     class Meta:
-        verbose_name = _("user")
-        verbose_name_plural = _("users")
+        verbose_name = _("User")
+        verbose_name_plural = _("Users")
 
     def __str__(self):
         return self.username
