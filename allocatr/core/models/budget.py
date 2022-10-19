@@ -2,7 +2,7 @@ from common.models import TimeStampedUUIDModel
 from django.db import models
 from django.utils.translation import gettext as _
 
-from . import Category
+from .category import Category
 
 
 class Budget(TimeStampedUUIDModel):
