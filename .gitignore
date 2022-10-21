@@ -285,3 +285,8 @@ vendors.js
 .vscode/
 
 TODO.md
+
+_old/
+allocatr/templates/_temp/
+
+webpack.config.js
