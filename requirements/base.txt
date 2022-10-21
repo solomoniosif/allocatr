@@ -17,3 +17,4 @@ crispy-bootstrap5==0.7  # https://github.com/django-crispy-forms/crispy-bootstra
 django-redis==5.2.0  # https://github.com/jazzband/django-redis
 django-colorfield==0.7.2 # https://github.com/fabiocaccamo/django-colorfield
 django-jazzmin==2.5.0 # https://github.com/farridav/django-jazzmin
+django-widget-tweaks==1.4.12 # https://github.com/jazzband/django-widget-tweaks
