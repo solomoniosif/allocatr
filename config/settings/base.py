@@ -279,6 +279,7 @@ JAZZMIN_SETTINGS = {
     "site_title": "allocatr",
     "site_header": "allocatr",
     "site_brand": "allocatr",
+    "site_logo": "images/allocatr-logo-square.png",
     "welcome_sign": "Welcome to allocatr!",
     "search_model": "users.User",
     "user_avatar": "profile_photo",
