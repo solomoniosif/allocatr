@@ -1,101 +1,113 @@
 {% load static i18n %}<!DOCTYPE html>
 {% get_current_language as LANGUAGE_CODE %}
 <html lang="{{ LANGUAGE_CODE }}">
-  <head>
+
+<head>
     <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>{% block title %}allocatr{% endblock title %}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Personal finance management app built with Django">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
+    <title>{% block title %}allocatr »{% endblock title %}</title>
+    <meta name="description" content="Budgeting and personal finances tracker app built with Django">
     <meta name="author" content="Iosif Solomon">
 
-    <link rel="icon" href="{% static 'images/favicons/favicon.ico' %}">
+    <link rel="icon" type="image/x-icon" href="{% static 'images/allocatr-logo-square.png' %}"/>
 
     {% block css %}
-    <!-- Your stuff: Third-party CSS libraries go here -->
+        <link href="{% static 'cork/vertical-light-menu/css/light/loader.css' %}" rel="stylesheet" type="text/css" />
+        <link href="{% static 'cork/vertical-light-menu/css/dark/loader.css' %}" rel="stylesheet" type="text/css" />
+        <script defer src="{% static 'cork/vertical-light-menu/loader.js' %}"></script>
 
-    <!-- This file stores project-specific CSS -->
-    <link href="{% static 'css/project.min.css' %}" rel="stylesheet">
+        <!-- BEGIN GLOBAL MANDATORY STYLES -->
+        <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700" rel="stylesheet">
+        <link href="{% static 'cork/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css" />
+        <link href="{% static 'cork/vertical-light-menu/css/light/plugins.css' %}" rel="stylesheet" type="text/css" />
+        <link href="{% static 'cork/vertical-light-menu/css/dark/plugins.css' %}" rel="stylesheet" type="text/css" />
+        <!-- END GLOBAL MANDATORY STYLES -->
+
+        <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM STYLES -->
+        <link href="{% static 'cork/plugins/src/apex/apexcharts.css' %}" rel="stylesheet" type="text/css">
+        <link href="{% static 'cork/assets/css/light/dashboard/dash_1.css' %}" rel="stylesheet" type="text/css" />
+        <link href="{% static 'cork/assets/css/dark/dashboard/dash_1.css' %}" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" type="text/css" href="{% static 'cork/plugins/src/table/datatable/datatables.css' %}">
+
+        {% comment %} <link rel="stylesheet" type="text/css" href="{% static 'cork/plugins/css/light/table/datatable/dt-global_style.css' %}"> {% endcomment %}
+        <link rel="stylesheet" type="text/css" href="{% static 'cork/plugins/css/light/table/datatable/custom_dt_custom.css' %}">
+
+        {% comment %} <link rel="stylesheet" type="text/css" href="{% static 'cork/plugins/css/dark/table/datatable/dt-global_style.css' %}"> {% endcomment %}
+        <link rel="stylesheet" type="text/css" href="{% static 'cork/plugins/css/dark/table/datatable/custom_dt_custom.css' %}">
+        <!-- END PAGE LEVEL PLUGINS/CUSTOM STYLES -->
     {% endblock %}
-    <!-- Le javascript
-    ================================================== -->
-    {# Placed at the top of the document so pages load faster with defer #}
+
     {% block javascript %}
-      <!-- Vendor dependencies bundled as one file-->
-      <script defer src="{% static 'js/vendors.min.js' %}"></script>
+        <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
+        <script defer src="{% static 'js/htmx.min.js' %}"></script>
+        <script defer src="{% static 'cork/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+        <script defer src="{% static 'cork/plugins/src/font-icons/feather/feather.min.js' %}"></script>
+        <script defer src="{% static 'cork/plugins/src/perfect-scrollbar/perfect-scrollbar.min.js' %}"></script>
+        <script defer src="{% static 'cork/plugins/src/mousetrap/mousetrap.min.js' %}"></script>
+        <script defer src="{% static 'cork/plugins/src/waves/waves.min.js' %}"></script>
+        <script defer src="{% static 'cork/vertical-light-menu/app.js' %}"></script>
+        <script src="{% static 'cork/assets/js/custom.js' %}"></script>
+        <!-- END GLOBAL MANDATORY SCRIPTS -->
 
-      <!-- place project specific Javascript in this file -->
-      <script defer src="{% static 'js/project.min.js' %}"></script>
-
+        <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
+        <script defer src="{% static 'cork/plugins/src/apex/apexcharts.min.js' %}"></script>
+        <script defer src="{% static 'cork/assets/js/dashboard/dash_1.js' %}"></script>
+        <script src="{% static 'cork/plugins/src/table/datatable/datatables.js' %}"></script>
+        <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
     {% endblock javascript %}
 
-  </head>
+</head>
 
-  <body>
+<body class="layout-boxed" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+    {% if request.user.is_authenticated %}
+        <!-- BEGIN LOADER -->
+        <div id="load_screen"> <div class="loader">
+        <div class="loader-content">
+        <div class="spinner-grow align-self-center"></div>
+        </div></div></div>
+        <!--  END LOADER -->
 
-    <div class="mb-1">
-      <nav class="navbar navbar-expand-md navbar-light bg-light">
-        <div class="container-fluid">
-          <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <a class="navbar-brand" href="{% url 'home' %}">allocatr</a>
+        <!--  BEGIN NAVBAR  -->
+        {% include "partials/_navbar.html" %}
+        <!--  END NAVBAR  -->
 
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-              <li class="nav-item active">
-                <a class="nav-link" href="{% url 'home' %}">Home <span class="visually-hidden">(current)</span></a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'about' %}">About</a>
-              </li>
-              {% if request.user.is_authenticated %}
-                <li class="nav-item">
-                  {# URL provided by django-allauth/account/urls.py #}
-                  <a class="nav-link" href="{% url 'users:detail' request.user.username  %}">{% translate "My Profile" %}</a>
-                </li>
-                <li class="nav-item">
-                  {# URL provided by django-allauth/account/urls.py #}
-                  <a class="nav-link" href="{% url 'account_logout' %}">{% translate "Sign Out" %}</a>
-                </li>
-              {% else %}
-                {% if ACCOUNT_ALLOW_REGISTRATION %}
-              <li class="nav-item">
-                {# URL provided by django-allauth/account/urls.py #}
-                <a id="sign-up-link" class="nav-link" href="{% url 'account_signup' %}">{% translate "Sign Up" %}</a>
-              </li>
-              {% endif %}
-                <li class="nav-item">
-                  {# URL provided by django-allauth/account/urls.py #}
-                  <a id="log-in-link" class="nav-link" href="{% url 'account_login' %}">{% translate "Sign In" %}</a>
-                </li>
-              {% endif %}
-            </ul>
-          </div>
+        <!--  BEGIN MAIN CONTAINER  -->
+        <div class="main-container" id="container">
+
+            <div class="overlay"></div>
+            <div class="cs-overlay"></div>
+            <div class="search-overlay"></div>
+
+            <!--  BEGIN SIDEBAR  -->
+            {% include "partials/_sidebar.html" %}
+            <!--  END SIDEBAR  -->
+
+            <!--  BEGIN CONTENT AREA  -->
+            <div id="content" class="main-content">
+                <div class="layout-px-spacing">
+                    <div class="middle-content container-xxl p-0">
+
+                            {% block content %}
+                            <p>Use this document as a way to quick start any new project.</p>
+                            {% endblock content %}
+
+                    </div>
+                </div>
+
+                <!--  BEGIN FOOTER  -->
+                {% include "partials/_footer.html" %}
+                <!--  END FOOTER  -->
+
+            </div>
+            <!--  END CONTENT AREA  -->
+
         </div>
-      </nav>
-
-    </div>
-
-    <div class="container">
-
-      {% if messages %}
-        {% for message in messages %}
-          <div class="alert alert-dismissible {% if message.tags %}alert-{{ message.tags }}{% endif %}">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-          </div>
-        {% endfor %}
-      {% endif %}
-
-      {% block content %}
-        <p>Use this document as a way to quick start any new project.</p>
-      {% endblock content %}
-
-    </div> <!-- /container -->
-
-    {% block modal %}{% endblock modal %}
-
+        <!-- END MAIN CONTAINER -->
+    {% else %}
+        <a class="btn btn-primary" href="{% url 'account_login' %}">Login</a>
+        <a class="btn btn-primary" href="{% url 'account_signup' %}">Register</a>
+    {% endif %}
     {% block inline_javascript %}
     {% comment %}
     Script tags with only code, no src (defer by default). To run
@@ -104,6 +116,89 @@
       window.addEventListener('DOMContentLoaded', () => {/* Run whatever you want */});
     </script>
     {% endcomment %}
+
     {% endblock inline_javascript %}
-  </body>
+    <script>
+        // var e;
+        c1 = $('#style-1').DataTable({
+            headerCallback:function(e, a, t, n, s) {
+                e.getElementsByTagName("th")[0].innerHTML=`
+                <div class="form-check form-check-primary d-block">
+                    <input class="form-check-input chk-parent" type="checkbox" id="form-check-default">
+                </div>`
+            },
+            columnDefs:[ {
+                targets:0, width:"30px", className:"", orderable:!1, render:function(e, a, t, n) {
+                    return `
+                    <div class="form-check form-check-primary d-block">
+                        <input class="form-check-input child-chk" type="checkbox" id="form-check-default">
+                    </div>`
+                }
+            }],
+            "dom": "<'dt--top-section'<'row'<'col-12 col-sm-6 d-flex justify-content-sm-start justify-content-center'l><'col-12 col-sm-6 d-flex justify-content-sm-end justify-content-center mt-sm-0 mt-3'f>>>" +
+        "<'table-responsive'tr>" +
+        "<'dt--bottom-section d-sm-flex justify-content-sm-between text-center'<'dt--pages-count  mb-sm-0 mb-3'i><'dt--pagination'p>>",
+            "oLanguage": {
+                "oPaginate": { "sPrevious": '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>', "sNext": '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>' },
+                "sInfo": "Showing page _PAGE_ of _PAGES_",
+                "sSearch": '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>',
+                "sSearchPlaceholder": "Search...",
+               "sLengthMenu": "Results :  _MENU_",
+            },
+            "lengthMenu": [5, 10, 20, 50],
+            "pageLength": 10
+        });
+
+        multiCheck(c1);
+
+        c2 = $('#style-2').DataTable({
+            headerCallback:function(e, a, t, n, s) {
+                e.getElementsByTagName("th")[0].innerHTML=`
+                <div class="form-check form-check-primary d-block new-control">
+                    <input class="form-check-input chk-parent" type="checkbox" id="form-check-default">
+                </div>`
+            },
+            columnDefs:[ {
+                targets:0, width:"30px", className:"", orderable:!1, render:function(e, a, t, n) {
+                    return `
+                    <div class="form-check form-check-primary d-block new-control">
+                        <input class="form-check-input child-chk" type="checkbox" id="form-check-default">
+                    </div>`
+                }
+            }],
+            "dom": "<'dt--top-section'<'row'<'col-12 col-sm-6 d-flex justify-content-sm-start justify-content-center'l><'col-12 col-sm-6 d-flex justify-content-sm-end justify-content-center mt-sm-0 mt-3'f>>>" +
+        "<'table-responsive'tr>" +
+        "<'dt--bottom-section d-sm-flex justify-content-sm-between text-center'<'dt--pages-count  mb-sm-0 mb-3'i><'dt--pagination'p>>",
+            "oLanguage": {
+                "oPaginate": { "sPrevious": '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>', "sNext": '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>' },
+                "sInfo": "Showing page _PAGE_ of _PAGES_",
+                "sSearch": '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>',
+                "sSearchPlaceholder": "Search...",
+               "sLengthMenu": "Results :  _MENU_",
+            },
+            "lengthMenu": [5, 10, 20, 50],
+            "pageLength": 10
+        });
+
+        multiCheck(c2);
+
+        c3 = $('#style-3').DataTable({
+            "dom": "<'dt--top-section'<'row'<'col-12 col-sm-6 d-flex justify-content-sm-start justify-content-center'l><'col-12 col-sm-6 d-flex justify-content-sm-end justify-content-center mt-sm-0 mt-3'f>>>" +
+        "<'table-responsive'tr>" +
+        "<'dt--bottom-section d-sm-flex justify-content-sm-between text-center'<'dt--pages-count  mb-sm-0 mb-3'i><'dt--pagination'p>>",
+            "oLanguage": {
+                "oPaginate": { "sPrevious": '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>', "sNext": '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>' },
+                "sInfo": "Showing page _PAGE_ of _PAGES_",
+                "sSearch": '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>',
+                "sSearchPlaceholder": "Search...",
+               "sLengthMenu": "Results :  _MENU_",
+            },
+            "stripeClasses": [],
+            "lengthMenu": [5, 10, 20, 50],
+            "pageLength": 10
+        });
+
+        multiCheck(c3);
+    </script>
+</body>
 </html>
