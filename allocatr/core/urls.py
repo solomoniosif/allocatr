@@ -4,7 +4,7 @@ from allocatr.core import views
 
 app_name = "core"
 urlpatterns = [
-    path("", views.dashboard_home, name="home"),
+    path("", views.DashboardHome.as_view(), name="home"),
 ]
 
 htmx_urlpatterns = [
