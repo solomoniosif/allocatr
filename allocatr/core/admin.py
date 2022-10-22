@@ -23,7 +23,7 @@ class AccountAdmin(admin.ModelAdmin):
     list_display = (
         "user",
         "name",
-        "account_type",
+        "type",
         "balance",
         "currency",
         "active",
@@ -38,8 +38,8 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Transaction)
 class TransactionAdmin(admin.ModelAdmin):
-    list_display = ("transaction_type", "title", "amount", "date", "account", "notes")
-    list_filter = ("transaction_type", "account")
+    list_display = ("type", "title", "amount", "date", "account", "notes")
+    list_filter = ("type", "account")
     search_fields = ("title",)
     date_hierarchy = "date"
 
@@ -58,8 +58,8 @@ class IncomeAdmin(admin.ModelAdmin):
         form = super().get_form(request, obj, **kwargs)
         income_categories = Category.objects.filter(group=Category.Group.INCOME)
         form.base_fields["category"].queryset = income_categories
-        form.base_fields["transaction_type"].initial = "IN"
-        form.base_fields["transaction_type"].widget = forms.HiddenInput()
+        form.base_fields["type"].initial = "IN"
+        form.base_fields["type"].widget = forms.HiddenInput()
         form.base_fields["dest_account"].widget = forms.HiddenInput()
         return form
 
@@ -72,8 +72,8 @@ class ExpenseAdmin(admin.ModelAdmin):
         form = super().get_form(request, obj, **kwargs)
         income_categories = Category.objects.filter(group=Category.Group.EXPENSE)
         form.base_fields["category"].queryset = income_categories
-        form.base_fields["transaction_type"].initial = "EX"
-        form.base_fields["transaction_type"].widget = forms.HiddenInput()
+        form.base_fields["type"].initial = "EX"
+        form.base_fields["type"].widget = forms.HiddenInput()
         form.base_fields["dest_account"].widget = forms.HiddenInput()
         return form
 
@@ -86,8 +86,8 @@ class TransferAdmin(admin.ModelAdmin):
         form = super().get_form(request, obj, **kwargs)
         income_categories = Category.objects.filter(group=Category.Group.TRANSFER)
         form.base_fields["category"].queryset = income_categories
-        form.base_fields["transaction_type"].initial = "TR"
-        form.base_fields["transaction_type"].widget = forms.HiddenInput()
+        form.base_fields["type"].initial = "TR"
+        form.base_fields["type"].widget = forms.HiddenInput()
         form.base_fields["account"].label = "Source account"
         form.base_fields["dest_account"].label = "Destination account"
         return form
