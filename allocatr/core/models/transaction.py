@@ -20,7 +20,7 @@ class Transaction(TimeStampedUUIDModel):
     title = models.CharField(verbose_name=_("Title"), max_length=100)
     amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     date = models.DateField(default=date.today)
-    transaction_type = models.CharField(
+    type = models.CharField(
         verbose_name=_("Transaction type"),
         max_length=2,
         choices=TransactionType.choices,
@@ -74,14 +74,19 @@ class Transaction(TimeStampedUUIDModel):
     def __str__(self):
         return f"{self.get_transaction_type_display()} » {self.title} » {self.amount}{self.account.currency.code}"
 
+    def is_income(self):
+        return self.type == self.TransactionType.INCOME
+
+    def is_expense(self):
+        return self.type == self.TransactionType.EXPENSE
+
+    def is_transfer(self):
+        return self.type == self.TransactionType.TRANSFER
+
 
 class IncomeTransactionManager(models.Manager):
     def get_queryset(self):
-        return (
-            super()
-            .get_queryset()
-            .filter(transaction_type=Transaction.TransactionType.INCOME)
-        )
+        return super().get_queryset().filter(type=Transaction.TransactionType.INCOME)
 
     def create(self, **kwargs):
         kwargs.update({"transaction_type": Transaction.TransactionType.INCOME})
@@ -90,11 +95,7 @@ class IncomeTransactionManager(models.Manager):
 
 class ExpenseTransactionManager(models.Manager):
     def get_queryset(self):
-        return (
-            super()
-            .get_queryset()
-            .filter(transaction_type=Transaction.TransactionType.EXPENSE)
-        )
+        return super().get_queryset().filter(type=Transaction.TransactionType.EXPENSE)
 
     def create(self, **kwargs):
         kwargs.update({"transaction_type": Transaction.TransactionType.EXPENSE})
@@ -103,11 +104,7 @@ class ExpenseTransactionManager(models.Manager):
 
 class TransferTransactionManager(models.Manager):
     def get_queryset(self):
-        return (
-            super()
-            .get_queryset()
-            .filter(transaction_type=Transaction.TransactionType.TRANSFER)
-        )
+        return super().get_queryset().filter(type=Transaction.TransactionType.TRANSFER)
 
     def create(self, **kwargs):
         kwargs.update({"transaction_type": Transaction.TransactionType.TRANSFER})

@@ -61,7 +61,7 @@ class Account(TimeStampedUUIDModel):
         User, verbose_name=_("User"), related_name="accounts", on_delete=models.CASCADE
     )
     name = models.CharField(verbose_name=_("Name"), max_length=50)
-    account_type = models.CharField(
+    type = models.CharField(
         verbose_name=_("Type"),
         max_length=2,
         choices=AccountType.choices,
@@ -89,7 +89,7 @@ class Account(TimeStampedUUIDModel):
 
     class Meta:
         ordering = ["-active", "name"]
-        unique_together = (("name", "account_type"),)
+        unique_together = (("name", "type"),)
 
     def __str__(self):
         return f"{self.name.title()}"
