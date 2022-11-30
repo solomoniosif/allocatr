@@ -40,6 +40,7 @@
   },
   "dependencies": {
     "alpinejs": "^3.10.4",
-    "htmx.org": "^1.8.2"
+    "htmx.org": "^1.8.2",
+    "sweetalert2": "^11.6.1"
   }
 }

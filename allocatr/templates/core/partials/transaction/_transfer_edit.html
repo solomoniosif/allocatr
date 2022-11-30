@@ -1,0 +1,66 @@
+{% load widget_tweaks %}
+{% with WIDGET_ERROR_CLASS='is-invalid' %}
+
+<form
+    hx-post="{% url 'core:edit_transfer' transfer.pk %}"
+    _="on transferEdited call Swal.fire({title: 'Transfer updated', icon: 'success', timer: 2000})"
+    class="modal-content"
+    >
+    <div class="modal-header" id="modalLabel">
+        <h3 class="modal-title">Edit <b>{{ transfer.title }}</b></h3>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+    </div>
+
+    <div class="modal-body row g-3">
+
+        {% for hidden in form.hidden_fields %} {{ hidden }} {% endfor %}
+
+        <div class="col-12">
+            <label for="{{ form.title.id_for_label }}">{{ form.title.label }}</label>
+            {% render_field form.title class+="form-control" type="text" %}
+            {% for error in form.title.errors %}<span class="help-block">{{ error }}</span>{% endfor %}
+        </div>
+
+        <div class="col-md-6">
+            <label for="{{ form.amount.id_for_label }}">{{ form.amount.label }}</label>
+            {% render_field form.amount class+="form-control" %}
+            {% for error in form.amount.errors %}<span class="help-block">{{ error }}</span>{% endfor %}
+        </div>
+
+        <div class="col-md-6">
+            <label for="{{ form.category.id_for_label }}">{{ form.category.label }}</label>
+            {% render_field form.category class+="form-control" %}
+            {% for error in form.category.errors %}<span class="help-block">{{ error }}</span>{% endfor %}
+        </div>
+
+        <div class="col-md-6">
+            <label for="{{ form.account.id_for_label }}">{{ form.account.label }}</label>
+            {% render_field form.account class+="form-control" %}
+            {% for error in form.account.errors %}<span class="help-block">{{ error }}</span>{% endfor %}
+        </div>
+
+        <div class="col-md-6">
+            <label for="{{ form.dest_account.id_for_label }}">{{ form.dest_account.label }}</label>
+            {% render_field form.dest_account class+="form-control" %}
+            {% for error in form.dest_account.errors %}<span class="help-block">{{ error }}</span>{% endfor %}
+        </div>
+
+        <div class="col-md-6">
+            <label for="{{ form.date.id_for_label }}">{{ form.date.label }}</label>
+            {% render_field form.date class+="form-control" type="date" placeholder="Date" %}
+            {% for error in form.date.errors %}<span class="help-block">{{ error }}</span>{% endfor %}
+        </div>
+
+        <div class="col-12">
+            <label for="{{ form.notes.id_for_label }}">{{ form.notes.label }}</label>
+            {% render_field form.notes rows="2" class+="form-control" %}
+            {% for error in form.notes.errors %}<span class="help-block">{{ error }}</span>{% endfor %}
+        </div>
+
+        <div class="col-12 d-flex justify-content-end">
+            <button type="submit" class="btn btn-light-danger m-2 " data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-primary m-2">Update</button>
+        </div>
+    </div>
+</form>
+{% endwith %}

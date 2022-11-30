@@ -3,6 +3,7 @@ from datetime import date
 from common.models import TimeStampedUUIDModel
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.urls import reverse
 from django.utils.translation import gettext as _
 
 from .account import Account
@@ -44,20 +45,19 @@ class Transaction(TimeStampedUUIDModel):
         Category, verbose_name=_("Category"), on_delete=models.PROTECT
     )
 
+    def get_absolute_url(self):
+        return reverse("core:transaction-detail", kwargs={"pk": self.pk})
+
     def clean(self):
         if (
-            self.transaction_type
-            in [self.TransactionType.EXPENSE, self.TransactionType.TRANSFER]
+            self.type in [self.TransactionType.EXPENSE, self.TransactionType.TRANSFER]
             and not self.account.balance_can_be_negative
             and self.account.balance < self.amount
         ):
             raise ValidationError(
                 _("Transaction amount is higher than account balance!")
             )
-        if (
-            self.transaction_type == self.TransactionType.TRANSFER
-            and not self.dest_account
-        ):
+        if self.type == self.TransactionType.TRANSFER and not self.dest_account:
             raise ValidationError(
                 _("For a transfer transaction a destination account must be specified!")
             )
@@ -65,14 +65,14 @@ class Transaction(TimeStampedUUIDModel):
     def save(self, *args, **kwargs):
         self.full_clean()
         if not self.pkid:
-            self.transaction_type = self.default_type
-        if self.transaction_type == self.TransactionType.INCOME:
+            self.type = self.default_type
+        if self.type == self.TransactionType.INCOME:
             self.account.balance += self.amount
 
         return super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.get_transaction_type_display()} » {self.title} » {self.amount}{self.account.currency.code}"
+        return f"{self.get_type_display()} » {self.title} » {self.amount}{self.account.currency.code}"
 
     def is_income(self):
         return self.type == self.TransactionType.INCOME
@@ -89,7 +89,7 @@ class IncomeTransactionManager(models.Manager):
         return super().get_queryset().filter(type=Transaction.TransactionType.INCOME)
 
     def create(self, **kwargs):
-        kwargs.update({"transaction_type": Transaction.TransactionType.INCOME})
+        kwargs.update({"type": Transaction.TransactionType.INCOME})
         return super().create(**kwargs)
 
 
@@ -98,7 +98,7 @@ class ExpenseTransactionManager(models.Manager):
         return super().get_queryset().filter(type=Transaction.TransactionType.EXPENSE)
 
     def create(self, **kwargs):
-        kwargs.update({"transaction_type": Transaction.TransactionType.EXPENSE})
+        kwargs.update({"type": Transaction.TransactionType.EXPENSE})
         return super(IncomeTransactionManager, self).create(**kwargs)
 
 
@@ -107,7 +107,7 @@ class TransferTransactionManager(models.Manager):
         return super().get_queryset().filter(type=Transaction.TransactionType.TRANSFER)
 
     def create(self, **kwargs):
-        kwargs.update({"transaction_type": Transaction.TransactionType.TRANSFER})
+        kwargs.update({"type": Transaction.TransactionType.TRANSFER})
         return super(IncomeTransactionManager, self).create(**kwargs)
 
 

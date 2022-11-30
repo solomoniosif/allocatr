@@ -4,12 +4,12 @@ from .models import Transaction
 
 
 def update_transaction(old_t: Transaction, new_t: Transaction) -> None:
-    if old_t.transaction_type != new_t.transaction_type:
+    if old_t.type != new_t.type:
         raise ValidationError(
             "Cannot change transaction type. Delete the first transaction than add a new one."
         )
 
-    t_type = old_t.transaction_type
+    t_type = old_t.type
     if t_type == Transaction.TransactionType.INCOME:
         if old_t.account == new_t.account and old_t.amount == new_t.amount:
             pass

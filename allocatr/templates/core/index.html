@@ -118,43 +118,77 @@
         </div>
     </div>
 
-    {% comment %} <div class="col-xl-9 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">
-        <div class="widget widget-chart-three">
-            <div class="widget-heading">
-                <div class="">
-                    <h5 class="">Unique Visitors</h5>
-                </div>
 
-                <div class="task-action">
-                    <div class="dropdown ">
-                        <a class="dropdown-toggle" href="#" role="button" id="uniqueVisitors" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
-                        </a>
+    <div class="modal fade inputForm-modal" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document" id="dialog" hx-target="this">
+        </div>
+    </div>
 
-                        <div class="dropdown-menu left" aria-labelledby="uniqueVisitors">
-                            <a class="dropdown-item" href="javascript:void(0);">View</a>
-                            <a class="dropdown-item" href="javascript:void(0);">Update</a>
-                            <a class="dropdown-item" href="javascript:void(0);">Download</a>
-                        </div>
-                    </div>
-                </div>
+
+
+    <div
+        id="tableHover"
+        class="col-xl-9 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing"
+        >
+        <div class="statbox widget box box-shadow">
+        <div class="widget-header pt-2">
+            <div class="d-flex justify-content-between align-items-center">
+            <div class="">
+                <h4>Transactions</h4>
             </div>
-
-            <div class="widget-content">
-                <div id="uniqueVisits"></div>
+            <a
+                hx-get="{% url 'core:add_income' %}"
+                hx-trigger="click"
+                hx-target="#dialog"
+                class="mb-2 me-4 _effect--ripple waves-effect waves-light bs-tooltip"
+                data-bs-toggle="tooltip"
+                title="Add transaction"
+                data-bs-placement="top"
+            >
+                <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="feather feather-plus"
+                >
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+            </a>
             </div>
         </div>
-    </div> {% endcomment %}
+        <div class="widget-content widget-content-area">
+            <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th scope="col" class="fw-bolder">Type</th>
+                    <th scope="col" class="fw-bolder">Transaction</th>
+                    <th class="text-center" scope="col" class="fw-bolder">Amount</th>
+                    <th scope="col" class="fw-bolder">Date</th>
+                    <th class="text-center" scope="col" class="fw-bolder">Account</th>
+                    <th class="text-center" scope="col" class="fw-bolder">Actions</th>
+                </tr>
+                </thead>
+                <tbody
+                    hx-get="{% url 'core:transaction_list' %}"
+                    hx-trigger="load, transactionListChanged from:body"
+                    hx-target="this"
+                    >
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
 
 </div>
-<div
-    hx-get="{% url 'core:transaction_list' %}"
-    hx-trigger="load"
-    hx-target="#transaction-table"
-    >
-</div>
-
-<div  id="transaction-table" class="row layout-spacing"><div>
 
 
 {% endblock content %}

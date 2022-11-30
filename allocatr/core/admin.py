@@ -70,8 +70,8 @@ class ExpenseAdmin(admin.ModelAdmin):
 
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
-        income_categories = Category.objects.filter(group=Category.Group.EXPENSE)
-        form.base_fields["category"].queryset = income_categories
+        expense_categories = Category.objects.filter(group=Category.Group.EXPENSE)
+        form.base_fields["category"].queryset = expense_categories
         form.base_fields["type"].initial = "EX"
         form.base_fields["type"].widget = forms.HiddenInput()
         form.base_fields["dest_account"].widget = forms.HiddenInput()
@@ -84,8 +84,8 @@ class TransferAdmin(admin.ModelAdmin):
 
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
-        income_categories = Category.objects.filter(group=Category.Group.TRANSFER)
-        form.base_fields["category"].queryset = income_categories
+        transfer_categories = Category.objects.filter(group=Category.Group.TRANSFER)
+        form.base_fields["category"].queryset = transfer_categories
         form.base_fields["type"].initial = "TR"
         form.base_fields["type"].widget = forms.HiddenInput()
         form.base_fields["account"].label = "Source account"

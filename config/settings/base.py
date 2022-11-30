@@ -72,6 +72,10 @@ THIRD_PARTY_APPS = [
     "allauth.account",
     "allauth.socialaccount",
     "colorfield",
+    "widget_tweaks",
+    "django_tables2",
+    "django_filters",
+    "django_htmx",
 ]
 
 LOCAL_APPS = [
@@ -132,6 +136,7 @@ MIDDLEWARE = [
     "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
+    "django_htmx.middleware.HtmxMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.common.BrokenLinkEmailsMiddleware",
@@ -182,6 +187,7 @@ TEMPLATES = [
                 "django.template.context_processors.tz",
                 "django.contrib.messages.context_processors.messages",
                 "allocatr.users.context_processors.allauth_settings",
+                "django.template.context_processors.request",
             ],
         },
     }
