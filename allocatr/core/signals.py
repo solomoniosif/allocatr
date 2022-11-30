@@ -1,11 +1,11 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from .models.transaction import Income, Transaction
+from .models.transaction import Transaction
 from .utils import update_transaction
 
 
-@receiver(post_save, sender=Income)
+@receiver(post_save, sender=Transaction)
 def update_account_balance(sender, instance, created, **kwargs):
     if instance.pkid is not None:
         current_transaction = instance

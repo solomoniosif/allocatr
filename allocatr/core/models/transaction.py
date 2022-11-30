@@ -84,52 +84,52 @@ class Transaction(TimeStampedUUIDModel):
         return self.type == self.TransactionType.TRANSFER
 
 
-class IncomeTransactionManager(models.Manager):
-    def get_queryset(self):
-        return super().get_queryset().filter(type=Transaction.TransactionType.INCOME)
+# class IncomeTransactionManager(models.Manager):
+#     def get_queryset(self):
+#         return super().get_queryset().filter(type=Transaction.TransactionType.INCOME)
 
-    def create(self, **kwargs):
-        kwargs.update({"type": Transaction.TransactionType.INCOME})
-        return super().create(**kwargs)
-
-
-class ExpenseTransactionManager(models.Manager):
-    def get_queryset(self):
-        return super().get_queryset().filter(type=Transaction.TransactionType.EXPENSE)
-
-    def create(self, **kwargs):
-        kwargs.update({"type": Transaction.TransactionType.EXPENSE})
-        return super(IncomeTransactionManager, self).create(**kwargs)
+#     def create(self, **kwargs):
+#         kwargs.update({"type": Transaction.TransactionType.INCOME})
+#         return super().create(**kwargs)
 
 
-class TransferTransactionManager(models.Manager):
-    def get_queryset(self):
-        return super().get_queryset().filter(type=Transaction.TransactionType.TRANSFER)
+# class ExpenseTransactionManager(models.Manager):
+#     def get_queryset(self):
+#         return super().get_queryset().filter(type=Transaction.TransactionType.EXPENSE)
 
-    def create(self, **kwargs):
-        kwargs.update({"type": Transaction.TransactionType.TRANSFER})
-        return super(IncomeTransactionManager, self).create(**kwargs)
-
-
-class Income(Transaction):
-    default_type = Transaction.TransactionType.INCOME
-    objects = IncomeTransactionManager()
-
-    class Meta:
-        proxy = True
+#     def create(self, **kwargs):
+#         kwargs.update({"type": Transaction.TransactionType.EXPENSE})
+#         return super(IncomeTransactionManager, self).create(**kwargs)
 
 
-class Expense(Transaction):
-    default_type = Transaction.TransactionType.EXPENSE
-    onjects = ExpenseTransactionManager()
+# class TransferTransactionManager(models.Manager):
+#     def get_queryset(self):
+#         return super().get_queryset().filter(type=Transaction.TransactionType.TRANSFER)
 
-    class Meta:
-        proxy = True
+#     def create(self, **kwargs):
+#         kwargs.update({"type": Transaction.TransactionType.TRANSFER})
+#         return super(IncomeTransactionManager, self).create(**kwargs)
 
 
-class Transfer(Transaction):
-    default_type = Transaction.TransactionType.TRANSFER
-    objects = TransferTransactionManager()
+# class Income(Transaction):
+#     default_type = Transaction.TransactionType.INCOME
+#     objects = IncomeTransactionManager()
 
-    class Meta:
-        proxy = True
+#     class Meta:
+#         proxy = True
+
+
+# class Expense(Transaction):
+#     default_type = Transaction.TransactionType.EXPENSE
+#     onjects = ExpenseTransactionManager()
+
+#     class Meta:
+#         proxy = True
+
+
+# class Transfer(Transaction):
+#     default_type = Transaction.TransactionType.TRANSFER
+#     objects = TransferTransactionManager()
+
+#     class Meta:
+#         proxy = True

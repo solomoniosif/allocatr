@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404, render
 from django.views.decorators.http import require_POST
 
 from .forms import ExpenseForm, IncomeForm, TransferForm
-from .models.transaction import Expense, Income, Transaction, Transfer
+from .models.transaction import Transaction
 
 
 def transaction_list(request):
@@ -41,7 +41,7 @@ def create_income(request):
 
 
 def edit_income(request, pk):
-    income = get_object_or_404(Income, pk=pk)
+    income = get_object_or_404(Transaction, pk=pk)
     if request.method == "POST":
         form = IncomeForm(request.POST, instance=income)
         if form.is_valid():
@@ -68,7 +68,7 @@ def edit_income(request, pk):
 
 @require_POST
 def delete_transaction(request, pk):
-    income = get_object_or_404(Income, pk=pk)
+    income = get_object_or_404(Transaction, pk=pk)
     income.delete()
     return HttpResponse(
         status=204,
@@ -101,7 +101,7 @@ def create_expense(request):
 
 
 def edit_expense(request, pk):
-    expense = get_object_or_404(Expense, pk=pk)
+    expense = get_object_or_404(Transaction, pk=pk)
     if request.method == "POST":
         form = ExpenseForm(request.POST, instance=expense)
         if form.is_valid():
@@ -147,7 +147,7 @@ def create_transfer(request):
 
 
 def edit_transfer(request, pk):
-    transfer = get_object_or_404(Transfer, pk=pk)
+    transfer = get_object_or_404(Transaction, pk=pk)
     if request.method == "POST":
         form = TransferForm(request.POST, instance=transfer)
         if form.is_valid():

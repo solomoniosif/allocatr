@@ -2,12 +2,12 @@ from django import forms
 from django.utils import timezone
 
 from .models.category import Category
-from .models.transaction import Expense, Income, Transfer
+from .models.transaction import Transaction
 
 
 class IncomeForm(forms.ModelForm):
     class Meta:
-        model = Income
+        model = Transaction
         fields = ("title", "amount", "date", "account", "category", "notes", "type")
 
     def __init__(self, *args, **kwargs):
@@ -21,7 +21,7 @@ class IncomeForm(forms.ModelForm):
 
 class ExpenseForm(forms.ModelForm):
     class Meta:
-        model = Expense
+        model = Transaction
         fields = ("title", "amount", "date", "account", "category", "notes", "type")
 
     def __init__(self, *args, **kwargs):
@@ -35,7 +35,7 @@ class ExpenseForm(forms.ModelForm):
 
 class TransferForm(forms.ModelForm):
     class Meta:
-        model = Transfer
+        model = Transaction
         fields = (
             "title",
             "amount",
