@@ -14,7 +14,7 @@ class User(AbstractUser):
     first_name = models.CharField(verbose_name=_("first name"), max_length=50)
     last_name = models.CharField(verbose_name=_("last name"), max_length=50)
     profile_photo = models.ImageField(
-        verbose_name=_("profile photo"), default="/profile_default.png"
+        verbose_name=_("profile photo"), default="https://eu2.contabostorage.com/84d43e83142241f5a2d61d2b3486c2bb:allocatr/media/profile_default.png"
     )
 
     def get_absolute_url(self):
