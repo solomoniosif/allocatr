@@ -281,7 +281,7 @@ JAZZMIN_SETTINGS = {
     # "site_logo": "images/allocatr-logo-square.png",
     "welcome_sign": "Welcome to allocatr!",
     "search_model": "users.User",
-    "user_avatar": "profile_photo",
+    # "user_avatar": "profile_photo",
     ############
     # Top Menu #
     ############
