@@ -1,0 +1,103 @@
+{% load widget_tweaks %}
+
+<!-- Modal Header -->
+<header class="flex justify-between pt-2">
+    <h1 class="text-2xl font-bold text-gray-700 dark:text-gray-200">Edit <span class="font-thin">{{ expense.title }}</span></h1>
+  <button
+    class="inline-flex items-center justify-center w-6 h-6 text-gray-400 transition-colors duration-150 rounded dark:hover:text-gray-200 hover: hover:text-gray-700 focus:outline-none"
+    aria-label="close"
+    @click="closeModal"
+  >
+    <svg
+      class="w-4 h-4"
+      fill="currentColor"
+      viewBox="0 0 20 20"
+      role="img"
+      aria-hidden="true"
+    > 
+      <path
+        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+        clip-rule="evenodd"
+        fill-rule="evenodd"
+      ></path>
+    </svg>
+  </button>
+</header>
+
+<div class="px-1 py-6 space-y-4 max-w-xl text-gray-900 dark:text-white">
+
+  {% with WIDGET_ERROR_CLASS='is-invalid' %}
+  <form
+    _="on expenseEdited call Swal.fire({title: 'Expense transaction updated', icon: 'success', timer: 2000})"
+    class="w-full max-w-lg" hx-post="{% url 'wallet:edit_expense' expense.pk %}" hx-headers='{"X-CSRFToken":"{{ csrf_token }}"}'>
+    {% for hidden in form.hidden_fields %} {{ hidden }} {% endfor %}
+
+    <div class="flex flex-wrap -mx-3 mb-6">
+        <!-- Title -->
+        <div class="w-full px-3">
+            <label for="{{ form.title.id_for_label }}" class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 dark:text-gray-400">{{ form.title.label }}</label>
+            {% render_field form.title class+="appearance-none block w-full bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" type="text" %}
+            {% for error in form.title.errors %}<p class="text-red-500 text-xs italic">{{ error }}</p>{% endfor %}
+        </div>
+    </div>
+
+    <div class="flex flex-wrap -mx-3 mb-6">
+        <!-- Amount -->
+        <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+            <label for="{{ form.amount.id_for_label }}" class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 dark:text-gray-400">{{ form.amount.label }}</label>
+            {% render_field form.amount class+="appearance-none block w-full bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %}
+            {% for error in form.amount.errors %}<p class="text-red-500 text-xs italic">{{ error }}</p>{% endfor %}
+        </div>
+
+        <!-- Category -->
+        <div class="w-full md:w-1/2 px-3">
+            <label for="{{ form.category.id_for_label }}" class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 dark:text-gray-400">{{ form.category.label }}</label>
+            {% render_field form.category class+="appearance-none block w-full bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %}
+            {% for error in form.category.errors %}<p class="text-red-500 text-xs italic">{{ error }}</p>{% endfor %}
+        </div>
+    </div>
+
+    <div class="flex flex-wrap -mx-3 mb-6">
+        <!-- Account -->
+        <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+            <label for="{{ form.category.id_for_label }}" class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 dark:text-gray-400">{{ form.account.label }}</label>
+            {% render_field form.account  class+="appearance-none block w-full bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %}
+            {% for error in form.account.errors %}<p class="text-red-500 text-xs italic">{{ error }}</p>{% endfor %}
+        </div>
+
+        <!-- Date -->
+        <div class="w-full md:w-1/2 px-3">
+            <label for="{{ form.date.id_for_label }}" class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 dark:text-gray-400">{{ form.date.label }}</label>
+            {% render_field form.date class+="appearance-none block w-full bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" type="date" placeholder="Date" %}
+            {% for error in form.date.errors %}<p class="text-red-500 text-xs italic">{{ error }}</p>{% endfor %}
+        </div>
+    </div>
+
+    <!-- Note -->
+    <div class="flex flex-wrap -mx-3 mb-6">
+        <div class="w-full px-3">
+            <label for="{{ form.notes.id_for_label }}" class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 dark:text-gray-400">{{ form.notes.label }}</label>
+            {% render_field form.notes rows="3" class+="appearance-none block w-full bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" type="text" %}
+            {% for error in form.notes.errors %}<p class="text-red-500 text-xs italic">{{ error }}</p>{% endfor %}
+        </div>
+    </div>
+
+    <footer class="flex flex-col items-center justify-end px-6 py-3 -mx-6 -mb-4 space-y-4 sm:space-y-0 sm:space-x-6 sm:flex-row bg-white dark:bg-gray-800">
+        <button
+            @click="closeModal"
+            class="w-full px-5 py-3 text-sm font-medium leading-5 text-gray-700 transition-colors duration-150 border border-gray-300 rounded-lg dark:text-gray-400 sm:px-4 sm:py-2 sm:w-auto active:bg-transparent hover:border-gray-500 focus:border-gray-500 active:text-gray-500 focus:outline-none focus:shadow-outline-gray"
+        >Cancel</button>
+        <button
+            @click="closeModal"
+            type="submit"
+            class="w-full px-5 py-3 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg sm:w-auto sm:px-4 sm:py-2 active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+        >Save</button>
+    </footer>
+
+  </form>
+  {% endwith %}
+
+</div>
+
+
+

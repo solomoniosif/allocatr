@@ -1,0 +1,46 @@
+{% extends "wallet/base.html" %}
+
+{% block title %}allocatr » Home{% endblock title %}
+
+{% block content %}
+
+<div
+  class="flex h-screen bg-gray-200 dark:bg-gray-900"
+  :class="{ 'overflow-hidden': isSideMenuOpen }"
+>
+  {% include 'wallet/partials/sidebar.html' %}
+
+  <div class="flex flex-col flex-1 w-full">
+    {% include 'wallet/partials/header/header.html' %}
+
+    <main class="h-full overflow-y-auto">
+      <div class="container px-6 mx-auto grid">
+        <h2
+          class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200"
+        >
+          Welcome {{ user.first_name|title }}
+        </h2>
+
+        <!-- User accounts -->
+        <div
+          hx-get="{% url 'wallet:accounts_list' %}"
+          hx-trigger="load, transactionListChanged from:body"
+          hx-target="this"
+        ></div>
+
+        <!-- Transactions -->
+        <div
+          hx-get="{% url 'wallet:transaction_list' %}"
+          hx-trigger="load, transactionListChanged from:body"
+          hx-target="this"
+        ></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+{% include 'wallet/partials/modal.html' %}
+
+
+
+{% endblock content %}

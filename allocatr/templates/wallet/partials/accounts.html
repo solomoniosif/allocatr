@@ -1,0 +1,31 @@
+<div class="grid gap-6 mb-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+
+  <div
+    class="flex items-center p-4 bg-white rounded-lg shadow-lg shadow-gray-500 md:max-w-xs dark:bg-gray-800 dark:shadow-gray-700">
+    <div>
+      <p class="mb-2 text-2xl text-center font-medium text-gray-600 dark:text-gray-400">
+        Wallet balance
+      </p>
+      <p class="text-3xl font-bold text-gray-700 dark:text-gray-200">
+        {{ currency }} {{ wallet_balance|floatformat:0 }}
+      </p>
+    </div>
+  </div>
+
+  {% for account in accounts %}
+  <div
+    class="flex items-center p-4 rounded-lg shadow-lg shadow-gray-500 cursor-pointer md:max-w-xs scale-100 hover:scale-105 ease-in duration-100  dark:shadow-gray-900 dark:hover:shadow-gray-600 dark:hover:shadow-xs" style="background-color: {{ account.color }}; color: {{ account.text_color }}">
+    <div class="p-4 mr-4 text-green-500 rounded-full font-bold dark:text-green-100" style="background-color: {{ account.text_color }}; color: {{ account.color }}">
+      {{ account.account_type }}
+    </div>
+    <div>
+      <p class="mb-2 text-xl font-bold">
+        {{ account.name|title }}
+      </p>
+      <p class="text-xl font-semibold">
+        {{ currency }} {{ account.current_balance|floatformat:0 }}
+      </p>
+    </div>
+  </div>
+  {% endfor %}
+</div>

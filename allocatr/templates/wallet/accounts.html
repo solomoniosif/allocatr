@@ -1,0 +1,130 @@
+{% extends "wallet/base.html" %}
+
+{% block title %}allocatr » Accounts{% endblock title %}
+
+{% block content %}
+
+<div
+  class="flex h-screen bg-gray-50 dark:bg-gray-900"
+  :class="{ 'overflow-hidden': isSideMenuOpen }"
+>
+  {% include 'wallet/partials/sidebar.html' %}
+
+  <div class="flex flex-col flex-1 w-full">
+    {% include 'wallet/partials/header/header.html' %}
+
+    <main class="h-full overflow-y-auto">
+      <div class="container px-6 mx-auto">
+        <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">Your wallet accounts</h2>
+
+        <div class="flex flex-wrap flex-row">
+
+          {% for account in accounts %}
+
+          <!-- Account Cards -->
+          <div class="flex-shrink max-w-full px-4 w-full xl:w-1/2 mb-5">
+            <div class="relative h-full bg-white dark:bg-gray-800 rounded-lg shadow-xl border mb-6"
+              style="border-color: {{ account.details.color }}">
+              <div class="absolute top-0 left-0 w-full rounded-tl-lg rounded-tr-lg  px-3 pt-2 cursor-pointer"
+                style="background-color: {{ account.details.color }}">
+                <div class="flex flex-row justify-between pb-4">
+                  <div class="flex flex-row items-end">
+                    <h3 class="text-2xl font-bold pt-2 pl-2" style="color: {{ account.details.text_color }}">
+                      {{ account.details.name }}</h3>
+                      <span
+                      class="ml-2 mb-1 px-2 py-1 flex items-center font-semibold text-xs rounded text-white bg-accent">{{ account.details.get_account_type_display }}</span>
+                  </div>
+                  <div x-data="{ open: false }" class="relative">
+                    <button @click="open = ! open"
+                      class="pt-2 pr-2 transition-colors duration-200 focus:outline-none hover:outline-none"
+                      style="color: {{ account.details.text_color }}">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-6 h-6 bi bi-three-dots"
+                        viewBox="0 0 16 16">
+                        <path
+                          d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z">
+                        </path>
+                      </svg>
+                    </button>
+                    <div x-show="open" @mousedown.outside="open = false"
+                      class="absolute right-0 rounded rounded-t-non bg-white dark:bg-gray-800 dark:text-white z-10 border border-gray-200 dark:border-gray-700"
+                      >
+                      <button class="block px-3 py-2 w-full text-left hover:bg-gray-200 hover:text-gray-800 focus:outline-none"
+                        >Edit</button>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex flex-col justify-between h-full pb-4 mt-8">
+
+                <!-- Account Transactions -->
+                <div class="flex-row items-center mt-3">
+                  <div class="relative overflow-x-clip w-full p-2">
+                    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                      <caption
+                        class="p-3 w-full mt-3 text-lg font-semibold text-left rounded text-gray-900 bg-transparent dark:text-white">
+                        Latest transactions
+                      </caption>
+                      <tbody>
+                        {% for tr in account.transactions %}
+                        <tr
+                        hx-get="{% url 'wallet:transaction_detail' tr.pk %}"
+                        hx-target="#modal"
+                        hx-trigger="click"
+                        @click="openModal"
+                        class="cursor-pointer bg-transparent border-b dark:border-gray-700 hover:bg-gray-100 hover:text-gray-800">
+                          <td class="px-2 py-2">
+                            {% if tr.get_transaction_type_display == 'Income' %}
+                            <i class="bi bi-arrow-up-right text-green-600"></i>
+                            {% elif tr.get_transaction_type_display == 'Expense' %}
+                            <i class="bi bi-arrow-down-right text-red-600"></i>
+                            {% elif tr.get_transaction_type_display == 'Transfer' %}
+                            <i class="bi bi-arrow-left-right text-blue-500"></i>
+                            {% endif %}
+                          </td>
+                          <td scope="row" class="px-2 py-2 font-semibold">
+                            {{ tr.title|truncatechars:35 }}
+                          </td>
+                          <td class="px-2 py-2">
+                            {{ tr.category }}
+                          </td>
+                          <td class="px-2 py-2">
+                            {{ user_settings.currency }}{{ tr.amount|floatformat:0 }}
+                          </td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <!-- End Account Transactions -->
+
+                <!-- Account Status -->
+                <div class="flex items-center justify-end mb-4 rounded-bl-lg rounded-br-lg p-2" style="background-color: {{ account.details.color }};">
+                  <span
+                    class="px-2 py-1 flex items-center text-2xl font-bold" style="color: {{ account.details.text_color }};">{{ user_settings.currency }} {{ account.details.current_balance|floatformat:0 }}</span>
+
+
+                </div>
+                <!-- Account Status -->
+
+              </div>
+
+
+            </div>
+          </div>
+          <!-- End Account Cards -->
+          {% endfor %}
+        </div>
+      </div>
+    </main>
+
+  </div>
+</div>
+
+{% include 'wallet/partials/modal.html' %}
+
+{% include 'wallet/partials/mobile_add_menu.html' with add_buttons='wallet/partials/add_buttons/add_account.html' %}
+
+{% endblock content %}
