@@ -8,11 +8,9 @@
     >
       <img
         class="object-cover w-8 h-8 rounded-full"
-        {% if user.profile_photo %}
-        src="{{ user.profile_photo.url }}"
-        {% else %}
+        
         src="https://eu2.contabostorage.com/84d43e83142241f5a2d61d2b3486c2bb:allocatr/media/profile_default.png"
-        {% endif %}%
+
         alt=""
         aria-hidden="true"
       />
