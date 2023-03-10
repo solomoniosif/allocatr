@@ -62,7 +62,7 @@ AWS_ACCESS_KEY_ID = env("DJANGO_CONATBO_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = env("DJANGO_CONATBO_SECRET_ACCESS_KEY")
 # https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
 AWS_STORAGE_BUCKET_NAME = env("DJANGO_CONTABO_STORAGE_BUCKET_NAME")
-AWS_DEFAULT_ACL = 'public-read'
+AWS_DEFAULT_ACL = "public-read"
 # https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
 AWS_QUERYSTRING_AUTH = False
 # DO NOT change these unless you know what you're doing.
@@ -80,16 +80,21 @@ AWS_S3_MAX_MEMORY_SIZE = env.int(
 AWS_S3_REGION_NAME = env("DJANGO_CONTABO_S3_REGION_NAME", default=None)
 # https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#cloudfront
 AWS_S3_CUSTOM_DOMAIN = env("DJANGO_CONTABO_S3_CUSTOM_DOMAIN", default=None)
-aws_s3_domain = AWS_S3_CUSTOM_DOMAIN or f"eu2.contabostorage.com/84d43e83142241f5a2d61d2b3486c2bb:{AWS_STORAGE_BUCKET_NAME}"
+AWS_S3_ENDPOINT_URL = "https://eu2.contabostorage.com"
+
+contabo_s3_domain = (
+    AWS_S3_CUSTOM_DOMAIN
+    or f"eu2.contabostorage.com/84d43e83142241f5a2d61d2b3486c2bb:{AWS_STORAGE_BUCKET_NAME}"
+)
 # STATIC
 # ------------------------
 STATICFILES_STORAGE = "allocatr.utils.storages.StaticRootS3Boto3Storage"
 COLLECTFAST_STRATEGY = "collectfast.strategies.boto3.Boto3Strategy"
-STATIC_URL = f"https://{aws_s3_domain}/static/"
+STATIC_URL = f"https://{contabo_s3_domain}/static/"
 # MEDIA
 # ------------------------------------------------------------------------------
 DEFAULT_FILE_STORAGE = "allocatr.utils.storages.MediaRootS3Boto3Storage"
-MEDIA_URL = f"https://{aws_s3_domain}/media/"
+MEDIA_URL = f"https://{contabo_s3_domain}/media/"
 
 # EMAIL
 # ------------------------------------------------------------------------------
