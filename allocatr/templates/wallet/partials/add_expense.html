@@ -78,7 +78,7 @@
     <div class="flex flex-wrap -mx-3 mb-6">
         <div class="w-full px-3">
             <label for="{{ form.notes.id_for_label }}" class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 dark:text-gray-400">{{ form.notes.label }}</label>
-            {% render_field form.notes rows="3" class+="appearance-none block w-full bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" type="text" %}
+            {% render_field form.notes rows="1" class+="appearance-none block w-full bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" type="text" %}
             {% for error in form.notes.errors %}<p class="text-red-500 text-xs italic">{{ error }}</p>{% endfor %}
         </div>
     </div>
@@ -86,7 +86,7 @@
     <footer class="flex flex-col items-center justify-end px-6 py-3 -mx-6 -mb-4 space-y-4 sm:space-y-0 sm:space-x-6 sm:flex-row bg-white dark:bg-gray-800">
         <button
             @click="closeModal"
-            class="w-full px-5 py-3 text-sm font-medium leading-5 text-white text-gray-700 transition-colors duration-150 border border-gray-300 rounded-lg dark:text-gray-400 sm:px-4 sm:py-2 sm:w-auto active:bg-transparent hover:border-gray-500 focus:border-gray-500 active:text-gray-500 focus:outline-none focus:shadow-outline-gray"
+            class="w-full px-5 py-3 text-sm font-medium leading-5 text-gray-700 transition-colors duration-150 border border-gray-300 rounded-lg dark:text-gray-400 sm:px-4 sm:py-2 sm:w-auto active:bg-transparent hover:border-gray-500 focus:border-gray-500 active:text-gray-500 focus:outline-none focus:shadow-outline-gray"
         >Cancel</button>
         <button
             @click="closeModal"
