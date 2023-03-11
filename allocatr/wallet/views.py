@@ -3,7 +3,7 @@ import json
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import ListView, TemplateView
+from django.views.generic import DetailView, ListView, TemplateView
 from django.views.decorators.http import require_POST
 
 from .forms import ExpenseForm, IncomeForm, TransferForm
@@ -189,9 +189,9 @@ def account_cards(request):
     return render(request, "wallet/partials/accounts.html", context)
 
 
-class Accounts(LoginRequiredMixin, ListView):
+class AccountListView(LoginRequiredMixin, ListView):
     model = Account
-    template_name = "wallet/accounts.html"
+    template_name = "wallet/account_list.html"
 
     def get_queryset(self, **kwargs):
         qs = super().get_queryset(**kwargs)
@@ -201,8 +201,20 @@ class Accounts(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         accounts = []
         for account in context["account_list"]:
-            transactions = account.transactions.order_by('-created_at')[:5]
+            transactions = account.transactions.order_by("-created_at")[:5]
             accounts.append({"details": account, "transactions": transactions})
         context["accounts"] = accounts
-        context['user_settings'] = UserSettings.objects.get(user=self.request.user)
+        context["user_settings"] = UserSettings.objects.get(user=self.request.user)
+        return context
+
+
+class AccountDetailView(DetailView):
+    model = Account
+    context_object_name = "account"
+    template_name = "wallet/account_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["transactions"] = context["account"].transactions.all()
+        context["user_settings"] = UserSettings.objects.get(user=self.request.user)
         return context

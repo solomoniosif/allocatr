@@ -110,6 +110,9 @@ class Account(TimeStampedUUIDModel):
         self.text_color = "white" if is_color_dark(self.color) else "black"
         super(Account, self).save(*args, **kwargs)
 
+    def get_absolute_url(self):
+        return reverse('wallet:account_detail', kwargs={"pk": self.pk})
+
 
 class IncomeManager(models.Manager):
     def get_queryset(self):
@@ -197,7 +200,7 @@ class Transaction(TimeStampedUUIDModel):
     )
 
     def get_absolute_url(self):
-        return reverse("core:transaction-detail", kwargs={"pk": self.pk})
+        return reverse("wallet:transaction-detail", kwargs={"pk": self.pk})
 
     def clean(self):
         if self.pkid is not None:

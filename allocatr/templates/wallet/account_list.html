@@ -25,8 +25,11 @@
           <div class="flex-shrink max-w-full px-4 w-full xl:w-1/2 mb-5">
             <div class="relative h-full bg-white dark:bg-gray-800 rounded-lg shadow-xl border mb-6"
               style="border-color: {{ account.details.color }}">
-              <div class="absolute top-0 left-0 w-full rounded-tl-lg rounded-tr-lg  px-3 pt-2 cursor-pointer"
-                style="background-color: {{ account.details.color }}">
+              <div
+                x-data="{ navigateToPage: function(url) { window.location.href = url; } }"
+                class="absolute top-0 left-0 w-full rounded-tl-lg rounded-tr-lg  px-3 pt-2 cursor-pointer"
+                style="background-color: {{ account.details.color }}"
+                @click="navigateToPage('{{ account.details.get_absolute_url }}')">
                 <div class="flex flex-row justify-between pb-4">
                   <div class="flex flex-row items-end">
                     <h3 class="text-2xl font-bold pt-2 pl-2" style="color: {{ account.details.text_color }}">

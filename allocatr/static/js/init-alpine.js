@@ -106,5 +106,9 @@ function data() {
         }
       })
     },
+
+    setHref(href) {
+      window.location.href=href;
+    }
   }
 }
