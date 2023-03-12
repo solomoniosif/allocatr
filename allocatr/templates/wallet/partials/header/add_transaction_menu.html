@@ -29,94 +29,14 @@
       x-transition:leave-end="opacity-0"
       @mousedown.outside="closeAddMenu"
       @keydown.escape="closeAddMenu"
-      class="absolute left-0 w-40 p-2 mt-2 space-y-1 text-gray-600 bg-white border border-gray-100 rounded-md shadow-md dark:border-gray-700 dark:text-gray-300 dark:bg-gray-700"
+      class="absolute left-0 mt-2 p-1 pr-10 rounded-lg mx-auto bg-white text-gray-800 dark:bg-gray-800 dark:text-white"
       aria-label="submenu"
     >
-    <!-- Add Income -->
-      <li class="flex">
-        <a
-          hx-get="{% url 'wallet:add_income' %}"
-          hx-trigger="click"
-          hx-target="#modal"
-          @click="openAddTransactionModal"
-          class="inline-flex items-center w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md group hover:bg-accent hover:text-white"
-        >
-          <svg
-            class="w-4 h-4 mr-3 text-green-600 group-hover:text-green-400"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2.5"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"
-            ></path>
-          </svg>
-          <span>Income</span>
-        </a>
-      </li>
 
-      <!-- Add Expense -->
-      <li class="flex">
-        <a
-          hx-get="{% url 'wallet:add_expense' %}"
-          hx-trigger="click"
-          hx-target="#modal"
-          @click.prevent="openAddTransactionModal"
-          class="inline-flex items-center w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md group hover:bg-accent hover:text-white"
-          href="#"
-        >
-          <svg
-            class="w-4 h-4 mr-3 text-red-600 group-hover:text-red-500"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2.5"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M4.5 4.5l15 15m0 0V8.25m0 11.25H8.25"
-            ></path>
-          </svg>
-          <span>Expense</span>
-        </a>
-      </li>
 
-      <!-- Add Transfer -->
-      <li class="flex">
-        <a
-          hx-get="{% url 'wallet:add_transfer' %}"
-          hx-trigger="click"
-          hx-target="#modal"
-          @click="openAddTransactionModal"
-          class="inline-flex items-center w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md group hover:bg-accent hover:text-white"
-          href="#"
-        >
-          <svg
-            class="w-4 h-4 mr-3 text-blue-500 group-hover:text-blue-300"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2.5"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5"
-            ></path>
-          </svg>
-          <span>Transfer</span>
-        </a>
-      </li>
+    {% include add_buttons|default:'wallet/partials/add_buttons/add_transactions.html' %}
+
+
     </ul>
   </div>
 </div>

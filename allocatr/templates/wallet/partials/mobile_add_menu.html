@@ -8,14 +8,12 @@
         x-transition:enter-start="opacity-0 transform translate-y-1/2" x-transition:enter-end="opacity-100"
         x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100"
         x-transition:leave-end="opacity-0  transform translate-y-1/2" @mousedown.outside="closeMobileAddMenu"
-        @keydown.escape="closeMobileAddMenu"  role="dialog" id="mobile-menu"
+        @keydown.escape="closeMobileAddMenu" role="dialog" id="mobile-menu"
         class="rounded-lg mx-auto p-1 bg-white text-gray-800 dark:bg-gray-800 dark:text-white">
 
-       {% include add_buttons|default:'wallet/partials/add_buttons/add_transactions.html' %}
+        {% include add_buttons|default:'wallet/partials/add_buttons/add_transactions.html' %}
 
       </ul>
-
-
     </div>
 
     <button class="mx-auto p-1.5 align-middle rounded-full bg-accent text-white focus:outline-none"
@@ -27,17 +25,4 @@
     </button>
 
   </div>
-
-
 </div>
-
-{% comment %}
-<div class="fixed bottom-0 w-full flex-row items-center bg-gray-700">
-  <div class="mobileNavigation">
-    <div class="mobileMenuToggle">
-      <div class="mobileMenu"></div>
-    </div>
-
-
-  </div>
-</div> {% endcomment %}
