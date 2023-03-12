@@ -9,7 +9,7 @@
         x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100"
         x-transition:leave-end="opacity-0  transform translate-y-1/2" @mousedown.outside="closeMobileAddMenu"
         @keydown.escape="closeMobileAddMenu" role="dialog" id="mobile-menu"
-        class="rounded-lg mx-auto p-1 bg-white text-gray-800 dark:bg-gray-800 dark:text-white">
+        class="rounded-lg mx-auto p-1 space-y-1 bg-gray-200 text-gray-800 dark:bg-gray-900 dark:text-white">
 
         {% include add_buttons|default:'wallet/partials/add_buttons/add_transactions.html' %}
 
