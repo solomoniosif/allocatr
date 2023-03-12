@@ -10,7 +10,7 @@ from .forms import ExpenseForm, IncomeForm, TransferForm
 from .models import UserSettings, Account, Transaction
 
 
-class DashboardHome(TemplateView):
+class DashboardHome(LoginRequiredMixin, TemplateView):
     template_name = "wallet/index.html"
 
     def get_context_data(self, **kwargs):
