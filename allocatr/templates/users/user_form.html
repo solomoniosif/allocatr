@@ -1,17 +1,81 @@
-{% extends "base.html" %}
-{% load crispy_forms_tags %}
+{% extends "wallet/base.html" %}
+{% load widget_tweaks %}
 
 {% block title %}{{ user.username }}{% endblock %}
 
 {% block content %}
-  <h1>{{ user.username }}</h1>
-  <form class="form-horizontal" method="post" action="{% url 'users:update' %}">
-    {% csrf_token %}
-    {{ form|crispy }}
-    <div class="control-group">
-      <div class="controls">
-        <button type="submit" class="btn btn-primary">Update</button>
+
+<div class="flex h-screen bg-gray-200 dark:bg-gray-900" :class="{ 'overflow-hidden': isSideMenuOpen }">
+  {% include 'wallet/partials/sidebar.html' %}
+
+  <div class="flex flex-col flex-1 w-full">
+    {% include 'wallet/partials/header/header.html' %}
+
+    <main class="h-full overflow-y-auto">
+      <div class="container px-6 mx-auto grid">
+        <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+          Welcome
+          {% if object.first_name and object.last_name %}
+          <span>{{ object.first_name }} {{ object.last_name }}</span>
+          {% else %}
+          <span>{{ object.username }}</span>
+          {% endif %}
+        </h2>
+
+        <form class="w-full max-w-lg px-5 py-6 rounded-lg bg-white text-gray-800 dark:bg-gray-800 dark:text-white" method="post" action="{% url 'users:update' %}">
+          {% csrf_token %}
+          {% for hidden in form.hidden_fields %} {{ hidden }} {% endfor %}
+
+          <!-- Username - (disabled) -->
+          <div class="flex flex-wrap mb-6">
+            <div class="w-full px-2">
+              <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 dark:text-gray-400">Username</label>
+              <input type="text" disabled="true" value="{{ user.username }} "class="appearance-none block w-full bg-gray-100 border border-gray-300 text-gray-900 text rounded-md focus:ring-blue-500 focus:border-blue-500 p-3 dark:bg-gray-800 dark:border-gray-700 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" type="text">
+
+            </div>
+          </div>
+
+          <!-- First Name -->
+          <div class="flex flex-wrap mb-6">
+            <div class="w-full px-2">
+              <label for="{{ form.first_name.id_for_label }}" class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 dark:text-gray-400">{{ form.first_name.label }}</label>
+              {% render_field form.first_name class+="appearance-none block w-full bg-gray-100 border border-gray-300 text-gray-900 text rounded-md focus:ring-blue-500 focus:border-blue-500 p-3 dark:bg-gray-700 dark:border-gray-700 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" type="text" %}
+              {% for error in form.first_name.errors %}<p class="text-red-500 text-xs italic">{{ error }}</p>{% endfor %}
+            </div>
+          </div>
+
+          <!-- Last Name -->
+          <div class="flex flex-wrap mb-6">
+            <div class="w-full px-2">
+              <label for="{{ form.profile_photo.id_for_label }}" class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 dark:text-gray-400">{{ form.last_name.label }}</label>
+              {% render_field form.last_name class+="appearance-none block w-full bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" type="text" %}
+              {% for error in form.last_name.errors %}<p class="text-red-500 text-xs italic">{{ error }}</p>{% endfor %}
+            </div>
+          </div>
+
+          <!-- Profile Photo -->
+          <div class="flex flex-wrap mb-6">
+            <div class="w-full px-2">
+              <label for="{{ form.first_name.id_for_label }}" class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 dark:text-gray-400">{{ form.profile_photo.label }}</label>
+              {% render_field form.profile_photo class+="appearance-none block w-full bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-md mt-2 focus:ring-blue-500 focus:border-blue-500 p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" type="file" accept="image/*" %}
+              {% for error in form.profile_photo.errors %}<p class="text-red-500 text-xs italic">{{ error }}</p>{% endfor %}
+            </div>
+          </div>
+
+          <div class="flex flex-row justify-end px-2">
+              <button type="submit" class="bg-accent text-white px-4 py-2 rounded-lg">Update</button>
+          </div>
+        </form>
+
+
       </div>
-    </div>
-  </form>
+    </main>
+  </div>
+</div>
+
+</div>
+
+{% include 'wallet/partials/modal.html' %}
+
+{% include 'wallet/partials/mobile_add_menu.html' with add_buttons='wallet/partials/add_buttons/add_transactions.html' %}
 {% endblock %}

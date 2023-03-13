@@ -1,34 +1,49 @@
-{% extends "base.html" %}
+{% extends "wallet/base.html" %}
 {% load static %}
 
 {% block title %}User: {{ object.username }}{% endblock %}
 
 {% block content %}
-<div class="container">
 
-  <div class="row">
-    <div class="col-sm-12">
+<div class="flex h-screen bg-gray-200 dark:bg-gray-900" :class="{ 'overflow-hidden': isSideMenuOpen }">
+  {% include 'wallet/partials/sidebar.html' %}
 
-      <h2>{{ object.username }}</h2>
-      {% if object.name %}
-        <p>{{ object.name }}</p>
-      {% endif %}
-    </div>
+  <div class="flex flex-col flex-1 w-full">
+    {% include 'wallet/partials/header/header.html' %}
+
+    <main class="h-full overflow-y-auto">
+      <div class="container px-6 mx-auto grid">
+        <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+          Welcome
+          {% if object.first_name and object.last_name %}
+          <span>{{ object.first_name }} {{ object.last_name }}</span>
+          {% else %}
+          <span>{{ object.username }}</span>
+          {% endif %}
+        </h2>
+
+
+        {% if object == request.user %}
+          <div class="row">
+
+            <div class="col-sm-12">
+              <a class="w-full px-5 py-3 text-smd font-medium leading-5 text-white transition-colors duration-150 bg-accent border border-transparent rounded-lg sm:w-auto sm:px-4 sm:py-2 active:bg-accentDark hover:bg-accentDarkest focus:outline-none" href="{% url 'users:update' %}" role="button">My Info</a>
+              <a class="w-full px-5 py-3 text-smd font-medium leading-5 text-white transition-colors duration-150 bg-accent border border-transparent rounded-lg sm:w-auto sm:px-4 sm:py-2 active:bg-accentDark hover:bg-accentDarkest focus:outline-none" href="{% url 'account_email' %}" role="button">E-Mail</a>
+            </div>
+
+          </div>
+        {% endif %}
+
+
+      </div>
+    </main>
   </div>
-
-{% if object == request.user %}
-<!-- Action buttons -->
-<div class="row">
-
-  <div class="col-sm-12">
-    <a class="btn btn-primary" href="{% url 'users:update' %}" role="button">My Info</a>
-    <a class="btn btn-primary" href="{% url 'account_email' %}" role="button">E-Mail</a>
-    <!-- Your Stuff: Custom user template urls -->
-  </div>
+</div>
 
 </div>
-<!-- End Action buttons -->
-{% endif %}
 
-</div>
+{% include 'wallet/partials/modal.html' %}
+
+{% include 'wallet/partials/mobile_add_menu.html' with add_buttons='wallet/partials/add_buttons/add_transactions.html' %}
+
 {% endblock content %}
