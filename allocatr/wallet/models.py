@@ -111,7 +111,7 @@ class Account(TimeStampedUUIDModel):
         super(Account, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
-        return reverse('wallet:account_detail', kwargs={"pk": self.pk})
+        return reverse("wallet:account_detail", kwargs={"pk": self.pk})
 
 
 class IncomeManager(models.Manager):
@@ -223,16 +223,42 @@ class Transaction(TimeStampedUUIDModel):
             )
 
     def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
         if self.transaction_type == self.TransactionType.INCOME:
-            self.account.current_balance += self.amount
+            if self.pkid is not None:
+                old_transaction = Transaction.objects.get(pk=self.pkid)
+                old_transaction.account.current_balance -= old_transaction.amount
+                old_transaction.account.save()
+                self.account.refresh_from_db()
+                self.account.current_balance += self.amount
+            else:
+                self.account.current_balance += self.amount
         elif self.transaction_type == self.TransactionType.EXPENSE:
-            self.account.current_balance -= self.amount
+            if self.pkid is not None:
+                old_transaction = Transaction.objects.get(pk=self.pkid)
+                old_transaction.account.current_balance += old_transaction.amount
+                old_transaction.account.save()
+                self.account.refresh_from_db()
+                self.account.current_balance -= self.amount
+            else:
+                self.account.current_balance -= self.amount
         elif self.transaction_type == self.TransactionType.TRANSFER:
-            self.account.current_balance -= self.amount
-            self.to_account.current_balance += self.amount
-            self.to_account.save()
+            if self.pkid is not None:
+                old_transaction = Transaction.objects.get(pk=self.pkid)
+                old_transaction.account.current_balance += old_transaction.amount
+                old_transaction.to_account.current_balance -= old_transaction.amount
+                old_transaction.account.save()
+                old_transaction.to_account.save()
+                self.account.refresh_from_db()
+                self.to_account.refresh_from_db()
+                self.account.current_balance -= self.amount
+                self.to_account.current_balance += self.amount
+                self.to_account.save()
+            else:
+                self.account.current_balance -= self.amount
+                self.to_account.current_balance += self.amount
+                self.to_account.save()
         self.account.save()
+        super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
         if self.transaction_type == self.TransactionType.INCOME:
