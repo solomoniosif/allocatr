@@ -3,15 +3,15 @@
 @tailwind utilities;
 
 .primaryBtn {
-    @apply mx-2 rounded-lg bg-accent px-4 py-2 text-white;
+    @apply mx-2 px-4 py-2 rounded-lg cursor-pointer bg-accent text-white scale-100 hover:scale-105 hover:bg-accentDarkest;
 }
 
 .secondaryBtn {
-    @apply mx-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:hover:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700;
+    @apply mx-2 px-4 py-2 rounded-lg border border-gray-300 bg-white text-gray-900 hover:bg-gray-100 scale-100 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:hover:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700;
 }
 
-.swal2-popup .swal2-toast {
-    @apply bg-gray-200 text-gray-800 shadow-lg dark:bg-gray-800 dark:text-white;
+.redBtn {
+    @apply mx-2 px-4 py-2 rounded-lg cursor-pointer bg-red-500 text-white scale-100 hover:scale-105 hover:bg-red-600;
 }
 
 .success-toast {
