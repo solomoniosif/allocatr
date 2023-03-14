@@ -1,3 +1,45 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.primaryBtn {
+    @apply mx-2 rounded-lg bg-accent px-4 py-2 text-white;
+}
+
+.secondaryBtn {
+    @apply mx-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:hover:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700;
+}
+
+.swal2-popup .swal2-toast {
+    @apply bg-gray-200 text-gray-800 shadow-lg dark:bg-gray-800 dark:text-white;
+}
+
+.success-toast {
+    background-color: #459417 !important;
+    color: white !important;
+    font-size: 18px !important;
+}
+
+.error-toast {
+    background-color: #ee3c3c !important;
+    color: white !important;
+    font-size: 18px !important;
+}
+
+.warning-toast {
+    background-color: #e9a66c !important;
+    color: white !important;
+    font-size: 18px !important;
+}
+
+.info-toast {
+    background-color: #3fc3ee !important;
+    color: white !important;
+    font-size: 18px !important;
+}
+
+.question-toast {
+    background-color: #87adbd !important;
+    color: white !important;
+    font-size: 18px !important;
+}

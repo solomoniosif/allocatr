@@ -6,6 +6,7 @@ module.exports = {
     './allocatr/templates/**/*.html',
     './allocatr/templates/**/**/*.html',
     './allocatr/templates/**/**/**/*.html',
+    './allocatr/static/js/project.js',
   ],
   theme: {
     extend: {

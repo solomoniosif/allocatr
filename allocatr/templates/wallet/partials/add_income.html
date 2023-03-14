@@ -28,8 +28,7 @@
 
   {% with WIDGET_ERROR_CLASS='is-invalid' %}
   <form
-  _="on incomeCreated
-  call Swal.fire({title: 'Transaction added successfully', icon: 'success', timer: 2000})"
+  _="on incomeCreated call successToast.fire({title: 'Income added successfully', icon: 'success'})"
    class="w-full max-w-lg" hx-post="{% url 'wallet:add_income' %}" hx-headers='{"X-CSRFToken":"{{ csrf_token }}"}'>
     {% for hidden in form.hidden_fields %} {{ hidden }} {% endfor %}
 
