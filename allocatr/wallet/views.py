@@ -3,7 +3,7 @@ import json
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import DetailView, ListView, TemplateView
+from django.views.generic import CreateView, DetailView, ListView, TemplateView
 from django.views.decorators.http import require_POST
 
 from .forms import ExpenseForm, IncomeForm, TransferForm
@@ -20,8 +20,8 @@ class DashboardHome(LoginRequiredMixin, TemplateView):
 
 
 def transactions(request):
-    transactions = Transaction.objects.filter(account__user=request.user)
-    context = {"transactions": transactions}
+    user_transactions = Transaction.objects.filter(account__user=request.user)
+    context = {"transactions": user_transactions}
     return render(request, "wallet/partials/transactions.html", context)
 
 
@@ -29,6 +29,24 @@ def transaction_detail(request, pk):
     transaction = get_object_or_404(Transaction, pk=pk)
     context = {"transaction": transaction}
     return render(request, "wallet/partials/transaction_detail.html", context)
+
+
+class IncomeCreateView(CreateView):
+    model = Transaction
+    form_class = IncomeForm
+    context_object_name = "income"
+    template_name = "wallet/partials/add_income.html"
+
+    def form_valid(self, form):
+        self.object = form.save()  # noqa
+        return HttpResponse(
+            status=204,
+            headers={
+                "HX-Trigger": json.dumps(
+                    {"transactionListChanged": None, "incomeCreated": None}
+                )
+            },
+        )
 
 
 def add_income(request):

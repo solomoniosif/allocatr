@@ -72,7 +72,6 @@ THIRD_PARTY_APPS = [
     "allauth.socialaccount",
     "widget_tweaks",
     "colorfield",
-    "sweetify",
 ]
 
 LOCAL_APPS = [

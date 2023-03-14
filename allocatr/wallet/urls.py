@@ -13,7 +13,7 @@ urlpatterns = [
         views.transaction_detail,
         name="transaction_detail",
     ),
-    path("htmx/add-income/", views.add_income, name="add_income"),
+    path("htmx/add-income/", views.IncomeCreateView.as_view(), name="add_income"),
     path("htmx/edit-income/<int:pk>/", views.edit_income, name="edit_income"),
     path("htmx/add-expense/", views.add_expense, name="add_expense"),
     path("htmx/edit-expense/<int:pk>/", views.edit_expense, name="edit_expense"),
