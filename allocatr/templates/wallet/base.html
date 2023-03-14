@@ -49,6 +49,8 @@
     {% endblock content %}
 
 
+    {% load sweetify %}
+    {% sweetify %}
     {% block inline_javascript %}
     <script>
       document.body.addEventListener('htmx:configRequest', (event) => {

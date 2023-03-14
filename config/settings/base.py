@@ -72,6 +72,7 @@ THIRD_PARTY_APPS = [
     "allauth.socialaccount",
     "widget_tweaks",
     "colorfield",
+    "sweetify",
 ]
 
 LOCAL_APPS = [
@@ -291,8 +292,8 @@ JAZZMIN_SETTINGS = {
         {"name": "Home", "url": "admin:index", "permissions": ["auth.view_user"]},
         # external url that opens in a new window (Permissions can be added)
         {
-            "name": "Support",
-            "url": "https://github.com/farridav/django-jazzmin/issues",
+            "name": "Live site",
+            "url": "https://allocatr.eu",
             "new_window": True,
         },
         # model admin to link to (Permissions checked against model)
@@ -320,11 +321,11 @@ JAZZMIN_SETTINGS = {
     # Whether to aut expand the menu
     "navigation_expanded": True,
     # Hide these apps when generating side menu e.g (auth)
-    "hide_apps": ["sites"],
+    "hide_apps": [],
     # Hide these models when generating side menu (e.g auth.user)
     "hide_models": [],
     # List of apps (and/or models) to base side menu ordering off of (does not need to contain all apps/models)
-    "order_with_respect_to": ["users", "auth", "core", "books.author", "books.book"],
+    "order_with_respect_to": ["users", "wallet", "auth", ],
     # Custom links to append to app groups, keyed on app name
     "custom_links": {
         "books": [
@@ -342,6 +343,14 @@ JAZZMIN_SETTINGS = {
         "auth": "fas fa-users-cog",
         "auth.user": "fas fa-user",
         "auth.Group": "fas fa-users",
+        "users.User": "fas fa-user",
+        "account.EmailAddress": "fas fa-envelope",
+        "sites.Site": "fas fa-globe",
+        "wallet.Account": "fas fa-credit-card",  # <i class="fa-regular fa-credit-card"></i>
+        "wallet.Transaction": "fas fa-list",
+        "wallet.Category": "fas fa-tag",
+        "wallet.Budget": "fas fa-chart-line",
+        "wallet.UserSettings": "fas fa-wrench",
     },
     # Icons that are used when one is not manually specified
     "default_icon_parents": "fas fa-chevron-circle-right",
@@ -374,3 +383,6 @@ JAZZMIN_SETTINGS = {
         "auth.group": "vertical_tabs",
     },
 }
+
+# Sweetify
+SWEETIFY_SWEETALERT_LIBRARY = "sweetalert2"

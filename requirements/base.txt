@@ -17,3 +17,4 @@ django-redis==5.2.0  # https://github.com/jazzband/django-redis
 django-colorfield==0.8.0 # https://github.com/fabiocaccamo/django-colorfield
 django-jazzmin==2.6.0 # https://github.com/farridav/django-jazzmin
 django-widget-tweaks==1.4.12 # https://github.com/jazzband/django-widget-tweaks
+sweetify==2.3.1 # https://github.com/Atrox/sweetify-django
