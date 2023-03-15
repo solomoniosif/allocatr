@@ -13,19 +13,23 @@
   </div>
 
   {% for account in accounts %}
-  <div
-    class="flex items-center p-4 rounded-lg shadow-lg shadow-gray-500 cursor-pointer md:max-w-xs scale-100 hover:scale-105 ease-in duration-100  dark:shadow-gray-900 dark:hover:shadow-gray-600 dark:hover:shadow-xs" style="background-color: {{ account.color }}; color: {{ account.text_color }}">
-    <div class="p-4 mr-4 text-green-500 rounded-full font-bold dark:text-green-100" style="background-color: {{ account.text_color }}; color: {{ account.color }}">
-      {{ account.account_type }}
+  <a href="{% url 'wallet:account_detail' account.pk %}">
+    <div
+      class="flex items-center p-4 rounded-lg shadow-lg shadow-gray-500 cursor-pointer md:max-w-xs scale-100 hover:scale-105 ease-in duration-100  dark:shadow-gray-900 dark:hover:shadow-gray-600 dark:hover:shadow-xs"
+      style="background-color: {{ account.color }}; color: {{ account.text_color }}"
+      >
+      <div class="p-4 mr-4 text-green-500 rounded-full font-bold dark:text-green-100" style="background-color: {{ account.text_color }}; color: {{ account.color }}">
+        {{ account.account_type }}
+      </div>
+      <div>
+        <p class="mb-2 text-xl font-bold">
+          {{ account.name|title }}
+        </p>
+        <p class="text-xl font-semibold">
+          {{ currency }} {{ account.current_balance|floatformat:0 }}
+        </p>
+      </div>
     </div>
-    <div>
-      <p class="mb-2 text-xl font-bold">
-        {{ account.name|title }}
-      </p>
-      <p class="text-xl font-semibold">
-        {{ currency }} {{ account.current_balance|floatformat:0 }}
-      </p>
-    </div>
-  </div>
+  </a>
   {% endfor %}
 </div>
