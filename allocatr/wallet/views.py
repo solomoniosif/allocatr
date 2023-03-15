@@ -10,6 +10,7 @@ from django.views.generic import (
     TemplateView,
     UpdateView,
 )
+from django.db.models import Q
 
 from .forms import ExpenseForm, IncomeForm, TransferForm
 from .mixins import RequirePostMixin
@@ -188,7 +189,8 @@ class AccountListView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         accounts = []
         for account in context["account_list"]:
-            transactions = account.transactions.order_by("-created_at")[:5]
+            # transactions = account.transactions.order_by("-created_at")[:5]
+            transactions = Transaction.objects.filter(Q(account=account) | Q(to_account=account))
             accounts.append({"details": account, "transactions": transactions})
         context["accounts"] = accounts
         context["user_settings"] = UserSettings.objects.get(user=self.request.user)
@@ -202,6 +204,9 @@ class AccountDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["transactions"] = context["account"].transactions.all()
+        accound_pk = context["account"].pkid
+
+        all_tr = Transaction.objects.filter(Q(account=self.get_object()) | Q(to_account=self.get_object()))
+        context["transactions"] = all_tr
         context["user_settings"] = UserSettings.objects.get(user=self.request.user)
         return context

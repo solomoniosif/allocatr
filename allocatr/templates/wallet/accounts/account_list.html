@@ -82,8 +82,10 @@
                             <i class="bi bi-arrow-up-right text-green-600"></i>
                             {% elif tr.get_transaction_type_display == 'Expense' %}
                             <i class="bi bi-arrow-down-right text-red-600"></i>
-                            {% elif tr.get_transaction_type_display == 'Transfer' %}
-                            <i class="bi bi-arrow-left-right text-blue-500"></i>
+                            {% elif tr.get_transaction_type_display == 'Transfer' and tr.to_account.pkid == account.details.pkid %}
+                            <i class="bi bi-arrow-up-right text-green-600"></i>
+                            {% elif tr.get_transaction_type_display == 'Transfer' and tr.account.pkid == account.details.pkid %}
+                            <i class="bi bi-arrow-down-right text-red-600"></i>
                             {% endif %}
                           </td>
                           <td scope="row" class="px-2 py-2 font-semibold">
