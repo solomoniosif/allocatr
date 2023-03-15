@@ -7,25 +7,45 @@ urlpatterns = [
     # Home
     path("", views.DashboardHome.as_view(), name="home"),
     # Transaction Views
-    path("htmx/transactions/", views.transactions, name="transaction_list"),
+    path(
+        "htmx/transactions/",
+        views.TransactionListView.as_view(),
+        name="transaction_list",
+    ),
     path(
         "htmx/transaction/<int:pk>/",
-        views.transaction_detail,
+        views.TransactionDetailView.as_view(),
         name="transaction_detail",
     ),
     path("htmx/add-income/", views.IncomeCreateView.as_view(), name="add_income"),
-    path("htmx/edit-income/<int:pk>/", views.edit_income, name="edit_income"),
-    path("htmx/add-expense/", views.add_expense, name="add_expense"),
-    path("htmx/edit-expense/<int:pk>/", views.edit_expense, name="edit_expense"),
-    path("htmx/add-transfer/", views.add_transfer, name="add_transfer"),
-    path("htmx/edit-transfer/<int:pk>/", views.edit_transfer, name="edit_transfer"),
+    path(
+        "htmx/edit-income/<int:pk>/",
+        views.IncomeUpdateView.as_view(),
+        name="edit_income",
+    ),
+    path("htmx/add-expense/", views.ExpenseCreateView.as_view(), name="add_expense"),
+    path(
+        "htmx/edit-expense/<int:pk>/",
+        views.ExpenseUpdateView.as_view(),
+        name="edit_expense",
+    ),
+    path("htmx/add-transfer/", views.TransferCreateView.as_view(), name="add_transfer"),
+    path(
+        "htmx/edit-transfer/<int:pk>/",
+        views.TransferUpdateView.as_view(),
+        name="edit_transfer",
+    ),
     path(
         "htmx/delete-transaction/<int:pk>/",
-        views.delete_transaction,
+        views.TransactionDeleteView.as_view(),
         name="delete_transaction",
     ),
     # Account Views
     path("wallet-accounts/", views.AccountListView.as_view(), name="accounts"),
-    path("wallet-account/<int:pk>/", views.AccountDetailView.as_view(), name="account_detail"),
-    path("htmx/accounts/", views.account_cards, name="accounts_list"),
+    path(
+        "wallet-account/<int:pk>/",
+        views.AccountDetailView.as_view(),
+        name="account_detail",
+    ),
+    path("htmx/accounts/", views.AccountPartialListView.as_view(), name="accounts_list"),
 ]

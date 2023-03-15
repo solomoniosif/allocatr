@@ -3,10 +3,18 @@ import json
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import CreateView, DetailView, ListView, TemplateView
+from django.views.generic import (
+    CreateView,
+    DeleteView,
+    DetailView,
+    ListView,
+    TemplateView,
+    UpdateView,
+)
 from django.views.decorators.http import require_POST
 
 from .forms import ExpenseForm, IncomeForm, TransferForm
+from .mixins import RequirePostMixin
 from .models import UserSettings, Account, Transaction
 
 
@@ -19,23 +27,26 @@ class DashboardHome(LoginRequiredMixin, TemplateView):
         return context
 
 
-def transactions(request):
-    user_transactions = Transaction.objects.filter(account__user=request.user)
-    context = {"transactions": user_transactions}
-    return render(request, "wallet/partials/transactions.html", context)
+class TransactionListView(LoginRequiredMixin, ListView):
+    model = Transaction
+    context_object_name = "transactions"
+    template_name = "wallet/partials/transactions/transaction_list.html"
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs.filter(account__user=self.request.user)
 
 
-def transaction_detail(request, pk):
-    transaction = get_object_or_404(Transaction, pk=pk)
-    context = {"transaction": transaction}
-    return render(request, "wallet/partials/transaction_detail.html", context)
+class TransactionDetailView(DetailView):
+    model = Transaction
+    context_object_name = "transaction"
+    template_name = "wallet/partials/transactions/transaction_detail.html"
 
 
-class IncomeCreateView(CreateView):
+class IncomeCreateView(LoginRequiredMixin, CreateView):
     model = Transaction
     form_class = IncomeForm
-    context_object_name = "income"
-    template_name = "wallet/partials/add_income.html"
+    template_name = "wallet/partials/transactions/add_income.html"
 
     def form_valid(self, form):
         self.object = form.save()  # noqa
@@ -49,162 +60,122 @@ class IncomeCreateView(CreateView):
         )
 
 
-def add_income(request):
-    if request.method == "POST":
-        form = IncomeForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return HttpResponse(
-                status=204,
-                headers={
-                    "HX-Trigger": json.dumps(
-                        {"transactionListChanged": None, "incomeCreated": None}
-                    )
-                },
+class ExpenseCreateView(LoginRequiredMixin, CreateView):
+    model = Transaction
+    form_class = ExpenseForm
+    template_name = "wallet/partials/transactions/add_expense.html"
+
+    def form_valid(self, form):
+        self.object = form.save()  # noqa
+        return HttpResponse(
+            status=204,
+            headers={
+                "HX-Trigger": json.dumps(
+                    {"transactionListChanged": None, "expenseCreated": None}
+                )
+            },
+        )
+
+
+class TransferCreateView(LoginRequiredMixin, CreateView):
+    model = Transaction
+    form_class = TransferForm
+    template_name = "wallet/partials/transactions/add_transfer.html"
+
+    def form_valid(self, form):
+        self.object = form.save()  # noqa
+        return HttpResponse(
+            status=204,
+            headers={
+                "HX-Trigger": json.dumps(
+                    {"transactionListChanged": None, "transferCreated": None}
+                )
+            },
+        )
+
+
+class IncomeUpdateView(LoginRequiredMixin, UpdateView):
+    model = Transaction
+    form_class = IncomeForm
+    context_object_name = "income"
+    template_name = "wallet/partials/transactions/edit_income.html"
+    success_url = None
+
+    def form_valid(self, form):
+        self.object = form.save()  # noqa
+        headers = {
+            "HX-Trigger": json.dumps(
+                {"transactionListChanged": None, "incomeEdited": None}
             )
-    else:
-        form = IncomeForm()
-    return render(request, "wallet/partials/add_income.html", {"form": form})
+        }
+        return HttpResponse(status=204, headers=headers)
 
 
-def add_expense(request):
-    if request.method == "POST":
-        form = ExpenseForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return HttpResponse(
-                status=204,
-                headers={
-                    "HX-Trigger": json.dumps(
-                        {"transactionListChanged": None, "expenseCreated": None}
-                    )
-                },
+class ExpenseUpdateView(LoginRequiredMixin, UpdateView):
+    model = Transaction
+    form_class = ExpenseForm
+    context_object_name = "expense"
+    template_name = "wallet/partials/transactions/edit_expense.html"
+    success_url = None
+
+    def form_valid(self, form):
+        self.object = form.save()  # noqa
+        headers = {
+            "HX-Trigger": json.dumps(
+                {"transactionListChanged": None, "expenseEdited": None}
             )
-    else:
-        form = ExpenseForm()
-    return render(request, "wallet/partials/add_expense.html", {"form": form})
+        }
+        return HttpResponse(status=204, headers=headers)
 
 
-def add_transfer(request):
-    if request.method == "POST":
-        form = TransferForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return HttpResponse(
-                status=204,
-                headers={
-                    "HX-Trigger": json.dumps(
-                        {"transactionListChanged": None, "transferCreated": None}
-                    )
-                },
+class TransferUpdateView(LoginRequiredMixin, UpdateView):
+    model = Transaction
+    form_class = TransferForm
+    context_object_name = "transfer"
+    template_name = "wallet/partials/transactions/edit_transfer.html"
+    success_url = None
+
+    def form_valid(self, form):
+        self.object = form.save()  # noqa
+        headers = {
+            "HX-Trigger": json.dumps(
+                {"transactionListChanged": None, "transferEdited": None}
             )
-    else:
-        form = TransferForm()
-    return render(request, "wallet/partials/add_transfer.html", {"form": form})
+        }
+        return HttpResponse(status=204, headers=headers)
 
 
-def edit_income(request, pk):
-    income = get_object_or_404(Transaction, pk=pk)
-    if request.method == "POST":
-        form = IncomeForm(request.POST, instance=income)
-        if form.is_valid():
-            form.save()
-            return HttpResponse(
-                status=204,
-                headers={
-                    "HX-Trigger": json.dumps(
-                        {"transactionListChanged": None, "incomeEdited": None}
-                    )
-                },
-            )
-    else:
-        form = IncomeForm(instance=income)
-    return render(
-        request,
-        "wallet/partials/edit_income.html",
-        {
-            "form": form,
-            "income": income,
-        },
-    )
+class TransactionDeleteView(LoginRequiredMixin, RequirePostMixin, DeleteView):
+    model = Transaction
+    success_url = None
 
-
-def edit_expense(request, pk):
-    expense = get_object_or_404(Transaction, pk=pk)
-    if request.method == "POST":
-        form = ExpenseForm(request.POST, instance=expense)
-        if form.is_valid():
-            form.save()
-            return HttpResponse(
-                status=204,
-                headers={
-                    "HX-Trigger": json.dumps(
-                        {"transactionListChanged": None, "expenseEdited": None}
-                    )
-                },
-            )
-    else:
-        form = ExpenseForm(instance=expense)
-    return render(
-        request,
-        "wallet/partials/edit_expense.html",
-        {
-            "form": form,
-            "expense": expense,
-        },
-    )
-
-
-def edit_transfer(request, pk):
-    transfer = get_object_or_404(Transaction, pk=pk)
-    if request.method == "POST":
-        form = TransferForm(request.POST, instance=transfer)
-        if form.is_valid():
-            form.save()
-            return HttpResponse(
-                status=204,
-                headers={
-                    "HX-Trigger": json.dumps(
-                        {"transactionListChanged": None, "transferEdited": None}
-                    )
-                },
-            )
-    else:
-        form = TransferForm(instance=transfer)
-    return render(
-        request,
-        "wallet/partials/edit_transfer.html",
-        {
-            "form": form,
-            "transfer": transfer,
-        },
-    )
-
-
-@require_POST
-def delete_transaction(request, pk):
-    transaction = get_object_or_404(Transaction, pk=pk)
-    transaction.delete()
-    return HttpResponse(
-        status=204,
-        headers={
+    def form_valid(self, form):
+        self.object.delete()
+        headers = {
             "HX-Trigger": json.dumps(
                 {"transactionListChanged": None, "transactionDeleted": None}
             )
-        },
-    )
+        }
+        return HttpResponse(status=204, headers=headers)
 
 
-def account_cards(request):
-    user_accounts = Account.objects.filter(user=request.user)
-    user_settings = UserSettings.objects.get(user=request.user)
-    wallet_balance = sum([account.current_balance for account in user_accounts])
-    context = {
-        "accounts": user_accounts,
-        "currency": user_settings.currency,
-        "wallet_balance": wallet_balance,
-    }
-    return render(request, "wallet/partials/accounts.html", context)
+class AccountPartialListView(LoginRequiredMixin, ListView):
+    model = Account
+    template_name = "wallet/partials/accounts.html"
+
+    def get_queryset(self, **kwargs):
+        qs = super().get_queryset(**kwargs)
+        return qs.filter(user=self.request.user)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_accounts = Account.objects.filter(user=self.request.user)
+        user_settings = UserSettings.objects.get(user=self.request.user)
+        wallet_balance = sum([account.current_balance for account in user_accounts])
+        context["accounts"] = user_accounts
+        context["currency"] = user_settings.currency
+        context["wallet_balance"] = wallet_balance
+        return context
 
 
 class AccountListView(LoginRequiredMixin, ListView):

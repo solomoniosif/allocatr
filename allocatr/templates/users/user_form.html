@@ -12,7 +12,7 @@
     {% include 'wallet/partials/header/header.html' %}
 
     <main class="h-full overflow-y-auto">
-      <div class="container px-6 mx-auto grid">
+      <div class="container flex flex-col items-center px-6 mx-auto">
         <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
           Welcome
           {% if object.first_name and object.last_name %}
@@ -63,7 +63,7 @@
           </div>
 
           <div class="flex flex-row justify-end px-2">
-              <button type="submit" class="bg-accent text-white px-4 py-2 rounded-lg">Update</button>
+              <button type="submit" class="primaryBtn">Update</button>
           </div>
         </form>
 
