@@ -1,7 +1,6 @@
 import json
 
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import (
     CreateView,
@@ -11,7 +10,6 @@ from django.views.generic import (
     TemplateView,
     UpdateView,
 )
-from django.views.decorators.http import require_POST
 
 from .forms import ExpenseForm, IncomeForm, TransferForm
 from .mixins import RequirePostMixin
@@ -30,7 +28,7 @@ class DashboardHome(LoginRequiredMixin, TemplateView):
 class TransactionListView(LoginRequiredMixin, ListView):
     model = Transaction
     context_object_name = "transactions"
-    template_name = "wallet/partials/transactions/transaction_list.html"
+    template_name = "wallet/transactions/partials/transaction_list.html"
 
     def get_queryset(self):
         qs = super().get_queryset()
@@ -40,13 +38,13 @@ class TransactionListView(LoginRequiredMixin, ListView):
 class TransactionDetailView(DetailView):
     model = Transaction
     context_object_name = "transaction"
-    template_name = "wallet/partials/transactions/transaction_detail.html"
+    template_name = "wallet/transactions/partials/transaction_detail.html"
 
 
 class IncomeCreateView(LoginRequiredMixin, CreateView):
     model = Transaction
     form_class = IncomeForm
-    template_name = "wallet/partials/transactions/add_income.html"
+    template_name = "wallet/transactions/partials/add_income.html"
 
     def form_valid(self, form):
         self.object = form.save()  # noqa
@@ -63,7 +61,7 @@ class IncomeCreateView(LoginRequiredMixin, CreateView):
 class ExpenseCreateView(LoginRequiredMixin, CreateView):
     model = Transaction
     form_class = ExpenseForm
-    template_name = "wallet/partials/transactions/add_expense.html"
+    template_name = "wallet/transactions/partials/add_expense.html"
 
     def form_valid(self, form):
         self.object = form.save()  # noqa
@@ -80,7 +78,7 @@ class ExpenseCreateView(LoginRequiredMixin, CreateView):
 class TransferCreateView(LoginRequiredMixin, CreateView):
     model = Transaction
     form_class = TransferForm
-    template_name = "wallet/partials/transactions/add_transfer.html"
+    template_name = "wallet/transactions/partials/add_transfer.html"
 
     def form_valid(self, form):
         self.object = form.save()  # noqa
@@ -98,7 +96,7 @@ class IncomeUpdateView(LoginRequiredMixin, UpdateView):
     model = Transaction
     form_class = IncomeForm
     context_object_name = "income"
-    template_name = "wallet/partials/transactions/edit_income.html"
+    template_name = "wallet/transactions/partials/edit_income.html"
     success_url = None
 
     def form_valid(self, form):
@@ -115,7 +113,7 @@ class ExpenseUpdateView(LoginRequiredMixin, UpdateView):
     model = Transaction
     form_class = ExpenseForm
     context_object_name = "expense"
-    template_name = "wallet/partials/transactions/edit_expense.html"
+    template_name = "wallet/transactions/partials/edit_expense.html"
     success_url = None
 
     def form_valid(self, form):
@@ -132,7 +130,7 @@ class TransferUpdateView(LoginRequiredMixin, UpdateView):
     model = Transaction
     form_class = TransferForm
     context_object_name = "transfer"
-    template_name = "wallet/partials/transactions/edit_transfer.html"
+    template_name = "wallet/transactions/partials/edit_transfer.html"
     success_url = None
 
     def form_valid(self, form):
@@ -161,7 +159,7 @@ class TransactionDeleteView(LoginRequiredMixin, RequirePostMixin, DeleteView):
 
 class AccountPartialListView(LoginRequiredMixin, ListView):
     model = Account
-    template_name = "wallet/partials/accounts.html"
+    template_name = "wallet/accounts/partials/account_cards.html"
 
     def get_queryset(self, **kwargs):
         qs = super().get_queryset(**kwargs)
@@ -180,7 +178,7 @@ class AccountPartialListView(LoginRequiredMixin, ListView):
 
 class AccountListView(LoginRequiredMixin, ListView):
     model = Account
-    template_name = "wallet/account_list.html"
+    template_name = "wallet/accounts/account_list.html"
 
     def get_queryset(self, **kwargs):
         qs = super().get_queryset(**kwargs)
@@ -200,7 +198,7 @@ class AccountListView(LoginRequiredMixin, ListView):
 class AccountDetailView(DetailView):
     model = Account
     context_object_name = "account"
-    template_name = "wallet/account_detail.html"
+    template_name = "wallet/accounts/account_detail.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
