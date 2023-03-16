@@ -1,6 +1,6 @@
 <header class="z-10 py-4 bg-white shadow-md dark:bg-gray-800">
   <div
-    class="container flex items-center justify-between h-full px-6 mx-auto text-accent dark:text-accentLightest"
+    class="container flex items-center justify-between h-full px-3 md:px-6 mx-auto text-accent dark:text-accentLightest"
   >
     <!-- Mobile hamburger -->
     <button
@@ -25,7 +25,9 @@
     <!-- Add Transaction Menu -->
     {% include 'wallet/partials/header/add_transaction_menu.html' %}
 
-    <ul class="flex items-center flex-shrink-0 space-x-6">
+    {% include 'wallet/partials/period_selecter.html' %}
+
+    <ul class="flex items-center flex-shrink-0 space-x-3 md:space-x-6">
 
       <!-- Theme toggler -->
       <button id="theme-toggle" type="button" class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">

@@ -1,3 +1,8 @@
+from datetime import date
+from calendar import monthrange
+from dateutil.relativedelta import relativedelta
+
+
 COLOR_PALETTE = [
     # Red
     ("#FDE8E8", "red-100"),
@@ -113,3 +118,14 @@ def is_color_dark(hex_color):
         return True
     else:
         return False
+
+
+def get_month_range(start_day_of_month: int, date_to_check: date):
+    if start_day_of_month <= date_to_check.day:
+        first_day = date(date_to_check.year, date_to_check.month, start_day_of_month)
+    else:
+        first_day = date(
+            date_to_check.year, date_to_check.month, start_day_of_month
+        ) - relativedelta(months=1)
+    last_day = first_day + relativedelta(months=1) - relativedelta(days=1)
+    return first_day, last_day
