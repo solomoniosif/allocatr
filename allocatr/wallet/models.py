@@ -9,7 +9,7 @@ from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.db import models
 
-from .utils import COLOR_PALETTE, is_color_dark
+from .utils import COLOR_PALETTE, get_month_range, is_color_dark
 
 User = get_user_model()
 
@@ -39,11 +39,11 @@ class UserSettings(models.Model):
     currency = models.CharField(
         max_length=3, choices=Currency.choices, default=Currency.USD
     )
-    start_date_of_month = models.PositiveSmallIntegerField(
+    start_day_of_month = models.PositiveSmallIntegerField(
         default=1,
         validators=[
-            MaxValueValidator(31, message=_("Value must be between 1 and 31.")),
-            MinValueValidator(1, message=_("Value must be between 1 and 31.")),
+            MaxValueValidator(28, message=_("Value must be between 1 and 28.")),
+            MinValueValidator(1, message=_("Value must be between 1 and 28.")),
         ],
     )
 
@@ -306,7 +306,7 @@ class Budget(TimeStampedUUIDModel):
     end_date = models.DateField(verbose_name=_("End date"))
 
     def __str__(self):
-        return f"{self.get_period_display()}ly budget for {self.category.name}"
+        return self.name
 
 
 class BudgetItem(TimeStampedUUIDModel):
