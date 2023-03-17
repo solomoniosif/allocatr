@@ -1,3 +1,4 @@
+from datetime import date
 import json
 
 from django.http import HttpResponse
@@ -15,6 +16,7 @@ from django.db.models import Q
 from .forms import ExpenseForm, IncomeForm, TransferForm
 from .mixins import RequirePostMixin
 from .models import UserSettings, Account, Transaction
+from .utils import get_month_range
 
 
 class DashboardHome(LoginRequiredMixin, TemplateView):
@@ -22,7 +24,9 @@ class DashboardHome(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["user"] = self.request.user
+        user_settings = UserSettings.objects.get(user=self.request.user)
+        context["user_settings"] = user_settings
+        context["current_period"] = user_settings.get_current_period(date.today())
         return context
 
 
@@ -33,7 +37,13 @@ class TransactionListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         qs = super().get_queryset()
-        return qs.filter(account__user=self.request.user)
+        first_period_day = self.request.GET["firstPeriodDay"]
+        last_period_day = self.request.GET["lastPeriodDay"]
+        return qs.filter(
+            account__user=self.request.user,
+            date__gte=first_period_day,
+            date__lte=last_period_day,
+        )
 
 
 class TransactionDetailView(DetailView):
@@ -190,7 +200,9 @@ class AccountListView(LoginRequiredMixin, ListView):
         accounts = []
         for account in context["account_list"]:
             # transactions = account.transactions.order_by("-created_at")[:5]
-            transactions = Transaction.objects.filter(Q(account=account) | Q(to_account=account))
+            transactions = Transaction.objects.filter(
+                Q(account=account) | Q(to_account=account)
+            )
             accounts.append({"details": account, "transactions": transactions})
         context["accounts"] = accounts
         context["user_settings"] = UserSettings.objects.get(user=self.request.user)
@@ -206,7 +218,9 @@ class AccountDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         accound_pk = context["account"].pkid
 
-        all_tr = Transaction.objects.filter(Q(account=self.get_object()) | Q(to_account=self.get_object()))
+        all_tr = Transaction.objects.filter(
+            Q(account=self.get_object()) | Q(to_account=self.get_object())
+        )
         context["transactions"] = all_tr
         context["user_settings"] = UserSettings.objects.get(user=self.request.user)
         return context

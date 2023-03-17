@@ -33,6 +33,7 @@
           hx-get="{% url 'wallet:transaction_list' %}"
           hx-trigger="load, transactionListChanged from:body"
           hx-target="this"
+          hx-vals='{"firstPeriodDay": "{{ current_period.0|date:'Y-m-d' }}", "lastPeriodDay": "{{ current_period.1|date:'Y-m-d' }}" }'
         ></div>
       </div>
     </main>

@@ -9,6 +9,7 @@ from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.db import models
 
+from .managers import ExpenseManager, IncomeManager, TransferManager
 from .utils import COLOR_PALETTE, get_month_range, is_color_dark
 
 User = get_user_model()
@@ -49,6 +50,9 @@ class UserSettings(models.Model):
 
     class Meta:
         verbose_name_plural = "User Settings"
+
+    def get_current_period(self, day):
+        return get_month_range(self.start_day_of_month, day)
 
 
 class Account(TimeStampedUUIDModel):
@@ -112,21 +116,6 @@ class Account(TimeStampedUUIDModel):
 
     def get_absolute_url(self):
         return reverse("wallet:account_detail", kwargs={"pk": self.pk})
-
-
-class IncomeManager(models.Manager):
-    def get_queryset(self):
-        return super().get_queryset().filter(group="IN")
-
-
-class ExpenseManager(models.Manager):
-    def get_queryset(self):
-        return super().get_queryset().filter(group="EX")
-
-
-class TransferManager(models.Manager):
-    def get_queryset(self):
-        return super().get_queryset().filter(group="TR")
 
 
 class Category(TimeStampedUUIDModel):
