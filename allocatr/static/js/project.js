@@ -40,7 +40,6 @@ themeToggleBtn.addEventListener('click', function () {
 
 });
 
-
 const twSwal = Swal.mixin({
     customClass: {
         container: 'bg-gray-200 text-gray-800 dark:bg-gray-800 dark:text-white',

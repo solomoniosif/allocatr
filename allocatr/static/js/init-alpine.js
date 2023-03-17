@@ -1,27 +1,6 @@
 function data() {
-  function getThemeFromLocalStorage() {
-    // if user already changed the theme, use it
-    if (window.localStorage.getItem('dark')) {
-      return JSON.parse(window.localStorage.getItem('dark'))
-    }
-
-    // else return their preferences
-    return (
-      !!window.matchMedia &&
-      window.matchMedia('(prefers-color-scheme: dark)').matches
-    )
-  }
-
-  function setThemeToLocalStorage(value) {
-    window.localStorage.setItem('dark', value)
-  }
-
   return {
-    dark: getThemeFromLocalStorage(),
-    toggleTheme() {
-      this.dark = !this.dark
-      setThemeToLocalStorage(this.dark)
-    },
+    // Side Menu
     isSideMenuOpen: false,
     toggleSideMenu() {
       this.isSideMenuOpen = !this.isSideMenuOpen
@@ -29,13 +8,8 @@ function data() {
     closeSideMenu() {
       this.isSideMenuOpen = false
     },
-    isNotificationsMenuOpen: false,
-    toggleNotificationsMenu() {
-      this.isNotificationsMenuOpen = !this.isNotificationsMenuOpen
-    },
-    closeNotificationsMenu() {
-      this.isNotificationsMenuOpen = false
-    },
+
+    // Profile Menu
     isProfileMenuOpen: false,
     toggleProfileMenu() {
       this.isProfileMenuOpen = !this.isProfileMenuOpen
@@ -43,6 +17,8 @@ function data() {
     closeProfileMenu() {
       this.isProfileMenuOpen = false
     },
+
+    // Add Menu
     isAddMenuOpen: false,
     toggleAddMenu() {
       this.isAddMenuOpen = !this.isAddMenuOpen
@@ -50,10 +26,23 @@ function data() {
     closeAddMenu() {
       this.isAddMenuOpen = false
     },
+
+    // Mobile Add Menu
+    isMobileAddMenuOpen: false,
+    toggleMobileAddMenu() {
+      this.isMobileAddMenuOpen = !this.isMobileAddMenuOpen
+    },
+    closeMobileAddMenu() {
+      this.isMobileAddMenuOpen = false
+    },
+
+    // Transaction Menu
     isTransactionsMenuOpen: false,
     toggleTransactionsMenu() {
       this.isTransactionsMenuOpen = !this.isTransactionsMenuOpen
     },
+
+
     // Modal
     isModalOpen: false,
     trapCleanup: null,
@@ -66,49 +55,11 @@ function data() {
       this.isModalOpen = false
       this.trapCleanup()
     },
+
+    // Transaction Modal
     openAddTransactionModal() {
       this.isAddMenuOpen = false
       this.openModal()
     },
-    isMobileAddMenuOpen: false,
-    toggleMobileAddMenu() {
-      this.isMobileAddMenuOpen = !this.isMobileAddMenuOpen
-    },
-    closeMobileAddMenu() {
-      this.isMobileAddMenuOpen = false
-    },
-    sweetAlert() {
-      Swal.fire({
-        title: 'Transaction added successfully',
-        text: 'Do you want to continue',
-        icon: 'success',
-        confirmButtonText: "OK"
-      })
-    },
-    confirmTransactionDelete() {
-      Swal.fire({
-        title: 'Delete Transaction',
-        text: 'Are you sure you want to delete this transaction?',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonText: 'Yes, delete it!',
-        cancelButtonText: 'Cancel'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          console.log('Deletion Confirmed')
-          // Send a POST request with HTMX
-          const deletionConfirmed = new Event('deletion-confirmed',  {
-            bubbles: true
-          });
-          const modalBody = document.getElementById('#modal-body').
-          console.log(modalBody)
-          document.body.dispatchEvent(deletionConfirmed);
-        }
-      })
-    },
-
-    setHref(href) {
-      window.location.href=href;
-    }
   }
 }
