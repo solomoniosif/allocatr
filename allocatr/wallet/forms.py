@@ -78,7 +78,6 @@ class TransferForm(forms.ModelForm):
         self.fields["to_account"].label = "Destination account"
 
     def clean_title(self):
-        print(self.data)
         value = self.cleaned_data.get("title")
         if not value or value == "Transfer":
             computed_title = self.compute_title()
