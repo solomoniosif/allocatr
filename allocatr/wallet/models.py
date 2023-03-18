@@ -1,5 +1,5 @@
 import uuid
-from datetime import date
+from datetime import date, timedelta
 from colorfield.fields import ColorField
 
 from django.core.exceptions import ValidationError
@@ -51,8 +51,16 @@ class UserSettings(models.Model):
     class Meta:
         verbose_name_plural = "User Settings"
 
-    def get_current_period(self, day):
+    def get_current_period(self, day: date):
         return get_month_range(self.start_day_of_month, day)
+
+    def get_previous_period(self, day: date):
+        day_minus_five = day - timedelta(days=5)
+        return get_month_range(self.start_day_of_month, day_minus_five)
+
+    def get_next_period(self, day: date):
+        day_plus_five = day + timedelta(days=5)
+        return get_month_range(self.start_day_of_month, day_plus_five)
 
 
 class Account(TimeStampedUUIDModel):

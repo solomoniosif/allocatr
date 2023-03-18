@@ -35,6 +35,22 @@ def current_period(request):
     return JsonResponse(period, safe=False)
 
 
+def previous_period(request, day: str):
+    user_settings = UserSettings.objects.get(user=request.user)
+    next_period_first_day = date.fromisoformat(day)
+    first_day, last_day = user_settings.get_previous_period(next_period_first_day)
+    period = {"firstDay": first_day.isoformat(), "lastDay": last_day.isoformat()}
+    return JsonResponse(period, safe=False)
+
+
+def next_period(request, day: str):
+    user_settings = UserSettings.objects.get(user=request.user)
+    previous_period_last_day = date.fromisoformat(day)
+    first_day, last_day = user_settings.get_next_period(previous_period_last_day)
+    period = {"firstDay": first_day.isoformat(), "lastDay": last_day.isoformat()}
+    return JsonResponse(period, safe=False)
+
+
 class TransactionListView(LoginRequiredMixin, ListView):
     model = Transaction
     context_object_name = "transactions"

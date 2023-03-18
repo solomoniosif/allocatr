@@ -7,6 +7,8 @@ urlpatterns = [
     # Home
     path("", views.DashboardHome.as_view(), name="home"),
     path("current-period/", views.current_period, name="current_period"),
+    path("previous-period/<str:day>/", views.previous_period, name="previous_period"),
+    path("next-period/<str:day>/", views.next_period, name="next_period"),
     # Transaction Views
     path(
         "htmx/transactions/",

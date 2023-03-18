@@ -93,12 +93,19 @@ function data() {
       return `${firstDayDisplay} - ${lastDayDisplay}`
     },
     getHtmxPeriodVals() {
-      // {"firstPeriodDay": "2023-03-15", "lastPeriodDay": "2023-04-14" }
       const obj = {
         firstPeriodDay: this.period.firstDay,
         lastPeriodDay: this.period.lastDay
       }
       return JSON.stringify(obj)
+    },
+    async getAndSetPreviousPeriod() {
+      this.period = await (await fetch(`previous-period/${this.period.firstDay}/`)).json()
+      this.periodDisplay = this.getPeriodDisplay(this.period.firstDay, this.period.lastDay)
+    },
+    async getAndSetNextPeriod() {
+      this.period = await (await fetch(`next-period/${this.period.lastDay}/`)).json()
+      this.periodDisplay = this.getPeriodDisplay(this.period.firstDay, this.period.lastDay)
     },
   }
 }
