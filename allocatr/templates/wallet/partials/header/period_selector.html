@@ -1,5 +1,5 @@
 <ul
-  x-init="period = await (await fetch('current-period/')).json(); periodDisplay = getPeriodDisplay(period.firstDay, period.lastDay)"
+  x-init="getAndSetCurrentPeriod"
   class="inline-flex items-center -space-x-px text-md md:text-xl">
   <li>
     <button @click="getAndSetPreviousPeriod; $dispatch('transactionListChanged', null)"

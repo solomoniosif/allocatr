@@ -99,12 +99,17 @@ function data() {
       }
       return JSON.stringify(obj)
     },
+    baseUrl: window.location.origin,
+    async getAndSetCurrentPeriod() {
+      this.period = await (await fetch(`${this.baseUrl}/current-period/`)).json();
+      this.periodDisplay = this.getPeriodDisplay(this.period.firstDay, this.period.lastDay)
+    },
     async getAndSetPreviousPeriod() {
-      this.period = await (await fetch(`previous-period/${this.period.firstDay}/`)).json()
+      this.period = await (await fetch(`${this.baseUrl}/previous-period/${this.period.firstDay}/`)).json()
       this.periodDisplay = this.getPeriodDisplay(this.period.firstDay, this.period.lastDay)
     },
     async getAndSetNextPeriod() {
-      this.period = await (await fetch(`next-period/${this.period.lastDay}/`)).json()
+      this.period = await (await fetch(`${this.baseUrl}/next-period/${this.period.lastDay}/`)).json()
       this.periodDisplay = this.getPeriodDisplay(this.period.firstDay, this.period.lastDay)
     },
   }
