@@ -1,15 +1,30 @@
 # allocatr
 
-Personal finance management and budgeting web app made with Django
+Allocatr is a personal finance management and budgeting web application built with Django. The app allows users to manage their personal finances by tracking their income, expenses, and savings goals.
 
 [![Built with Cookiecutter Django](https://img.shields.io/badge/built%20with-Cookiecutter%20Django-ff69b4.svg?logo=cookiecutter)](https://github.com/cookiecutter/cookiecutter-django/)
 [![Black code style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 
 License: MIT
 
-## Settings
+## Features
+- User authentication and authorization
+- Dashboard displaying income, expenses, and savings progress
+- Categorization of income and expenses for easy tracking
+- Budgeting tool to set spending goals and monitor progress
+- Savings goals to help users save for future purchases or events
+- Graphs and charts to visualize financial data
 
-Moved to [settings](http://cookiecutter-django.readthedocs.io/en/latest/settings.html).
+## Technologies Used
+- Python 3.10.8
+- Django 4.0,10
+- Alpine JS 3.12
+- htmx 1.8.6
+- hyperscript 0.9.8
+- Tailwind CSS 3.2.7
+- Sweetalert2 11.7.2
+- PostgreSQL database
+- Docker
 
 ## Basic Commands
 
@@ -40,14 +55,6 @@ To run the tests, check your test coverage, and generate an HTML coverage report
 #### Running tests with pytest
 
     $ pytest
-
-### Live reloading and Sass CSS compilation
-
-Moved to [Live reloading and SASS compilation](https://cookiecutter-django.readthedocs.io/en/latest/developing-locally.html#sass-compilation-live-reloading).
-
-## Deployment
-
-The following details how to deploy this application.
 
 ### Docker
 
