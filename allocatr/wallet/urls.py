@@ -6,6 +6,7 @@ app_name = "wallet"
 urlpatterns = [
     # Home
     path("", views.DashboardHome.as_view(), name="home"),
+    path("current-period/", views.current_period, name="current_period"),
     # Transaction Views
     path(
         "htmx/transactions/",
