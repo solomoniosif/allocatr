@@ -1,7 +1,7 @@
 from datetime import date
 import json
 
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import (
     CreateView,
@@ -16,7 +16,6 @@ from django.db.models import Q
 from .forms import ExpenseForm, IncomeForm, TransferForm
 from .mixins import RequirePostMixin
 from .models import UserSettings, Account, Transaction
-from .utils import get_month_range
 
 
 class DashboardHome(LoginRequiredMixin, TemplateView):
@@ -26,8 +25,14 @@ class DashboardHome(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         user_settings = UserSettings.objects.get(user=self.request.user)
         context["user_settings"] = user_settings
-        context["current_period"] = user_settings.get_current_period(date.today())
         return context
+
+
+def current_period(request):
+    user_settings = UserSettings.objects.get(user=request.user)
+    first_day, last_day = user_settings.get_current_period(date.today())
+    period = {"firstDay": first_day.isoformat(), "lastDay": last_day.isoformat()}
+    return JsonResponse(period, safe=False)
 
 
 class TransactionListView(LoginRequiredMixin, ListView):
