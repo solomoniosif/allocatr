@@ -1,7 +1,7 @@
 {% load static i18n %}
 <!DOCTYPE html>
 {% get_current_language as LANGUAGE_CODE %}
-<html x-data="data()" lang="{{ LANGUAGE_CODE }}">
+<html x-data="data()" lang="ro">
 
 <head>
   <meta charset="UTF-8" />
@@ -53,7 +53,6 @@
     document.body.addEventListener('htmx:configRequest', (event) => {
       event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
     })
-
   </script>
   {% endblock %}
 </body>

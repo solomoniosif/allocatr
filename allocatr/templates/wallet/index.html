@@ -31,10 +31,11 @@
         <!-- Transactions -->
         <div
           hx-get="{% url 'wallet:transaction_list' %}"
-          hx-trigger="load, transactionListChanged from:body"
+          hx-trigger="load delay:1s, transactionListChanged from:body delay:1s"
           hx-target="this"
-          hx-vals='{"firstPeriodDay": "{{ current_period.0|date:'Y-m-d' }}", "lastPeriodDay": "{{ current_period.1|date:'Y-m-d' }}" }'
+          x-bind:hx-vals="getHtmxPeriodVals"
         ></div>
+
       </div>
     </main>
   </div>
