@@ -44,7 +44,7 @@
       </li>
 
       <!-- Transactions -->
-      <li class="relative px-6 py-3">
+      <li class="relative px-6 py-3 cursor-pointer">
         <button
           class="inline-flex items-center justify-between w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 focus:outline-none"
           @click="toggleTransactionsMenu"
@@ -68,7 +68,7 @@
             aria-label="submenu"
           >
             <li
-              class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+              class="px-2 py-1 cursor-pointer transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
             >
               <a class="w-full" href="#"
                 ><i class="bi bi-list"></i>
@@ -76,7 +76,7 @@
               >
             </li>
             <li
-              class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+              class="px-2 py-1 cursor-pointer transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
             >
               <a class="w-full" href="#"
                 ><i class="bi bi-arrow-up-right"></i>
@@ -84,7 +84,7 @@
               >
             </li>
             <li
-              class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+              class="px-2 py-1 cursor-pointer transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
             >
               <a class="w-full" href="#"
                 ><i class="bi bi-arrow-down-right"></i>
@@ -92,7 +92,7 @@
               >
             </li>
             <li
-              class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+              class="px-2 py-1 cursor-pointer transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
             >
               <a class="w-full" href="#"
                 ><i class="bi bi-arrow-left-right"></i>
@@ -104,7 +104,7 @@
       </li>
 
       <!-- Categories -->
-      <li class="relative px-6 py-3">
+      <li class="relative px-6 py-3 cursor-pointer">
         <a
           class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
           href="#"
@@ -115,7 +115,7 @@
       </li>
 
       <!-- Reports -->
-      <li class="relative px-6 py-3">
+      <li class="relative px-6 py-3 cursor-pointer">
         <a
           class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
           href="#"
@@ -126,7 +126,7 @@
       </li>
 
       <!-- Budgets -->
-      <li class="relative px-6 py-3">
+      <li class="relative px-6 py-3 cursor-pointer">
         <a
           class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
           href="#"
@@ -137,7 +137,7 @@
       </li>
 
       <!-- Settings -->
-      <li class="relative px-6 py-3">
+      <li class="relative px-6 py-3 cursor-pointer">
         <a
           class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
           href="#"
@@ -176,7 +176,10 @@
   @keydown.escape="closeSideMenu"
 >
   <div class="py-4 text-gray-500 dark:text-gray-400">
-    <a class="ml-6 text-lg font-bold text-gray-800 dark:text-gray-200" href="{% url 'wallet:home' %}">
+    <a class="ml-6 text-lg font-bold cursor-pointer text-gray-800 dark:text-gray-200"
+      hx-get="{% url 'wallet:home' %}"
+      hx-trigger="click"
+      hx-target="#dashboard-main">
       allocatr
     </a>
     <ul class="mt-6">
@@ -211,7 +214,7 @@
       </li>
 
       <!-- Transactions -->
-      <li class="relative px-6 py-3">
+      <li class="relative px-6 py-3 cursor-pointer">
         <button
           class="inline-flex items-center justify-between w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 focus:outline-none"
           @click="toggleTransactionsMenu"
@@ -235,7 +238,7 @@
             aria-label="submenu"
           >
             <li
-              class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+              class="px-2 py-1 cursor-pointer transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
             >
               <a class="w-full" href="#"
                 ><i class="bi bi-list"></i>
@@ -243,7 +246,7 @@
               >
             </li>
             <li
-              class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+              class="px-2 py-1 cursor-pointer transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
             >
               <a class="w-full" href="#"
                 ><i class="bi bi-arrow-up-right"></i>
@@ -251,7 +254,7 @@
               >
             </li>
             <li
-              class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+              class="px-2 py-1 cursor-pointer transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
             >
               <a class="w-full" href="#"
                 ><i class="bi bi-arrow-down-right"></i>
@@ -259,7 +262,7 @@
               >
             </li>
             <li
-              class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+              class="px-2 py-1 cursor-pointer transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
             >
               <a class="w-full" href="#"
                 ><i class="bi bi-arrow-left-right"></i>
@@ -271,7 +274,7 @@
       </li>
 
       <!-- Categories -->
-      <li class="relative px-6 py-3">
+      <li class="relative px-6 py-3 cursor-pointer">
         <a
           class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
           href="#"
@@ -282,7 +285,7 @@
       </li>
 
       <!-- Reports -->
-      <li class="relative px-6 py-3">
+      <li class="relative px-6 py-3 cursor-pointer">
         <a
           class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
           href="#"
@@ -293,7 +296,7 @@
       </li>
 
       <!-- Budgets -->
-      <li class="relative px-6 py-3">
+      <li class="relative px-6 py-3 cursor-pointer">
         <a
           class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
           href="#"
@@ -304,7 +307,7 @@
       </li>
 
       <!-- Settings -->
-      <li class="relative px-6 py-3">
+      <li class="relative px-6 py-3 cursor-pointer">
         <a
           class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
           href="#"
