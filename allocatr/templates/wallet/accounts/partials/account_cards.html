@@ -13,7 +13,12 @@
   </div>
 
   {% for account in accounts %}
-  <a href="{% url 'wallet:account_detail' account.pk %}">
+  <a
+    hx-get="{% url 'wallet:account_detail' account.pk %}"
+    hx-trigger="click"
+    hx-target="#dashboard-main"
+    :hx-vals="getHtmxPeriodVals"
+    >
     <div
       class="flex items-center p-4 rounded-lg shadow-lg shadow-gray-500 cursor-pointer md:max-w-xs scale-100 hover:scale-105 ease-in duration-100  dark:shadow-gray-900 dark:hover:shadow-gray-600 dark:hover:shadow-xs"
       style="background-color: {{ account.color }}; color: {{ account.text_color }}"
