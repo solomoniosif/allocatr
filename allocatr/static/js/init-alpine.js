@@ -78,8 +78,8 @@ function data() {
         if (firstDayDayOfMonth === "1") {
           return firstDayDate.toLocaleString(language, { month: "long" });
         } else {
-          const firstDayMonthName = firstDayDate.toLocaleString(language, { month: "short" });
-          const lastDayMonthName = lastDayDate.toLocaleString(language, { month: "short" });
+          const firstDayMonthName = firstDayDate.toLocaleString(language, { month: "short" }).replace(/\./g, "");
+          const lastDayMonthName = lastDayDate.toLocaleString(language, { month: "short" }).replace(/\./g, "");
           const lastDayDayOfMonth = lastDayDate.toLocaleString(language, { day: "numeric" });
           return `${firstDayDayOfMonth} ${firstDayMonthName} - ${lastDayDayOfMonth} ${lastDayMonthName}`;
         }
@@ -89,8 +89,8 @@ function data() {
           const year = firstDayDate.getFullYear();
           return `${monthName} ${year}`
         } else {
-          const firstDayMonthName = firstDayDate.toLocaleString(language, { month: "short" });
-          const lastDayMonthName = lastDayDate.toLocaleString(language, { month: "short" });
+          const firstDayMonthName = firstDayDate.toLocaleString(language, { month: "short" }).replace(/\./g, "");
+          const lastDayMonthName = lastDayDate.toLocaleString(language, { month: "short" }).replace(/\./g, "");
           const lastDayDayOfMonth = lastDayDate.toLocaleString(language, { day: "numeric" });
           const firstDayYear = firstDayDate.getFullYear()
           const lastDayYear = lastDayDate.getFullYear()
