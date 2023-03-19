@@ -261,7 +261,10 @@ class AccountDetailView(DetailView):
         income_colors = []
         expense_colors = []
         for tr in filtered_transactions.order_by("-created_at"):
-            if tr.transaction_type == Transaction.TransactionType.EXPENSE:
+            if tr.transaction_type == Transaction.TransactionType.EXPENSE or (
+                tr.transaction_type == Transaction.TransactionType.TRANSFER
+                and tr.account == context["account"]
+            ):
                 expenses_amounts.append(int(tr.amount))
                 expenses.append(tr.title)
                 expense_colors.append(tr.category.color)
@@ -284,3 +287,20 @@ class AccountDetailView(DetailView):
         if self.request.headers.get("HX-Request"):
             return "wallet/accounts/partials/account_detail_partial.html"
         return "wallet/accounts/account_detail.html"
+
+
+class AccountAddButtonPartial(TemplateView):
+    template_name = "wallet/partials/header/add_account_menu.html"
+
+
+class AccountCreateView(LoginRequiredMixin, CreateView):
+    model = Account
+    fields = '__all__'
+    template_name = "wallet/accounts/partials/account_form.html"
+
+    def form_valid(self, form):
+        self.object = form.save()  # noqa
+        return HttpResponse(
+            status=204,
+            headers={"HX-Trigger": json.dumps({"accountCreated": None})},
+        )

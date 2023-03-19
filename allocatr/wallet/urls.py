@@ -50,5 +50,13 @@ urlpatterns = [
         views.AccountDetailView.as_view(),
         name="account_detail",
     ),
-    path("htmx/accounts/", views.AccountPartialListView.as_view(), name="accounts_list"),
+    path(
+        "htmx/accounts/", views.AccountPartialListView.as_view(), name="accounts_list"
+    ),
+    path(
+        "htmx/account-add-button/",
+        views.AccountAddButtonPartial.as_view(),
+        name="add_account_button",
+    ),
+    path("htmx/add-account/", views.AccountCreateView.as_view(), name="add_account"),
 ]

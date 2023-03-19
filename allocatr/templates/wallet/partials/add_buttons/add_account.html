@@ -1,12 +1,8 @@
  <!-- Add Account -->
  <li class="flex bg-white text-gray-800 dark:bg-gray-800 dark:text-white">
-    <button hx-get="{% url 'wallet:add_income' %}" hx-trigger="click" hx-target="#modal" @click="openAddTransactionModal"
+    <button hx-get="{% url 'wallet:add_account' %}" hx-trigger="click" hx-target="#modal" @click="openAddTransactionModal"
       class="inline-flex items-center w-full px-4 py-1 text-lg font-semibold transition-colors duration-150 rounded-md group hover:bg-accent hover:text-white">
-      <svg class="w-4 h-4 mr-3 text-green-600 group-hover:text-green-400" fill="none" stroke="currentColor"
-        stroke-width="2.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"></path>
-      </svg>
-      <span>New account</span>
+      <span class="whitespace-nowrap">New account</span>
     </button>
   </li>
 

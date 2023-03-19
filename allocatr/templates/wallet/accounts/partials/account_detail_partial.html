@@ -29,32 +29,34 @@
       <!-- Income Card -->
       <div
         class="flex items-center p-4 bg-white  text-gray-800 rounded-lg shadow-md shadow-gray-500 md:max-w-xs dark:bg-gray-800 dark:text-white dark:shadow-green-200">
-        <div class="p-4 mr-4 bg-green-200 rounded-full text-2xl font-bold dark:text-green-100">
-          <i class="bi bi-arrow-up-right text-green-600"></i>
+        <div class="px-3 py-2 mr-4 bg-green-200 rounded-full text-xl font-bold dark:text-green-100">
+          <i class="bi bi-arrow-up-right text-green-700"></i>
         </div>
         <div>
-          <p class="mb-2 text-xl font-bold">
+          <p class="text-lg font-bold">
             Income
           </p>
-          <p class="text-xl font-semibold">
+          <p class="text-2xl font-semibold text-green-700">
             {{ user_settings.currency }} {{ income_total|floatformat:0 }}
           </p>
+          <p>{{ income|length }} transaction{{ income|pluralize }}</p>
         </div>
       </div>
 
       <!-- Expenses Card -->
       <div
         class="flex items-center p-4 bg-white  text-gray-800 rounded-lg shadow-md shadow-gray-500 md:max-w-xs dark:bg-gray-800 dark:text-white dark:shadow-red-200">
-        <div class="p-4 mr-4 bg-red-200 rounded-full text-2xl font-bold dark:text-green-100">
-          <i class="bi bi-arrow-down-right text-red-600"></i>
+        <div class="px-3 py-2 mr-4 bg-red-200 rounded-full text-xl font-bold dark:text-green-100">
+          <i class="bi bi-arrow-down-right text-red-700"></i>
         </div>
         <div>
-          <p class="mb-2 text-xl font-bold">
+          <p class="text-lg font-bold">
             Expenses
           </p>
-          <p class="text-xl font-semibold">
+          <p class="text-2xl font-semibold text-red-700">
             {{ user_settings.currency }} {{ expense_total|floatformat:0 }}
           </p>
+          <p>{{ expenses|length }} transaction{{ expenses|pluralize }}</p>
         </div>
       </div>
 
@@ -76,8 +78,8 @@
                 class="text-xs font-semibold tracking-wide text-left bg-gray-50 text-gray-500 uppercase border-b dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800"
               >
                 <th class="px-4 py-3">Type</th>
-                <th class="px-4 py-3">Category</th>
                 <th class="px-4 py-3">Transaction</th>
+                <th class="px-4 py-3">Category</th>
                 <th class="px-4 py-3">Amount</th>
                 <th class="px-4 py-3">Date</th>
               </tr>
@@ -105,7 +107,7 @@
 
                 <!-- Transaction Title -->
                 <td class="px-4 py-3 text-sm font-bold dark:hover:text-white">
-                  {{ tr.title|title }}
+                  {{ tr.title|capfirst }}
                 </td>
 
                 <!-- Transaction Category -->
@@ -138,6 +140,12 @@
     </div>
   </div>
 
+  <div
+    hx-get={% url 'wallet:add_account_button' %}
+    hx-trigger="load"
+    hx-target="#header-add-menu"
+    class="hidden">
+  </div>
 
 
 </main>
