@@ -67,37 +67,41 @@ function data() {
     lastDay: "",
     period: {},
     periodDisplay: "",
-    displayDate(isoStringDate) {
-      const date = new Date(isoStringDate);
+    getPeriodDisplay(firstDay, lastDay) {
       const language = document.documentElement.lang;
-      const day = date.toLocaleString(language, { day: "numeric" });
-      const fullYear = date.getFullYear();
       const now = new Date();
-      let diffMonth = (now.getTime() - date.getTime()) / 1000;
-      diffMonth /= (60 * 60 * 24 * 7 * 4);
-      diffMonth = Math.abs(Math.round(diffMonth))
-      if (day === 1) {
-        let monthName = date.toLocaleString(language, { month: "long" });
-        if (diffMonth < 11) {
-          return monthName;
+      const firstDayDate = new Date(firstDay);
+      const lastDayDate = new Date(lastDay);
+      const firstDayDayOfMonth = firstDayDate.toLocaleString(language, { day: "numeric" });
+
+      if (now.getFullYear() === firstDayDate.getFullYear()) {
+        if (firstDayDayOfMonth === "1") {
+          return firstDayDate.toLocaleString(language, { month: "long" });
         } else {
-          return `${monthName} ${fullYear}`;
+          const firstDayMonthName = firstDayDate.toLocaleString(language, { month: "short" });
+          const lastDayMonthName = lastDayDate.toLocaleString(language, { month: "short" });
+          const lastDayDayOfMonth = lastDayDate.toLocaleString(language, { day: "numeric" });
+          return `${firstDayDayOfMonth} ${firstDayMonthName} - ${lastDayDayOfMonth} ${lastDayMonthName}`;
         }
       } else {
-        let shortMonthName = date.toLocaleString(language, { month: "short" });
-        shortMonthName = shortMonthName.replace(/\./g, "");
-        if (diffMonth < 11) {
-          return `${day} ${shortMonthName}`
+        if (firstDayDayOfMonth === "1") {
+          const monthName = firstDayDate.toLocaleString(language, { month: "long" });
+          const year = firstDayDate.getFullYear();
+          return `${monthName} ${year}`
         } else {
-          const shortYear = fullYear.toString().slice(-2);
-          return `${day} ${shortMonthName} ${shortYear}`
+          const firstDayMonthName = firstDayDate.toLocaleString(language, { month: "short" });
+          const lastDayMonthName = lastDayDate.toLocaleString(language, { month: "short" });
+          const lastDayDayOfMonth = lastDayDate.toLocaleString(language, { day: "numeric" });
+          const firstDayYear = firstDayDate.getFullYear()
+          const lastDayYear = lastDayDate.getFullYear()
+          if (firstDayYear === lastDayYear) {
+            return `${firstDayDayOfMonth} ${firstDayMonthName} - ${lastDayDayOfMonth} ${lastDayMonthName} ${firstDayYear}`;
+          } else {
+
+            return `${firstDayDayOfMonth} ${firstDayMonthName} ${firstDayYear.toString().slice(-2)} - ${lastDayDayOfMonth} ${lastDayMonthName} ${lastDayYear.toString().slice(-2)}`;
+          }
         }
       }
-    },
-    getPeriodDisplay(firstDay, lastDay) {
-      const firstDayDisplay = this.displayDate(firstDay);
-      const lastDayDisplay = this.displayDate(lastDay);
-      return `${firstDayDisplay} - ${lastDayDisplay}`
     },
     getHtmxPeriodVals() {
       const obj = {
