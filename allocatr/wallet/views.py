@@ -222,8 +222,12 @@ class AccountListView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         accounts = []
         for account in context["account_list"]:
+            first_period_day = self.request.GET["firstPeriodDay"]
+            last_period_day = self.request.GET["lastPeriodDay"]
             transactions = Transaction.objects.filter(
-                Q(account=account) | Q(to_account=account)
+                Q(account=account) | Q(to_account=account),
+                date__gte=first_period_day,
+                date__lte=last_period_day,
             )
             accounts.append({"details": account, "transactions": transactions})
         context["accounts"] = accounts
@@ -243,8 +247,12 @@ class AccountDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        first_period_day = self.request.GET["firstPeriodDay"]
+        last_period_day = self.request.GET["lastPeriodDay"]
         all_tr = Transaction.objects.filter(
-            Q(account=self.get_object()) | Q(to_account=self.get_object())
+            Q(account=self.get_object()) | Q(to_account=self.get_object()),
+            date__gte=first_period_day,
+            date__lte=last_period_day,
         )
         context["transactions"] = all_tr
         context["user_settings"] = UserSettings.objects.get(user=self.request.user)

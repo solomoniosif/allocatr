@@ -1,4 +1,9 @@
-<main class="h-full overflow-y-auto">
+<main
+  hx-get="{% url 'wallet:accounts' %}"
+  hx-trigger="transactionListChanged from:body delay:1s"
+  hx-target="#dashboard-main"
+  :hx-vals="getHtmxPeriodVals"
+  class="h-full overflow-y-auto">
   <div class="container px-6 mx-auto">
     <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">Your wallet accounts</h2>
 
@@ -16,6 +21,7 @@
             hx-get="{% url 'wallet:account_detail' account.details.pk %}"
             hx-trigger="click"
             hx-target="#dashboard-main"
+            :hx-vals="getHtmxPeriodVals"
             >
             <div class="flex flex-row justify-between pb-4">
               <div class="flex flex-row items-end">

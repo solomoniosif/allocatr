@@ -6,13 +6,21 @@
       </h2>
 
       <!-- User accounts -->
-      <div hx-get="{% url 'wallet:accounts_list' %}" hx-trigger="load, transactionListChanged from:body" hx-target="this">
+      <div
+        hx-get="{% url 'wallet:accounts_list' %}"
+        hx-trigger="load, transactionListChanged from:body"
+        hx-target="this"
+      >
       </div>
 
       <!-- Transactions -->
-      <div hx-get="{% url 'wallet:transaction_list' %}"
-        hx-trigger="load delay:1s, transactionListChanged from:body delay:1s" hx-target="this"
-        x-bind:hx-vals="getHtmxPeriodVals"></div>
+      <div
+        hx-get="{% url 'wallet:transaction_list' %}"
+        hx-trigger="load delay:1s, transactionListChanged from:body delay:1s"
+        hx-target="this"
+        :hx-vals="getHtmxPeriodVals"
+      >
+      </div>
 
     </div>
   </main>

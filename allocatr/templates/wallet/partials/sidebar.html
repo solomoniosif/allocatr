@@ -37,6 +37,7 @@
           hx-get="{% url 'wallet:accounts' %}"
           hx-trigger="click"
           hx-target = "#dashboard-main"
+          :hx-vals="getHtmxPeriodVals"
         >
           <i class="bi bi-window-stack"></i>
           <span class="ml-4">Accounts</span>
@@ -207,6 +208,7 @@
           hx-get="{% url 'wallet:accounts' %}"
           hx-trigger="click"
           hx-target = "#dashboard-main"
+          :hx-vals="getHtmxPeriodVals"
         >
           <i class="bi bi-window-stack"></i>
           <span class="ml-4">Accounts</span>
