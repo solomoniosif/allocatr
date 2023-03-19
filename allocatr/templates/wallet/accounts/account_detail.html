@@ -1,44 +1,9 @@
-{% extends "wallet/base.html" %}
+{% extends "wallet/dashboard_base.html" %}
 
 {% block title %}allocatr » Accounts{% endblock title %}
 
-{% block content %}
+{% block dashboard_main %}
 
-<div
-  class="flex h-screen bg-gray-50 dark:bg-gray-900"
-  :class="{ 'overflow-hidden': isSideMenuOpen }"
->
-  {% include 'wallet/partials/sidebar.html' %}
+{% include "wallet/accounts/partials/account_detail_partial.html" %}
 
-  <div class="flex flex-col flex-1 w-full">
-    {% include 'wallet/partials/header/header.html' %}
-
-    <main class="h-full overflow-y-auto">
-      <div class="container px-6 mx-auto">
-        <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">Your wallet accounts</h2>
-
-        <div class="flex flex-wrap flex-row">
-            <p class=" text-2xl text-gray-800 dark:text-white">
-                {{ account }}
-
-
-                {% for tr in transactions %}
-
-                <span class="text-green-700">{{ tr.account }} || </span><span>{{tr}}</span>
-                <br>
-
-                {% endfor %}
-
-            </p>
-        </div>
-      </div>
-    </main>
-
-  </div>
-</div>
-
-{% include 'wallet/partials/modal.html' %}
-
-{% include 'wallet/partials/mobile_add_menu.html' with add_buttons='wallet/partials/add_buttons/add_transactions.html' %}
-
-{% endblock content %}
+{% endblock dashboard_main %}

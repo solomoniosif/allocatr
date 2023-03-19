@@ -213,7 +213,6 @@ class AccountPartialListView(LoginRequiredMixin, ListView):
 
 class AccountListView(LoginRequiredMixin, ListView):
     model = Account
-    # template_name = "wallet/accounts/account_list.html"
 
     def get_queryset(self, **kwargs):
         qs = super().get_queryset(**kwargs)
@@ -240,15 +239,18 @@ class AccountListView(LoginRequiredMixin, ListView):
 class AccountDetailView(DetailView):
     model = Account
     context_object_name = "account"
-    template_name = "wallet/accounts/account_detail.html"
+    # template_name = "wallet/accounts/account_detail.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        accound_pk = context["account"].pkid
-
         all_tr = Transaction.objects.filter(
             Q(account=self.get_object()) | Q(to_account=self.get_object())
         )
         context["transactions"] = all_tr
         context["user_settings"] = UserSettings.objects.get(user=self.request.user)
         return context
+
+    def get_template_names(self):
+        if self.request.headers.get("HX-Request"):
+            return "wallet/accounts/partials/account_detail_partial.html"
+        return "wallet/accounts/account_detail.html"
