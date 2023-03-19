@@ -19,13 +19,16 @@ from .models import UserSettings, Account, Transaction
 
 
 class DashboardHome(LoginRequiredMixin, TemplateView):
-    template_name = "wallet/index.html"
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user_settings = UserSettings.objects.get(user=self.request.user)
         context["user_settings"] = user_settings
         return context
+
+    def get_template_names(self):
+        if self.request.headers.get("HX-Request"):
+            return "wallet/partials/dashboard_home_partial.html"
+        return "wallet/dashboard_home.html"
 
 
 def current_period(request):
@@ -210,7 +213,7 @@ class AccountPartialListView(LoginRequiredMixin, ListView):
 
 class AccountListView(LoginRequiredMixin, ListView):
     model = Account
-    template_name = "wallet/accounts/account_list.html"
+    # template_name = "wallet/accounts/account_list.html"
 
     def get_queryset(self, **kwargs):
         qs = super().get_queryset(**kwargs)
@@ -220,7 +223,6 @@ class AccountListView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         accounts = []
         for account in context["account_list"]:
-            # transactions = account.transactions.order_by("-created_at")[:5]
             transactions = Transaction.objects.filter(
                 Q(account=account) | Q(to_account=account)
             )
@@ -228,6 +230,11 @@ class AccountListView(LoginRequiredMixin, ListView):
         context["accounts"] = accounts
         context["user_settings"] = UserSettings.objects.get(user=self.request.user)
         return context
+
+    def get_template_names(self):
+        if self.request.headers.get("HX-Request"):
+            return "wallet/accounts/partials/account_list_partial.html"
+        return "wallet/accounts/dashboard_accounts.html"
 
 
 class AccountDetailView(DetailView):
