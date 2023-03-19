@@ -70,21 +70,28 @@ function data() {
     displayDate(isoStringDate) {
       const date = new Date(isoStringDate);
       const language = document.documentElement.lang;
-      let shortMonthName = date.toLocaleString(language, { month: "short" });
-      shortMonthName = shortMonthName.replace(/\./g, "");
       const day = date.toLocaleString(language, { day: "numeric" });
-
-      // Only return the year if the difference in months between input date and now is more than or equal to 11
+      const fullYear = date.getFullYear();
       const now = new Date();
       let diffMonth = (now.getTime() - date.getTime()) / 1000;
       diffMonth /= (60 * 60 * 24 * 7 * 4);
       diffMonth = Math.abs(Math.round(diffMonth))
-      if (diffMonth < 11) {
-        return `${day} ${shortMonthName}`
+      if (day === 1) {
+        let monthName = date.toLocaleString(language, { month: "long" });
+        if (diffMonth < 11) {
+          return monthName;
+        } else {
+          return `${monthName} ${fullYear}`;
+        }
       } else {
-        const fullYear = date.getFullYear();
-        const shortYear = fullYear.toString().slice(-2);
-        return `${day} ${shortMonthName} ${shortYear}`
+        let shortMonthName = date.toLocaleString(language, { month: "short" });
+        shortMonthName = shortMonthName.replace(/\./g, "");
+        if (diffMonth < 11) {
+          return `${day} ${shortMonthName}`
+        } else {
+          const shortYear = fullYear.toString().slice(-2);
+          return `${day} ${shortMonthName} ${shortYear}`
+        }
       }
     },
     getPeriodDisplay(firstDay, lastDay) {

@@ -6,11 +6,10 @@
   class="h-full overflow-y-auto"
   >
   <div class="container px-6 mx-auto">
-    <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">Your wallet accounts</h2>
+    <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">{{ account.name|title }}</h2>
 
     <div class="flex flex-wrap flex-row">
       <p class=" text-2xl text-gray-800 dark:text-white">
-        {{ account }}
 
         {% for tr in transactions %}
 
