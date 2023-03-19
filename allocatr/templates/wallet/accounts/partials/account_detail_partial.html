@@ -4,9 +4,10 @@
   hx-trigger="transactionListChanged from:body delay:1s"
   hx-target="#dashboard-main"
   :hx-vals="getHtmxPeriodVals"
+  hx-replace-url="true"
   class="h-full overflow-y-auto"
   >
-  <div class="container px-6 mx-auto">
+  <div class="container px-6 mx-auto bg-gray-200 dark:bg-gray-900">
     <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">{{ account.name|title }}</h2>
 
     <!-- Account Stats Card -->
@@ -27,7 +28,7 @@
 
       <!-- Income Card -->
       <div
-        class="flex items-center p-4 bg-white  text-gray-700 rounded-lg shadow-sm shadow-gray-500 md:max-w-xs dark:bg-gray-800 dark:text-white dark:shadow-green-200">
+        class="flex items-center p-4 bg-white  text-gray-800 rounded-lg shadow-md shadow-gray-500 md:max-w-xs dark:bg-gray-800 dark:text-white dark:shadow-green-200">
         <div class="p-4 mr-4 bg-green-200 rounded-full text-2xl font-bold dark:text-green-100">
           <i class="bi bi-arrow-up-right text-green-600"></i>
         </div>
@@ -36,14 +37,14 @@
             Income
           </p>
           <p class="text-xl font-semibold">
-            {{ user_settings.currency }} {{ account.current_balance|floatformat:0 }}
+            {{ user_settings.currency }} {{ income_total|floatformat:0 }}
           </p>
         </div>
       </div>
 
       <!-- Expenses Card -->
       <div
-        class="flex items-center p-4 bg-white  text-gray-700 rounded-lg shadow-sm shadow-gray-500 md:max-w-xs dark:bg-gray-800 dark:text-white dark:shadow-red-200">
+        class="flex items-center p-4 bg-white  text-gray-800 rounded-lg shadow-md shadow-gray-500 md:max-w-xs dark:bg-gray-800 dark:text-white dark:shadow-red-200">
         <div class="p-4 mr-4 bg-red-200 rounded-full text-2xl font-bold dark:text-green-100">
           <i class="bi bi-arrow-down-right text-red-600"></i>
         </div>
@@ -52,19 +53,21 @@
             Expenses
           </p>
           <p class="text-xl font-semibold">
-            {{ user_settings.currency }} {{ account.current_balance|floatformat:0 }}
+            {{ user_settings.currency }} {{ expense_total|floatformat:0 }}
           </p>
         </div>
+      </div>
+
+      <div class="flex items-center p-4 bg-white  text-gray-800 rounded-lg shadow-md shadow-gray-500 md:max-w-xs dark:bg-gray-800 dark:text-white dark:shadow-red-200">
+
       </div>
 
     </div>
 
     <div class="flex flex-wrap flex-row">
-      <p class=" text-2xl text-gray-800 dark:text-white">
-
         <!-- Transactions Table -->
         <div class="w-full overflow-hidden rounded-lg shadow-md">
-          <table class="w-full hidden whitespace-no-wrap md:table">
+          <table class="w-full whitespace-no-wrap md:table">
             <caption class="px-5 py-3 text-xl font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800">
               Latest Transactions
             </caption>
@@ -120,14 +123,50 @@
                 <!-- Transaction Date -->
                 <td class="px-4 py-3 text-sm">{{ tr.date|date:"d M Y" }}</td>
               </tr>
+              {% empty %}
+              <div class="text-xl font-bold">No Transactions</div>
               {% endfor %}
             </tbody>
           </table>
         </div>
 
-      </p>
+        <div class="w-1/2 p-5 mb-10">
+          <canvas id="expenses-pie-chart" ></canvas>
+        </div>
+
+
     </div>
   </div>
+
+
+
 </main>
 
 {% include 'wallet/partials/mobile_add_menu.html' with add_buttons='wallet/partials/add_buttons/add_account.html' %}
+
+<script>
+  const expenses = {{ expenses|safe }};
+  const amounts = {{ expenses_amounts|safe }};
+  const config = {
+    type: 'doughnut',
+    data: {
+      labels: expenses,
+      datasets: [{
+        label: 'Account Expenses',
+        data: amounts,
+        backgroundColor: {{ expense_colors|safe }}
+      }],
+    },
+    options: {
+      plugins: {
+          legend: {
+              display: false
+          }
+      }
+  }
+  };
+
+  const ctx = document.getElementById('expenses-pie-chart').getContext('2d');
+  window.myPie = new Chart(ctx, config);
+
+</script>

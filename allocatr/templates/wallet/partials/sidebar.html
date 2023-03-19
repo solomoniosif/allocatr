@@ -6,7 +6,8 @@
     <a class="ml-6 text-lg font-bold cursor-pointer text-gray-800 dark:text-gray-200"
         hx-get="{% url 'wallet:home' %}"
         hx-trigger="click"
-        hx-target="#dashboard-main">
+        hx-target="#dashboard-main"
+        hx-replace-url="true">
       allocatr
     </a>
 
@@ -22,6 +23,7 @@
           hx-get="{% url 'wallet:home' %}"
           hx-trigger="click"
           hx-target="#dashboard-main"
+          hx-replace-url="true"
         >
           <i class="bi bi-house-door text-lg"></i>
           <span class="ml-4">Home</span>
@@ -38,6 +40,7 @@
           hx-trigger="click"
           hx-target = "#dashboard-main"
           :hx-vals="getHtmxPeriodVals"
+          hx-replace-url="true"
         >
           <i class="bi bi-window-stack"></i>
           <span class="ml-4">Accounts</span>
@@ -180,7 +183,8 @@
     <a class="ml-6 text-lg font-bold cursor-pointer text-gray-800 dark:text-gray-200"
       hx-get="{% url 'wallet:home' %}"
       hx-trigger="click"
-      hx-target="#dashboard-main">
+      hx-target="#dashboard-main"
+      hx-replace-url="true">
       allocatr
     </a>
     <ul class="mt-6">
@@ -194,6 +198,7 @@
           hx-get="{% url 'wallet:home' %}"
           hx-trigger="click"
           hx-target="#dashboard-main"
+          hx-replace-url="true"
         >
           <i class="bi bi-house-door text-lg"></i>
           <span class="ml-4">Home</span>
@@ -209,6 +214,7 @@
           hx-trigger="click"
           hx-target = "#dashboard-main"
           :hx-vals="getHtmxPeriodVals"
+          hx-replace-url="true"
         >
           <i class="bi bi-window-stack"></i>
           <span class="ml-4">Accounts</span>

@@ -129,3 +129,9 @@ def get_month_range(start_day_of_month: int, date_to_check: date):
         ) - relativedelta(months=1)
     last_day = first_day + relativedelta(months=1) - relativedelta(days=1)
     return first_day, last_day
+
+
+def hex_to_rgb(hex_string):
+    hex_color = hex_string.lstrip("#")
+    rgb_string = tuple(int(hex_color[i:i+2], 16) for i in (0, 2, 4))
+    return f"rgb{rgb_string}"

@@ -24,3 +24,7 @@
 {% include 'wallet/partials/mobile_add_menu.html' with add_buttons='wallet/partials/add_buttons/add_transactions.html' %}
 
 {% endblock content %}
+
+{% block inline_javascript %}
+{{ block.super }}
+{% endblock inline_javascript %}

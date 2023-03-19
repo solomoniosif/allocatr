@@ -243,18 +243,40 @@ class AccountListView(LoginRequiredMixin, ListView):
 class AccountDetailView(DetailView):
     model = Account
     context_object_name = "account"
-    # template_name = "wallet/accounts/account_detail.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         first_period_day = self.request.GET["firstPeriodDay"]
         last_period_day = self.request.GET["lastPeriodDay"]
-        all_tr = Transaction.objects.filter(
+        filtered_transactions = Transaction.objects.filter(
             Q(account=self.get_object()) | Q(to_account=self.get_object()),
             date__gte=first_period_day,
             date__lte=last_period_day,
         )
-        context["transactions"] = all_tr
+        context["transactions"] = filtered_transactions
+        income_amounts = []
+        expenses_amounts = []
+        income = []
+        expenses = []
+        income_colors = []
+        expense_colors = []
+        for tr in filtered_transactions.order_by("-created_at"):
+            if tr.transaction_type == Transaction.TransactionType.EXPENSE:
+                expenses_amounts.append(int(tr.amount))
+                expenses.append(tr.title)
+                expense_colors.append(tr.category.color)
+            elif tr.transaction_type == Transaction.TransactionType.INCOME:
+                income_amounts.append(int(tr.amount))
+                income.append(tr.title)
+                income_colors.append(tr.category.color)
+        context["expenses"] = expenses
+        context["expenses_amounts"] = expenses_amounts
+        context["expense_colors"] = expense_colors
+        context["expense_total"] = sum(expenses_amounts)
+        context["income"] = income
+        context["income_amounts"] = income_amounts
+        context["income_colors"] = income_colors
+        context["income_total"] = sum(income_amounts)
         context["user_settings"] = UserSettings.objects.get(user=self.request.user)
         return context
 
