@@ -314,3 +314,16 @@ class AccountCreateView(LoginRequiredMixin, CreateView):
             form.errors,
             status=400,
         )
+
+
+class AccountUpdateView(LoginRequiredMixin, UpdateView):
+    model = Account
+    form_class = AccountForm
+    context_object_name = "account"
+    template_name = "wallet/accounts/partials/edit_account_form.html"
+    success_url = None
+
+    def form_valid(self, form):
+        self.object = form.save()  # noqa
+        headers = {"HX-Trigger": json.dumps({"accountEdited": None})}
+        return HttpResponse(status=204, headers=headers)

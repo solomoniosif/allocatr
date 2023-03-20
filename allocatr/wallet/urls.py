@@ -59,4 +59,9 @@ urlpatterns = [
         name="add_account_button",
     ),
     path("htmx/add-account/", views.AccountCreateView.as_view(), name="add_account"),
+    path(
+        "htmx/edit-account/<int:pk>",
+        views.AccountUpdateView.as_view(),
+        name="edit_account",
+    ),
 ]
