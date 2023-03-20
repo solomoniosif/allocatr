@@ -98,7 +98,6 @@ class AccountForm(forms.ModelForm):
     class Meta:
         model = Account
         fields = (
-            "user",
             "name",
             "account_type",
             "current_balance",
@@ -111,4 +110,4 @@ class AccountForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["color"].widget = ColorWidget()
+        self.fields["color"].widget = forms.TextInput()

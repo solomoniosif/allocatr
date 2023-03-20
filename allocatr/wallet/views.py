@@ -296,12 +296,11 @@ class AccountAddButtonPartial(TemplateView):
 class AccountCreateView(LoginRequiredMixin, CreateView):
     model = Account
     form_class = AccountForm
-    template_name = "wallet/accounts/partials/account_form.html"
+    template_name = "wallet/accounts/partials/add_account_form.html"
 
     def form_valid(self, form):
-        self.object = form.save(commit=False)  # noqa
-        self.object.user = self.request.user
-        self.object.save()
+        form.instance.user = self.request.user
+        self.object = form.save()
         return HttpResponse(
             status=204,
             headers={"HX-Trigger": json.dumps({"accountCreated": None})},
@@ -311,4 +310,7 @@ class AccountCreateView(LoginRequiredMixin, CreateView):
         print("Form invalid")
         print(form.errors)
         super(AccountCreateView, self).form_invalid(form)
-        return HttpResponse(form.errors, status=400,)
+        return HttpResponse(
+            form.errors,
+            status=400,
+        )
