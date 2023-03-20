@@ -327,3 +327,13 @@ class AccountUpdateView(LoginRequiredMixin, UpdateView):
         self.object = form.save()  # noqa
         headers = {"HX-Trigger": json.dumps({"accountEdited": None})}
         return HttpResponse(status=204, headers=headers)
+
+
+class AccountDeleteView(LoginRequiredMixin, RequirePostMixin, DeleteView):
+    model = Account
+    success_url = None
+
+    def form_valid(self, form):
+        self.object.delete()
+        headers = {"HX-Trigger": json.dumps({"accountDeleted": None})}
+        return HttpResponse(status=204, headers=headers)

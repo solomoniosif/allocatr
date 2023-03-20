@@ -64,4 +64,5 @@ urlpatterns = [
         views.AccountUpdateView.as_view(),
         name="edit_account",
     ),
+    path("htmx/delete-account/<int:pk>", views.AccountDeleteView.as_view(), name="delete_account")
 ]

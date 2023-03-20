@@ -1,6 +1,6 @@
 <main
   hx-get="{% url 'wallet:accounts' %}"
-  hx-trigger="transactionListChanged from:body delay:1s"
+  hx-trigger="transactionListChanged from:body delay:1s, accountDeleted from:body"
   hx-target="#dashboard-main"
   :hx-vals="getHtmxPeriodVals"
   class="h-full overflow-y-auto">
@@ -15,10 +15,8 @@
       <div class="flex-shrink max-w-full px-4 w-full xl:w-1/2 mb-5">
         <div class="relative h-full bg-white dark:bg-gray-800 rounded-lg shadow-xl border mb-6"
           style="border-color: {{ account.details.color }}">
-          <div
-            class="absolute top-0 left-0 w-full rounded-tl-lg rounded-tr-lg  px-3 pt-2"
-            style="background-color: {{ account.details.color }}"
-            >
+          <div class="absolute top-0 left-0 w-full rounded-tl-lg rounded-tr-lg  px-3 pt-2"
+            style="background-color: {{ account.details.color }}">
             <div class="flex flex-row justify-between pb-4">
               <div class="flex flex-row items-end">
                 <h3 class="text-2xl font-bold pt-2 pl-2" style="color: {{ account.details.text_color }}">
@@ -39,29 +37,29 @@
                 </button>
                 <div x-show="open" @mousedown.outside="open = false"
                   class="absolute right-0 rounded rounded-t-non bg-white dark:bg-gray-800 dark:text-white z-10 border border-gray-200 dark:border-gray-700">
-                  <div>
-                  <button
-                    hx-get="{% url 'wallet:account_detail' account.details.pk %}"
-                    hx-trigger="click"
-                    hx-target="#dashboard-main"
-                    :hx-vals="getHtmxPeriodVals"
-                    hx-replace-url="true"
-                    class="block px-3 py-2 w-full text-left hover:bg-gray-200 hover:text-gray-800 focus:outline-none">
-                    View
-                  </button>
-                </div>
-                <div>
-                  <button
-                    hx-get="{% url 'wallet:edit_account' account.details.pk %}"
-                    hx-trigger="click"
-                    hx-target="#modal"
-                    hx-replace-url="false"
-                    hx-vals=""
-                    @click="openModal"
-                    class="block px-3 py-2 w-full text-left hover:bg-gray-200 hover:text-gray-800 focus:outline-none">
-                    Edit
-                  </button>
-                </div>
+
+                  <!-- View Button -->
+                    <button hx-get="{% url 'wallet:account_detail' account.details.pk %}" hx-trigger="click"
+                      hx-target="#dashboard-main" :hx-vals="getHtmxPeriodVals" hx-replace-url="true"
+                      class="block px-3 py-2 w-full text-left hover:bg-gray-200 hover:text-gray-800 focus:outline-none">
+                      View
+                    </button>
+
+                    <!-- Edit Button -->
+                    <button hx-get="{% url 'wallet:edit_account' account.details.pk %}" hx-trigger="click"
+                      hx-target="#modal" hx-replace-url="false" hx-vals=""
+                      class="block px-3 py-2 w-full text-left hover:bg-gray-200 hover:text-gray-800 focus:outline-none">
+                      Edit
+                    </button>
+
+                    <!-- Delete Button -->
+                    <button hx-post="{% url 'wallet:delete_account' account.details.pk %}" hx-trigger="confirmed"
+                      _="on click call twSwal.fire({title: 'Are you sure?', text:'This account will be deleted! You will not be able to revert this!', icon: 'warning', showConfirmButton: true, showCancelButton: true, confirmButtonText: 'Yes, delete it!'})
+                        if result.isConfirmed trigger confirmed end on accountDeleted call successToast.fire({title: 'Account deleted successfully', icon: 'success'})"
+                        class="block px-3 py-2 w-full text-left hover:bg-gray-200 hover:text-gray-800 focus:outline-none">
+                      Delete
+                    </button>
+
                 </div>
               </div>
             </div>
