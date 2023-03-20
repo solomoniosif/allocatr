@@ -13,7 +13,7 @@ from django.views.generic import (
 )
 from django.db.models import Q
 
-from .forms import ExpenseForm, IncomeForm, TransferForm
+from .forms import AccountForm, ExpenseForm, IncomeForm, TransferForm
 from .mixins import RequirePostMixin
 from .models import UserSettings, Account, Transaction
 
@@ -295,12 +295,20 @@ class AccountAddButtonPartial(TemplateView):
 
 class AccountCreateView(LoginRequiredMixin, CreateView):
     model = Account
-    fields = '__all__'
+    form_class = AccountForm
     template_name = "wallet/accounts/partials/account_form.html"
 
     def form_valid(self, form):
-        self.object = form.save()  # noqa
+        self.object = form.save(commit=False)  # noqa
+        self.object.user = self.request.user
+        self.object.save()
         return HttpResponse(
             status=204,
             headers={"HX-Trigger": json.dumps({"accountCreated": None})},
         )
+
+    def form_invalid(self, form):
+        print("Form invalid")
+        print(form.errors)
+        super(AccountCreateView, self).form_invalid(form)
+        return HttpResponse(form.errors, status=400,)

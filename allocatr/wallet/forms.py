@@ -1,3 +1,5 @@
+from colorfield.widgets import ColorWidget
+
 from django import forms
 from django.utils import timezone
 
@@ -90,3 +92,23 @@ class TransferForm(forms.ModelForm):
         to_account_pk = self.data.get("to_account")
         to_account = Account.objects.get(pk=to_account_pk)
         return f"Transfer from {account} to {to_account}"
+
+
+class AccountForm(forms.ModelForm):
+    class Meta:
+        model = Account
+        fields = (
+            "user",
+            "name",
+            "account_type",
+            "current_balance",
+            "balance_can_be_negative",
+            "active",
+            "exclude_from_budget",
+            "show_on_dashboard",
+            "color",
+        )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["color"].widget = ColorWidget()
