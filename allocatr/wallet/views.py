@@ -3,6 +3,7 @@ import json
 
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import render
 from django.views.generic import (
     CreateView,
     DeleteView,
@@ -220,10 +221,15 @@ class AccountListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        user_settings = UserSettings.objects.get(user=self.request.user)
         accounts = []
         for account in context["account_list"]:
-            first_period_day = self.request.GET["firstPeriodDay"]
-            last_period_day = self.request.GET["lastPeriodDay"]
+            first_period_day = self.request.GET.get("firstPeriodDay")
+            last_period_day = self.request.GET.get("lastPeriodDay")
+            if not first_period_day:
+                first_period_day, last_period_day = user_settings.get_current_period(
+                    date.today()
+                )
             transactions = Transaction.objects.filter(
                 Q(account=account) | Q(to_account=account),
                 date__gte=first_period_day,
@@ -231,7 +237,7 @@ class AccountListView(LoginRequiredMixin, ListView):
             )
             accounts.append({"details": account, "transactions": transactions})
         context["accounts"] = accounts
-        context["user_settings"] = UserSettings.objects.get(user=self.request.user)
+        context["user_settings"] = user_settings
         return context
 
     def get_template_names(self):

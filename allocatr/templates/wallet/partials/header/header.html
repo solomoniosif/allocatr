@@ -1,3 +1,4 @@
+{% load add_links %}
 <header class="z-10 py-4 bg-white shadow-md dark:bg-gray-800">
   <div
     class="container flex items-center justify-between h-full px-3 md:px-6 mx-auto text-accent dark:text-accentLightest"
@@ -22,11 +23,10 @@
       </svg>
     </button>
 
-    <!-- Add Transaction Menu -->
-    <div id="header-add-menu">
-    {% include 'wallet/partials/header/add_transaction_menu.html' %}
-    </div>
+    <!-- Header Add Menu -->
+    {% include 'wallet/partials/header/header_add_menu.html' %}
 
+    <!-- Period Selector -->
     {% include 'wallet/partials/header/period_selector.html' %}
 
     <ul class="flex items-center flex-shrink-0 space-x-3 md:space-x-6">

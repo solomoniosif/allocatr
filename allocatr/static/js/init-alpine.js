@@ -123,5 +123,18 @@ function data() {
       this.period = await (await fetch(`${this.baseUrl}/next-period/${this.period.lastDay}/`)).json();
       this.periodDisplay = this.getPeriodDisplay(this.period.firstDay, this.period.lastDay);
     },
+    getContext() {
+      const current_page = window.location.pathname;
+      if (current_page === '/') {
+        return { transactionsContext: true, accountsContext: false, categoriesContext: false, budgetsContext: false }
+      } else if (current_page.startsWith('/accounts/')) {
+        return { transactionsContext: false, accountsContext: true, categoriesContext: false, budgetsContext: false }
+      } else if (current_page.startsWith('/categories/')) {
+        return { transactionsContext: false, accountsContext: false, categoriesContext: true, budgetsContext: false }
+      } else if (current_page.startsWith('/budgets/')) {
+        return { transactionsContext: false, accountsContext: false, categoriesContext: false, budgetsContext: true }
+      }
+
+    }
   }
 }

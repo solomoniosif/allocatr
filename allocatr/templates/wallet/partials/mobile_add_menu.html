@@ -2,22 +2,37 @@
 
   <div class="relative flex items-center justify-between mx-auto w-full text-accent dark:text-accentLightest">
 
-    <div x-show="isMobileAddMenuOpen"
-      class="absolute inset-x-0 bottom-10 w-full z-20 flex p-3 bg-transparent md:hidden">
-      <ul x-show="isMobileAddMenuOpen" x-transition:enter="transition ease-out duration-150"
-        x-transition:enter-start="opacity-0 transform translate-y-1/2" x-transition:enter-end="opacity-100"
-        x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100"
-        x-transition:leave-end="opacity-0  transform translate-y-1/2" @mousedown.outside="closeMobileAddMenu"
-        @keydown.escape="closeMobileAddMenu" role="dialog" id="mobile-menu"
+    <div
+        x-show="isMobileAddMenuOpen"
+        class="absolute inset-x-0 bottom-10 w-full z-20 flex p-3 bg-transparent md:hidden"
+        >
+      <ul
+        x-show="isMobileAddMenuOpen"
+        x-data="{ctx: getContext()}"
+        @reload-menu.window="ctx = getContext()"
+        x-transition:enter="transition ease-out duration-150"
+        x-transition:enter-start="opacity-0 transform translate-y-1/2"
+        x-transition:enter-end="opacity-100"
+        x-transition:leave="transition ease-in duration-150"
+        x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0  transform translate-y-1/2"
+        @mousedown.outside="closeMobileAddMenu"
+        @keydown.escape="closeMobileAddMenu" r
+        ole="dialog"
+        id="mobile-menu"
         class="rounded-lg mx-auto p-1 space-y-1 bg-gray-200 text-gray-800 dark:bg-gray-900 dark:text-white">
 
-        {% include add_buttons|default:'wallet/partials/add_buttons/add_transactions.html' %}
+        {% include 'wallet/partials/add_buttons.html' %}
 
       </ul>
     </div>
 
-    <button class="mx-auto p-1.5 align-middle rounded-full bg-accent text-white focus:outline-none"
-      @click="toggleMobileAddMenu" @keydown.escape="closeMobileAddMenu" aria-haspopup="true">
+    <button
+      class="mx-auto p-1.5 align-middle rounded-full bg-accent text-white focus:outline-none"
+      @click="toggleMobileAddMenu; $dispatch('reload-menu')"
+      @keydown.escape="closeMobileAddMenu"
+      aria-haspopup="true"
+      >
       <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"
         xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"></path>
