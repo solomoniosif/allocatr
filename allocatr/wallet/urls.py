@@ -64,4 +64,6 @@ urlpatterns = [
         views.AccountDeleteView.as_view(),
         name="delete_account",
     ),
+    # Category Views
+    path("categories/", views.CategoryListView.as_view(), name="categories"),
 ]

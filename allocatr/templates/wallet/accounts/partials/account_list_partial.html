@@ -1,6 +1,6 @@
 <main
   hx-get="{% url 'wallet:accounts' %}"
-  hx-trigger="transactionListChanged from:body delay:1s, accountDeleted from:body"
+  hx-trigger="transactionListChanged from:body delay:1s, accountCreated from:body, accountDeleted from:body"
   hx-target="#dashboard-main"
   :hx-vals="getHtmxPeriodVals"
   class="h-full overflow-y-auto">
@@ -129,7 +129,3 @@
     </div>
   </div>
 </main>
-
-
-
-{% include 'wallet/partials/mobile_add_menu.html' with add_buttons='wallet/partials/add_buttons/add_account.html' %}

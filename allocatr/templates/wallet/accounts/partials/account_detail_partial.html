@@ -140,17 +140,6 @@
     </div>
   </div>
 
- <div
-    hx-get={% url 'wallet:add_account_button' %}
-    hx-trigger="load"
-    hx-target="#header-add-menu"
-    hx-replace-url="false"
-    class="hidden">
-  </div>
-
-</main>
-
-{% include 'wallet/partials/mobile_add_menu.html' with add_buttons='wallet/partials/add_buttons/add_account.html' %}
 
 <script>
   const expenses = {{ expenses|safe }};

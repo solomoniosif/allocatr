@@ -252,8 +252,14 @@ class AccountDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        first_period_day = self.request.GET["firstPeriodDay"]
-        last_period_day = self.request.GET["lastPeriodDay"]
+        user_settings = UserSettings.objects.get(user=self.request.user)
+        first_period_day = self.request.GET.get("firstPeriodDay")
+        last_period_day = self.request.GET.get("lastPeriodDay")
+        if not first_period_day:
+            first_period_day, last_period_day = user_settings.get_current_period(
+                date.today()
+            )
+            print(first_period_day, "2")
         filtered_transactions = Transaction.objects.filter(
             Q(account=self.get_object()) | Q(to_account=self.get_object()),
             date__gte=first_period_day,
@@ -286,7 +292,7 @@ class AccountDetailView(DetailView):
         context["income_amounts"] = income_amounts
         context["income_colors"] = income_colors
         context["income_total"] = sum(income_amounts)
-        context["user_settings"] = UserSettings.objects.get(user=self.request.user)
+        context["user_settings"] = user_settings
         return context
 
     def get_template_names(self):
@@ -351,8 +357,8 @@ class CategoryListView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user_settings = UserSettings.objects.get(user=self.request.user)
-        accounts = []
-        for account in context["account_list"]:
+        categories = {}
+        for category in context["category_list"]:
             first_period_day = self.request.GET.get("firstPeriodDay")
             last_period_day = self.request.GET.get("lastPeriodDay")
             if not first_period_day:
@@ -360,16 +366,24 @@ class CategoryListView(LoginRequiredMixin, ListView):
                     date.today()
                 )
             transactions = Transaction.objects.filter(
-                Q(account=account) | Q(to_account=account),
+                category=category,
                 date__gte=first_period_day,
                 date__lte=last_period_day,
             )
-            accounts.append({"details": account, "transactions": transactions})
-        context["accounts"] = accounts
+            if category.group in categories:
+                categories[category.group].append(
+                    {"details": category, "transactions": transactions}
+                )
+            else:
+                categories[category.group] = [
+                    {"details": category, "transactions": transactions}
+                ]
+
+        context["categories"] = categories
         context["user_settings"] = user_settings
         return context
 
     def get_template_names(self):
         if self.request.headers.get("HX-Request"):
-            return "wallet/accounts/partials/account_list_partial.html"
-        return "wallet/accounts/dashboard_accounts.html"
+            return "wallet/categories/partials/category_list_partial.html"
+        return "wallet/categories/dashboard_categories.html"
