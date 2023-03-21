@@ -45,7 +45,7 @@
 </li>
 
 <!-- Add Category -->
-<li x-show="ctx.accountsContext" class="flex bg-white text-gray-800 dark:bg-gray-800 dark:text-white">
+<li x-show="ctx.categoriesContext" class="flex bg-white text-gray-800 dark:bg-gray-800 dark:text-white">
     <button hx-get="#" hx-trigger="click" hx-target="#modal" @click="openAddTransactionModal"
         class="inline-flex items-center w-full px-4 py-1 text-lg font-semibold transition-colors duration-150 rounded-md group hover:bg-accent hover:text-white">
         <span class="whitespace-nowrap">Add category</span>
@@ -53,7 +53,7 @@
 </li>
 
 <!-- Add Budget -->
-<li x-show="ctx.accountsContext" class="flex bg-white text-gray-800 dark:bg-gray-800 dark:text-white">
+<li x-show="ctx.budgetsContext" class="flex bg-white text-gray-800 dark:bg-gray-800 dark:text-white">
     <button hx-get="#" hx-trigger="click" hx-target="#modal" @click="openAddTransactionModal"
         class="inline-flex items-center w-full px-4 py-1 text-lg font-semibold transition-colors duration-150 rounded-md group hover:bg-accent hover:text-white">
         <span class="whitespace-nowrap">Add budget</span>
