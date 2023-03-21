@@ -137,6 +137,7 @@ class Category(TimeStampedUUIDModel):
         verbose_name=_("User"),
         related_name="categories",
         on_delete=models.CASCADE,
+        default=User.objects.get(pk=1)
     )
     group = models.CharField(
         verbose_name=_("Category group"),
