@@ -47,7 +47,7 @@
 
                     <!-- Edit Button -->
                     <button hx-get="{% url 'wallet:edit_account' account.details.pk %}" hx-trigger="click"
-                      hx-target="#modal" hx-replace-url="false" hx-vals=""
+                      hx-target="#modal" hx-replace-url="false" hx-vals="" @click="openModal"
                       class="block px-3 py-2 w-full text-left hover:bg-gray-200 hover:text-gray-800 focus:outline-none">
                       Edit
                     </button>

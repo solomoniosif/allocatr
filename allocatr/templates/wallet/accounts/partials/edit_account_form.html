@@ -18,26 +18,25 @@
 
 
   <form _="on accountEdited call successToast.fire({title: 'Account updated successfully', icon: 'success'})"
-    class="w-full" hx-post="{% url 'wallet:edit_account' account.pk %}" hx-headers='{"X-CSRFToken":"{{ csrf_token }}"}'>
+    class="w-full" hx-post="{% url 'wallet:edit_account' account.pk %}">
     {% for hidden in form.hidden_fields %} {{ hidden }} {% endfor %}
 
     <div class="flex flex-wrap -mx-3 mb-6">
       <!-- Name -->
-      <div class="w-3/4 px-2">
+      <div class="w-2/3 sm:w-3/4 px-2">
         <label for="{{ form.name.id_for_label }}"
           class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 dark:text-gray-400">{{ form.name.label }}</label>
         {% render_field form.name class="appearance-none block w-full bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" type="text" %}
         {% for error in form.name.errors %}<p class="text-red-500 text-xs italic">{{ error }}</p>{% endfor %}
       </div>
       <!-- Color -->
-      <div x-data="{selectedColor: '{{ form.color.value }}'}" class="w-1/4 px-3">
+      <div x-data="{selectedColor: '{{ form.color.value }}'}" class="w-1/3 sm:w-1/4 px-3">
         <label for="{{ form.color.id_for_label }}"
           class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 dark:text-gray-400">Color</label>
         {% render_field form.color|append_attr:"x-model:selectedColor" class+="coloris block w-full bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %}
         {% for error in form.color.errors %}<p class="text-red-500 text-xs italic">{{ error }}</p>{% endfor %}
       </div>
     </div>
-
 
     <div class="flex flex-wrap -mx-3 mb-6">
       <!-- Account Type -->
@@ -51,51 +50,54 @@
       <!-- Initial Balance -->
       <div class="w-1/2 px-3">
         <label for="{{ form.current_balance.id_for_label }}"
-          class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 dark:text-gray-400">{{ form.current_balance.label }}</label>
+          class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 dark:text-gray-400">Balance</label>
         {% render_field form.current_balance class+="appearance-none block w-full bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %}
         {% for error in form.current_balance.errors %}<p class="text-red-500 text-xs italic">{{ error }}</p>{% endfor %}
       </div>
     </div>
 
-
-    <div class="flex flex-wrap -mx-3 mb-6">
+    <fieldset class="flex flex-wrap -mx-1 mb-6">
       <!-- Balance can be negative -->
-      <div class="w-1/2 px-2">
-        <label for="{{ form.balance_can_be_negative.id_for_label }}"
-          class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 dark:text-gray-400">{{ form.balance_can_be_negative.label }}</label>
-        {% render_field form.balance_can_be_negative class+="appearance-none block bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %}
-        {% for error in form.balance_can_be_negative.errors %}<p class="text-red-500 text-xs italic">{{ error }}</p>
-        {% endfor %}
+      <div class="flex w-full sm:w-1/2 mb-6">
+        <div class="flex items-center h-5">
+          {% render_field form.balance_can_be_negative class+="w-6 h-6 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" %}
+        </div>
+        <div class="ml-2 text-sm">
+            <label for="{{ form.balance_can_be_negative.id_for_label }}" class="font-medium text-gray-900 dark:text-gray-300">{{ form.balance_can_be_negative.label }}</label>
+            {% for error in form.balance_can_be_negative.errors %}<p class="text-red-500 text-xs italic">{{ error }}</p>{% endfor %}
+        </div>
       </div>
-
-      <!-- Active -->
-      <div class="w-1/2 px-2">
-        <label for="{{ form.active.id_for_label }}"
-          class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 dark:text-gray-400">{{ form.active.label }}</label>
-        {% render_field form.active class+="appearance-none block bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %}
-        {% for error in form.active.errors %}<p class="text-red-500 text-xs italic">{{ error }}</p>{% endfor %}
+      <!-- Status -->
+      <div class="flex w-full sm:w-1/2 mb-6">
+        <div class="flex items-center h-5">
+          {% render_field form.active class+="w-6 h-6 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" %}
+        </div>
+        <div class="ml-2 text-sm">
+            <label for="{{ form.active.id_for_label }}" class="font-medium text-gray-900 dark:text-gray-300">{{ form.active.label }}</label>
+            {% for error in form.active.errors %}<p class="text-red-500 text-xs italic">{{ error }}</p>{% endfor %}
+        </div>
       </div>
-    </div>
-
-    <div class="flex flex-wrap -mx-3 mb-6">
       <!-- Exclude from budget -->
-      <div class="w-1/2 px-2">
-        <label for="{{ form.exclude_from_budget.id_for_label }}"
-          class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 dark:text-gray-400">{{ form.exclude_from_budget.label }}</label>
-        {% render_field form.exclude_from_budget class+="appearance-none block bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %}
-        {% for error in form.exclude_from_budget.errors %}<p class="text-red-500 text-xs italic">{{ error }}</p>
-        {% endfor %}
+      <div class="flex w-full sm:w-1/2 mb-6">
+        <div class="flex items-center h-5">
+          {% render_field form.exclude_from_budget class+="w-6 h-6 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" %}
+        </div>
+        <div class="ml-2 text-sm">
+            <label for="{{ form.exclude_from_budget.id_for_label }}" class="font-medium text-gray-900 dark:text-gray-300">{{ form.exclude_from_budget.label }}</label>
+            {% for error in form.exclude_from_budget.errors %}<p class="text-red-500 text-xs italic">{{ error }}</p>{% endfor %}
+        </div>
       </div>
-
-      <!-- Show on Dashboard -->
-      <div class="w-1/2 px-2">
-        <label for="{{ form.show_on_dashboard.id_for_label }}"
-          class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 dark:text-gray-400">{{ form.show_on_dashboard.label }}</label>
-        {% render_field form.show_on_dashboard class+="appearance-none block bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %}
-        {% for error in form.show_on_dashboard.errors %}<p class="text-red-500 text-xs italic">{{ error }}</p>
-        {% endfor %}
+      <!-- Show on dashboard -->
+      <div class="flex w-full sm:w-1/2 mb-6">
+        <div class="flex items-center h-5">
+          {% render_field form.show_on_dashboard class+="w-6 h-6 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" %}
+        </div>
+        <div class="ml-2 text-sm">
+            <label for="{{ form.show_on_dashboard.id_for_label }}" class="font-medium text-gray-900 dark:text-gray-300">{{ form.show_on_dashboard.label }}</label>
+            {% for error in form.show_on_dashboard.errors %}<p class="text-red-500 text-xs italic">{{ error }}</p>{% endfor %}
+        </div>
       </div>
-    </div>
+    </fieldset>
 
     <footer class="flex items-center justify-end px-6 py-2 -mx-6 -mb-4 space-x-6 flex-row bg-white dark:bg-gray-800">
       <button @click="closeModal" class="secondaryBtn">Cancel</button>

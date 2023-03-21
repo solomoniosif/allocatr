@@ -140,14 +140,13 @@
     </div>
   </div>
 
-  <div
+ <div
     hx-get={% url 'wallet:add_account_button' %}
     hx-trigger="load"
     hx-target="#header-add-menu"
     hx-replace-url="false"
     class="hidden">
   </div>
-
 
 </main>
 
@@ -179,3 +178,8 @@
   window.myPie = new Chart(ctx, config);
 
 </script>
+
+{% comment %}
+<div id="header-add-menu">
+  {% include 'wallet/partials/header/add_account_menu.html' %}
+</div> {% endcomment %}

@@ -273,8 +273,10 @@ dump.rdb
 
 ### Project template
 allocatr/media/
+allocatr/static/js/Coloris-0.18.0/
 
 .pytest_cache/
 .ipython/
 .env
 .envs/*
+
