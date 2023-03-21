@@ -1,8 +1,8 @@
 <!-- Add Income -->
 <li x-show="ctx.transactionsContext" class="flex rounded-md bg-white text-gray-800 dark:bg-gray-800 dark:text-white">
     <button hx-get="{% url 'wallet:add_income' %}" hx-trigger="click" hx-target="#modal" @click="openAddTransactionModal"
-      class="inline-flex items-center w-full px-5 py-1 text-lg font-semibold transition-colors duration-150 rounded-md shadow-md group hover:bg-accent hover:text-white">
-      <svg class="w-4 h-4 mr-3 text-green-600 group-hover:text-green-400" fill="none" stroke="currentColor"
+      class="inline-flex items-center w-full px-4 py-2 md:py-1 text-xl md:text-lg font-semibold transition-colors duration-150 rounded-md shadow-md group hover:bg-accent hover:text-white">
+      <svg class="w-5 md:w-4 h-5 md:h-4 mr-4 text-green-600 group-hover:text-green-400" fill="none" stroke="currentColor"
         stroke-width="3.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"></path>
       </svg>
@@ -12,50 +12,58 @@
 
 <!-- Add Expense -->
 <li x-show="ctx.transactionsContext"  class="flex rounded-md bg-white text-gray-800 dark:bg-gray-800 dark:text-white">
-<button hx-get="{% url 'wallet:add_expense' %}" hx-trigger="click" hx-target="#modal"
-    @click.prevent="openAddTransactionModal"
-    class="inline-flex items-center w-full px-5 py-1 text-lg font-semibold transition-colors duration-150 rounded-md shadow-md group hover:bg-accent hover:text-white">
-    <svg class="w-4 h-4 mr-3 text-red-600 group-hover:text-red-500" fill="none" stroke="currentColor"
-    stroke-width="3.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 4.5l15 15m0 0V8.25m0 11.25H8.25"></path>
-    </svg>
-    <span>Expense</span>
-</button>
+    <button hx-get="{% url 'wallet:add_expense' %}" hx-trigger="click" hx-target="#modal" @click.prevent="openAddTransactionModal"
+        class="inline-flex items-center w-full px-4 py-2 md:py-1 text-xl md:text-lg font-semibold transition-colors duration-150 rounded-md shadow-md group hover:bg-accent hover:text-white">
+        <svg class="w-5 md:w-4 h-5 md:h-4 mr-4 text-red-600 group-hover:text-red-500" fill="none" stroke="currentColor"
+        stroke-width="3.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 4.5l15 15m0 0V8.25m0 11.25H8.25"></path>
+        </svg>
+        <span>Expense</span>
+    </button>
 </li>
 
 <!-- Add Transfer -->
 <li x-show="ctx.transactionsContext" class="flex rounded-md bg-white text-gray-800 dark:bg-gray-800 dark:text-white">
-<button hx-get="{% url 'wallet:add_transfer' %}" hx-trigger="click" hx-target="#modal" @click="openAddTransactionModal"
-    class="inline-flex items-center w-full px-5 py-1 text-lg font-semibold transition-colors duration-150 rounded-md shadow-md group hover:bg-accent hover:text-white">
-    <svg class="w-4 h-4 mr-3 text-blue-500 group-hover:text-blue-300" fill="none" stroke="currentColor"
-    stroke-width="3.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <path stroke-linecap="round" stroke-linejoin="round"
-        d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5"></path>
-    </svg>
-    <span>Transfer</span>
-</button>
+    <button hx-get="{% url 'wallet:add_transfer' %}" hx-trigger="click" hx-target="#modal" @click="openAddTransactionModal"
+        class="inline-flex items-center w-full px-4 py-2 md:py-1 text-xl md:text-lg font-semibold transition-colors duration-150 rounded-md shadow-md group hover:bg-accent hover:text-white">
+        <svg class="w-5 md:w-4 h-5 md:h-4 mr-4 text-blue-500 group-hover:text-blue-300" fill="none" stroke="currentColor" stroke-width="3.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5"></path>
+        </svg>
+        <span>Transfer</span>
+    </button>
 </li>
 
 <!-- Add Account -->
-<li x-show="ctx.accountsContext" class="flex bg-white text-gray-800 dark:bg-gray-800 dark:text-white">
-<button hx-get="{% url 'wallet:add_account' %}" hx-trigger="click" hx-target="#modal" @click="openAddTransactionModal"
-    class="inline-flex items-center w-full px-4 py-1 text-lg font-semibold transition-colors duration-150 rounded-md group hover:bg-accent hover:text-white">
-    <span class="whitespace-nowrap">Add account</span>
-</button>
+<li x-show="ctx.accountsContext" class="flex rounded-md bg-white text-gray-800 dark:bg-gray-800 dark:text-white">
+    <button hx-get="{% url 'wallet:add_account' %}" hx-trigger="click" hx-target="#modal" @click="openAddTransactionModal"
+        class="inline-flex items-center w-full px-4 py-2 md:py-1 text-xl md:text-lg font-semibold transition-colors duration-150 rounded-md shadow-md group hover:bg-accent hover:text-white">
+        <svg class="w-5 md:w-4 h-5 md:h-4 mr-4 text-teal-500 group-hover:text-teal-300" fill="none" stroke="currentColor" stroke-width="3.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a2.25 2.25 0 00-2.25-2.25H15a3 3 0 11-6 0H5.25A2.25 2.25 0 003 12m18 0v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 9m18 0V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v3"></path>
+        </svg>
+        <span class="whitespace-nowrap">Account</span>
+    </button>
 </li>
 
 <!-- Add Category -->
-<li x-show="ctx.categoriesContext" class="flex bg-white text-gray-800 dark:bg-gray-800 dark:text-white">
+<li x-show="ctx.categoriesContext" class="flex rounded-md bg-white text-gray-800 dark:bg-gray-800 dark:text-white">
     <button hx-get="#" hx-trigger="click" hx-target="#modal" @click="openAddTransactionModal"
-        class="inline-flex items-center w-full px-4 py-1 text-lg font-semibold transition-colors duration-150 rounded-md group hover:bg-accent hover:text-white">
-        <span class="whitespace-nowrap">Add category</span>
+        class="inline-flex items-center w-full px-4 py-2 md:py-1 text-xl md:text-lg font-semibold transition-colors duration-150 rounded-md shadow-md group hover:bg-accent hover:text-white">
+        <svg class="w-5 md:w-4 h-5 md:h-4 mr-4 text-yellow-400 group-hover:text-yellow-500" fill="none" stroke="currentColor" stroke-width="3.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6z"></path>
+        </svg>
+        <span class="whitespace-nowrap">Category</span>
     </button>
 </li>
 
 <!-- Add Budget -->
-<li x-show="ctx.budgetsContext" class="flex bg-white text-gray-800 dark:bg-gray-800 dark:text-white">
+<li x-show="ctx.budgetsContext" class="flex rounded-md bg-white text-gray-800 dark:bg-gray-800 dark:text-white">
     <button hx-get="#" hx-trigger="click" hx-target="#modal" @click="openAddTransactionModal"
-        class="inline-flex items-center w-full px-4 py-1 text-lg font-semibold transition-colors duration-150 rounded-md group hover:bg-accent hover:text-white">
-        <span class="whitespace-nowrap">Add budget</span>
+        class="inline-flex items-center w-full px-4 py-2 md:py-1 text-xl md:text-lg font-semibold transition-colors duration-150 rounded-md shadow-md group hover:bg-accent hover:text-white">
+        <svg class="w-5 md:w-4 h-5 md:h-4 mr-4 text-purple-600 group-hover:text-purple-500" fill="none" stroke="currentColor" stroke-width="3.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z"></path>
+        </svg>
+        <span class="whitespace-nowrap">Budget</span>
     </button>
 </li>
