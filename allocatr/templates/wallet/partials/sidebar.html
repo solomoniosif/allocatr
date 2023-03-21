@@ -184,7 +184,8 @@
       hx-get="{% url 'wallet:home' %}"
       hx-trigger="click"
       hx-target="#dashboard-main"
-      hx-replace-url="true">
+      hx-replace-url="true"
+      @click="closeSideMenu">
       allocatr
     </a>
     <ul class="mt-6">
@@ -199,6 +200,7 @@
           hx-trigger="click"
           hx-target="#dashboard-main"
           hx-replace-url="true"
+          @click="closeSideMenu"
         >
           <i class="bi bi-house-door text-lg"></i>
           <span class="ml-4">Home</span>
@@ -215,6 +217,7 @@
           hx-target = "#dashboard-main"
           :hx-vals="getHtmxPeriodVals"
           hx-replace-url="true"
+          @click="closeSideMenu"
         >
           <i class="bi bi-window-stack"></i>
           <span class="ml-4">Accounts</span>
