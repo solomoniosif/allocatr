@@ -5,7 +5,10 @@ from .models import UserSettings, Account, Budget, Category, Transaction
 
 @admin.register(UserSettings)
 class UserSettingsAdmin(admin.ModelAdmin):
-    list_display = ("user", "currency",)
+    list_display = (
+        "user",
+        "currency",
+    )
 
 
 @admin.register(Account)
@@ -33,12 +36,6 @@ class TransactionAdmin(admin.ModelAdmin):
     list_filter = ("transaction_type", "account")
     search_fields = ("title",)
     date_hierarchy = "date"
-
-    # def has_add_permission(self, request):
-    #     return False
-
-    # def has_change_permission(self, request, obj=None):
-    #     return False
 
 
 admin.site.register(Budget)
