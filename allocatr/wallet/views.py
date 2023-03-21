@@ -16,7 +16,7 @@ from django.db.models import Q
 
 from .forms import AccountForm, ExpenseForm, IncomeForm, TransferForm
 from .mixins import RequirePostMixin
-from .models import UserSettings, Account, Transaction
+from .models import Category, Account, Transaction, UserSettings
 
 
 class DashboardHome(LoginRequiredMixin, TemplateView):
@@ -339,3 +339,37 @@ class AccountDeleteView(LoginRequiredMixin, RequirePostMixin, DeleteView):
         self.object.delete()
         headers = {"HX-Trigger": json.dumps({"accountDeleted": None})}
         return HttpResponse(status=204, headers=headers)
+
+
+class CategoryListView(LoginRequiredMixin, ListView):
+    model = Category
+
+    def get_queryset(self, **kwargs):
+        qs = super().get_queryset(**kwargs)
+        return qs.filter(user=self.request.user)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_settings = UserSettings.objects.get(user=self.request.user)
+        accounts = []
+        for account in context["account_list"]:
+            first_period_day = self.request.GET.get("firstPeriodDay")
+            last_period_day = self.request.GET.get("lastPeriodDay")
+            if not first_period_day:
+                first_period_day, last_period_day = user_settings.get_current_period(
+                    date.today()
+                )
+            transactions = Transaction.objects.filter(
+                Q(account=account) | Q(to_account=account),
+                date__gte=first_period_day,
+                date__lte=last_period_day,
+            )
+            accounts.append({"details": account, "transactions": transactions})
+        context["accounts"] = accounts
+        context["user_settings"] = user_settings
+        return context
+
+    def get_template_names(self):
+        if self.request.headers.get("HX-Request"):
+            return "wallet/accounts/partials/account_list_partial.html"
+        return "wallet/accounts/dashboard_accounts.html"

@@ -23,7 +23,7 @@ class AccountAdmin(admin.ModelAdmin):
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ("name", "group", "active")
+    list_display = ("name", "group")
 
 
 @admin.register(Transaction)

@@ -132,6 +132,12 @@ class Category(TimeStampedUUIDModel):
         EXPENSE = "EX", _("Expense")
         TRANSFER = "TR", _("Transfer")
 
+    user = models.ForeignKey(
+        User,
+        verbose_name=_("User"),
+        related_name="categories",
+        on_delete=models.CASCADE,
+    )
     group = models.CharField(
         verbose_name=_("Category group"),
         max_length=2,
@@ -139,7 +145,6 @@ class Category(TimeStampedUUIDModel):
         default=Group.EXPENSE,
     )
     name = models.CharField(_("Name"), max_length=100)
-    active = models.BooleanField(default=True)
     color = ColorField(
         verbose_name=_("Color on Dashboard"), samples=COLOR_PALETTE, default="#7DD181"
     )
