@@ -295,10 +295,6 @@ class AccountDetailView(DetailView):
         return "wallet/accounts/account_detail.html"
 
 
-class AccountAddButtonPartial(TemplateView):
-    template_name = "wallet/partials/header/add_account_menu.html"
-
-
 class AccountCreateView(LoginRequiredMixin, CreateView):
     model = Account
     form_class = AccountForm
