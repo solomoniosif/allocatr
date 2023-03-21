@@ -24,8 +24,10 @@ License: MIT
 - Charts.js 4.2.1
 - Tailwind CSS 3.2.7
 - Sweetalert2 11.7.2
+- Coloris 0.18.0
 - PostgreSQL database
 - Docker
+- CapRover 1.10.1
 
 ## Basic Commands
 
