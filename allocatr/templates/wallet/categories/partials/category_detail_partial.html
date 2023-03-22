@@ -36,7 +36,7 @@
 </header>
 
 <!-- Modal body -->
-<div class="flex px-1 pb-4 max-w-xl text-gray-900 dark:text-white">
+<div class="flex px-1 pb-4 max-w-xl text-gray-900 dark:text-white" id="modal-body">
 
   <div class="relative overflow-x-auto w-full">
     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -83,7 +83,7 @@
 
   <div class="flex flex-row justify-between">
     <div class="w-1/2 max-w-[130px]">
-      <canvas id="category-transactions"></canvas>
+      <canvas id="transactions-chart"></canvas>
     </div>
     <div class="w-1/2">
       <p class="text-gray-800 dark:text-white text-2xl font-bold">{{ user_settings.currency }} {{ amount_total.amount__sum|floatformat:0 }}</p>
@@ -108,26 +108,23 @@
 </footer>
 
 <script>
-  const transactionNames = {{ transaction_names|safe }};
-  const amounts = {{ amounts|safe }};
-  const config = {
-    type: 'doughnut',
-    data: {
-      labels: transactionNames,
-      datasets: [{
-        data: amounts,
-      }],
-    },
-    options: {
-      plugins: {
+  new Chart(
+    document.getElementById('transactions-chart').getContext('2d'),
+    {
+      type: 'doughnut',
+      data: {
+        labels: {{ transaction_names|safe }},
+        datasets: [{
+        data: {{ amounts|safe }},
+        }],
+      },
+      options: {
+        plugins: {
           legend: {
-              display: false
+            display: false
+            }
           }
       }
-  }
-  };
-
-  const ctx = document.getElementById('category-transactions').getContext('2d');
-  window.categoryTransactionsChart = new Chart(ctx, config);
-
+    }
+  );
 </script>

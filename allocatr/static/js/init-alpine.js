@@ -48,11 +48,12 @@ function data() {
     trapCleanup: null,
     openModal() {
       this.isModalOpen = true
-      document.querySelector('#modal').innerHTML = ''
+    
       this.trapCleanup = focusTrap(document.querySelector('#modal'))
     },
     closeModal() {
       this.isModalOpen = false
+
       this.trapCleanup()
     },
 
@@ -134,7 +135,12 @@ function data() {
       } else if (current_page.startsWith('/budgets/')) {
         return { transactionsContext: false, accountsContext: false, categoriesContext: false, budgetsContext: true }
       }
-
+    },
+    updateChart(chart, labels, data) {
+      console.log('updateChart function was called')
+      chart.data.labels = labels;
+      chart.data.datasets = [{ data: data }];
+      chart.update();
     }
   }
 }
