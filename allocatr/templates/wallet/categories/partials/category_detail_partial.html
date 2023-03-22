@@ -13,7 +13,13 @@
         </path>
       </svg>
       {% elif category.group == "IN"%}
+      <svg class="inline-block w-8 h-8 p-1 rounded-full" style="background-color: {{ category.text_color }}; color: {{ category.color }}"  fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"></path>
+      </svg>
       {% elif category.group == "TR"%}
+      <svg class="inline-block w-8 h-8 p-1 rounded-full" style="background-color: {{ category.text_color }}; color: {{ category.color }}"  fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5"></path>
+      </svg>
       {% endif %}
     </span>
     {{ category.name }}
