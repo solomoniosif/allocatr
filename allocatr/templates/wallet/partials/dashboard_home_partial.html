@@ -16,7 +16,7 @@
       <!-- Transactions -->
       <div
         hx-get="{% url 'wallet:transaction_list' %}"
-        hx-trigger="load delay:1s, transactionListChanged from:body delay:1s"
+        hx-trigger="load delay:1s, transactionListChanged from:body delay:300ms"
         hx-target="this"
         :hx-vals="getHtmxPeriodVals"
       >
@@ -26,4 +26,4 @@
   </main>
 
 
-  {% include 'wallet/partials/mobile_add_menu.html' with add_buttons='wallet/partials/add_buttons/add_transactions.html' %}
+  {% include 'wallet/partials/mobile_add_menu.html' %}

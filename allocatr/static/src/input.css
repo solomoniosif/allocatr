@@ -43,3 +43,7 @@
     color: white !important;
     font-size: 18px !important;
 }
+
+.table {
+    @apply dark:bg-gray-800;
+}

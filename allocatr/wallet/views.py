@@ -72,7 +72,7 @@ class TransactionListView(LoginRequiredMixin, ListView):
         )
 
 
-class TransactionDetailView(DetailView):
+class TransactionDetailView(LoginRequiredMixin, DetailView):
     model = Transaction
     context_object_name = "transaction"
     template_name = "wallet/transactions/partials/transaction_detail.html"
@@ -247,7 +247,7 @@ class AccountListView(LoginRequiredMixin, ListView):
         return "wallet/accounts/dashboard_accounts.html"
 
 
-class AccountDetailView(DetailView):
+class AccountDetailView(LoginRequiredMixin, DetailView):
     model = Account
     context_object_name = "account"
 
@@ -260,7 +260,6 @@ class AccountDetailView(DetailView):
             first_period_day, last_period_day = user_settings.get_current_period(
                 date.today()
             )
-            print(first_period_day, "2")
         filtered_transactions = Transaction.objects.filter(
             Q(account=self.get_object()) | Q(to_account=self.get_object()),
             date__gte=first_period_day,
@@ -416,3 +415,34 @@ class CategoryCreateView(LoginRequiredMixin, CreateView):
             form.errors,
             status=400,
         )
+
+
+class CategoryDetailView(LoginRequiredMixin, DetailView):
+    model = Category
+    context_object_name = "category"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_settings = UserSettings.objects.get(user=self.request.user)
+        first_period_day = self.request.GET.get("firstPeriodDay")
+        last_period_day = self.request.GET.get("lastPeriodDay")
+        if not first_period_day:
+            first_period_day, last_period_day = user_settings.get_current_period(
+                date.today()
+            )
+        filtered_transactions = Transaction.objects.filter(
+            category=self.get_object(),
+            date__gte=first_period_day,
+            date__lte=last_period_day,
+        )
+        context["transactions"] = filtered_transactions
+        context["amount_total"] = filtered_transactions.aggregate(Sum("amount"))
+        context["transaction_names"] = [tr.title for tr in filtered_transactions]
+        context["amounts"] = [int(tr.amount) for tr in filtered_transactions]
+        context["user_settings"] = user_settings
+        return context
+
+    def get_template_names(self):
+        if self.request.headers.get("HX-Request"):
+            return "wallet/categories/partials/category_detail_partial.html"
+        return "wallet/categories/category_detail.html"

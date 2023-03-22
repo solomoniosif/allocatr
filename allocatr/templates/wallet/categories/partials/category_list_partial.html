@@ -25,7 +25,11 @@
 
         <!-- Card Item -->
         <a
-          class="relative p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 cursor-pointer">
+          hx-get="{% url 'wallet:category_detail' c.details.pk %}"
+          hx-target="#modal"
+          hx-trigger="click"
+          @click="openModal"
+          class="relative p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 cursor-pointer dark:hover:bg-gray-700">
           <span class="absolute inset-x-0 top-0 bg-purple-600 rounded-tr-lg rounded-tl-lg" aria-hidden="true"
             style="background-color: {{ c.details.color }}">
             <h2 class="px-4 py-2 text-xl font-bold" style="color: {{ c.details.text_color }}">{{ c.details.name }}
@@ -63,6 +67,10 @@
 
         <!-- Card Item -->
         <a
+          hx-get="{% url 'wallet:category_detail' c.details.pk %}"
+          hx-target="#modal"
+          hx-trigger="click"
+          @click="openModal"
           class="relative p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 cursor-pointer">
           <span class="absolute inset-x-0 top-0 bg-purple-600 rounded-tr-lg rounded-tl-lg" aria-hidden="true"
             style="background-color: {{ c.details.color }}">
@@ -99,6 +107,10 @@
 
         <!-- Card Item -->
         <a
+          hx-get="{% url 'wallet:category_detail' c.details.pk %}"
+          hx-target="#modal"
+          hx-trigger="click"
+          @click="openModal"
           class="relative p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 cursor-pointer">
           <span class="absolute inset-x-0 top-0 bg-purple-600 rounded-tr-lg rounded-tl-lg" aria-hidden="true"
             style="background-color: {{ c.details.color }}">

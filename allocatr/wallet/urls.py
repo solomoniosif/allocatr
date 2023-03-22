@@ -66,5 +66,10 @@ urlpatterns = [
     ),
     # Category Views
     path("categories/", views.CategoryListView.as_view(), name="categories"),
+    path(
+        "categories/<int:pk>/",
+        views.CategoryDetailView.as_view(),
+        name="category_detail",
+    ),
     path("htmx/add-category/", views.CategoryCreateView.as_view(), name="add_category"),
 ]
