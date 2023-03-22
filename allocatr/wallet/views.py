@@ -15,7 +15,7 @@ from django.views.generic import (
 )
 from django.db.models import Q
 
-from .forms import AccountForm, ExpenseForm, IncomeForm, TransferForm
+from .forms import AccountForm, CategoryForm, ExpenseForm, IncomeForm, TransferForm
 from .mixins import RequirePostMixin
 from .models import Category, Account, Transaction, UserSettings
 
@@ -393,3 +393,26 @@ class CategoryListView(LoginRequiredMixin, ListView):
         if self.request.headers.get("HX-Request"):
             return "wallet/categories/partials/category_list_partial.html"
         return "wallet/categories/dashboard_categories.html"
+
+
+class CategoryCreateView(LoginRequiredMixin, CreateView):
+    model = Category
+    form_class = CategoryForm
+    template_name = "wallet/categories/partials/add_category_form.html"
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        self.object = form.save()
+        return HttpResponse(
+            status=204,
+            headers={"HX-Trigger": json.dumps({"categoryCreated": None})},
+        )
+
+    def form_invalid(self, form):
+        print("Form invalid")
+        print(form.errors)
+        super(CategoryCreateView, self).form_invalid(form)
+        return HttpResponse(
+            form.errors,
+            status=400,
+        )
