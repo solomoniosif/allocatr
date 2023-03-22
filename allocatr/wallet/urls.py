@@ -72,4 +72,14 @@ urlpatterns = [
         name="category_detail",
     ),
     path("htmx/add-category/", views.CategoryCreateView.as_view(), name="add_category"),
+    path(
+        "htmx/edit-category/<int:pk>/",
+        views.CategoryUpdateView.as_view(),
+        name="edit_category",
+    ),
+    path(
+        "htmx/delete-account/<int:pk>/",
+        views.CategoryDeleteView.as_view(),
+        name="delete_category",
+    ),
 ]

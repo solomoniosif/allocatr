@@ -446,3 +446,26 @@ class CategoryDetailView(LoginRequiredMixin, DetailView):
         if self.request.headers.get("HX-Request"):
             return "wallet/categories/partials/category_detail_partial.html"
         return "wallet/categories/category_detail.html"
+
+
+class CategoryUpdateView(LoginRequiredMixin, UpdateView):
+    model = Category
+    form_class = CategoryForm
+    context_object_name = "category"
+    template_name = "wallet/categories/partials/edit_category_form.html"
+    success_url = None
+
+    def form_valid(self, form):
+        self.object = form.save()  # noqa
+        headers = {"HX-Trigger": json.dumps({"categoryEdited": None})}
+        return HttpResponse(status=204, headers=headers)
+
+
+class CategoryDeleteView(LoginRequiredMixin, RequirePostMixin, DeleteView):
+    model = Category
+    success_url = None
+
+    def form_valid(self, form):
+        self.object.delete()
+        headers = {"HX-Trigger": json.dumps({"categoryDeleted": None})}
+        return HttpResponse(status=204, headers=headers)

@@ -87,15 +87,15 @@
 
 <!-- Modal Footer -->
 <footer class="flex items-center justify-end px-6 pt-2 pb-4 -mx-6 -mb-2 space-x-6 flex-row bg-white dark:bg-gray-800">
-  <button hx-post="#" hx-trigger="confirmed"
+  <button hx-post="{% url 'wallet:delete_category' category.pk %}" hx-trigger="confirmed"
     _="on click
                call twSwal.fire({title: 'Are you sure?', text:'You will not be able to revert this!', icon: 'warning', showConfirmButton: true, showCancelButton: true, confirmButtonText: 'Yes, delete it!'})
-               if result.isConfirmed trigger confirmed end on transactionDeleted call successToast.fire({title: 'Transaction deleted successfully', icon: 'success'})"
+               if result.isConfirmed trigger confirmed end on categoryDeleted call successToast.fire({title: 'Category deleted successfully', icon: 'success'})"
     class="redBtn">
     Delete
   </button>
 
-  <button hx-get="#" hx-trigger="click" hx-target="#modal" class="primaryBtn">
+  <button hx-get="{% url 'wallet:edit_category' category.pk %}" hx-trigger="click" hx-target="#modal" class="primaryBtn">
     Edit category
   </button>
 
