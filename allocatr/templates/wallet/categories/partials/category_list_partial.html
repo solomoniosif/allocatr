@@ -5,102 +5,123 @@
   :hx-vals="getHtmxPeriodVals"
   class="h-full overflow-y-auto">
   <div class="container px-6 mx-auto">
-    <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">Transaction Categories</h2>
 
     <div class="flex flex-wrap flex-row">
-
-      {% for group, group_categ in categories.items %}
-
-      <div class="text-gray-900 dark:text-white">
-        {{ group }}
-        <br>
-
-        {% for categ in group_categ %}
-            {{ categ.details }}
-            <br>
-
-
-            {% for tr in categ.transactions %}
-                {{ tr }}
-            {% endfor %}
-
-
-        {% endfor %}
-
-
-      </div>
-      <hr> <br>
-      {% endfor %}
-
-
-
-
     </div>
 
+    <section class="px-5 py-4">
 
-
-
-    <!-- Card List Section -->
-    <section class="bg-gray-300 dark:bg-gray-900 px-5 py-4">
+      {% if categories.EX %}
+      <h1 class="mt-4 text-3xl font-bold text-gray-900 dark:text-white mb-4">
+        <svg class="inline-block w-7 h-7 mb-2 mr-2 text-red-600" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"></path>
+        </svg>
+        Expense Categories
+      </h1>
       <!-- Card Grid -->
-      <div class="grid grid-flow-row gap-8 text-neutral-600 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div
+        class="grid grid-flow-row gap-6 text-neutral-600 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {% for c in categories.EX %}
 
         <!-- Card Item -->
-        <div
-          x-data="{open: false}"
-          class="w-full max-w-md bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 duration-200 hover:-translate-y-1">
-          <div class="flex justify-end px-4 pt-4">
-              <button @click="open = true" id="dropdownButton" data-dropdown-toggle="dropdown" class="fixed top-2 right-2 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-1.5" type="button">
-                  <span class="sr-only">Open dropdown</span>
-                  <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z"></path></svg>
-              </button>
-              <!-- Dropdown menu -->
-              <div x-show="open" id="dropdown" class="z-10 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-                  <ul class="py-2" aria-labelledby="dropdownButton">
-                  <li>
-                      <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Edit</a>
-                  </li>
-                  <li>
-                      <a href="#" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Delete</a>
-                  </li>
-                  </ul>
-              </div>
+        <a
+          class="relative p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 cursor-pointer">
+          <span class="absolute inset-x-0 top-0 bg-purple-600 rounded-tr-lg rounded-tl-lg" aria-hidden="true"
+            style="background-color: {{ c.details.color }}">
+            <h2 class="px-4 py-2 text-xl font-bold" style="color: {{ c.details.text_color }}">{{ c.details.name }}
+            </h2>
+          </span>
+
+          <div class="flex flex-row justify-between mt-8 dark:text-white">
+            {% if c.transactions_count %}
+            <div class="font-bold">{{ user_settings.currency }} {{ c.total_amount.amount__sum|floatformat:0 }}</div>
+
+            <div>{{ c.transactions_count }} transaction{{ c.transactions_count|pluralize }}</div>
+            {% else %}
+            <div>No transactions</div>
+            {% endif %}
           </div>
-          <div class="flex flex-col items-center pb-10">
+        </a>
 
-              <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">Bonnie Green</h5>
-              <span class="text-sm text-gray-500 dark:text-gray-400">Visual Designer</span>
+        {% endfor %}
+      </div>
+      {% endif %}
 
+      {% if categories.IN %}
+
+        <h1 class="mt-10 text-3xl font-bold text-gray-900 dark:text-white mb-4">
+          <svg class="inline-block w-7 h-7 mb-2 mr-2 text-green-600" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"></path>
+          </svg>
+          Income Categories
+        </h1>
+
+      <!-- Card Grid -->
+      <div
+        class="grid grid-flow-row gap-6 text-neutral-600 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {% for c in categories.IN %}
+
+        <!-- Card Item -->
+        <a
+          class="relative p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 cursor-pointer">
+          <span class="absolute inset-x-0 top-0 bg-purple-600 rounded-tr-lg rounded-tl-lg" aria-hidden="true"
+            style="background-color: {{ c.details.color }}">
+            <h2 class="px-4 py-2 text-xl font-bold" style="color: {{ c.details.text_color }}">{{ c.details.name }}
+            </h2>
+          </span>
+
+          <div class="flex flex-row justify-between mt-8 dark:text-white">
+            {% if c.transactions_count %}
+            <div class="font-bold">{{ user_settings.currency }} {{ c.total_amount.amount__sum|floatformat:0 }}</div>
+
+            <div>{{ c.transactions_count }} transaction{{ c.transactions_count|pluralize }}</div>
+            {% else %}
+            <div>No transactions</div>
+            {% endif %}
           </div>
+        </a>
+
+        {% endfor %}
       </div>
+      {% endif %}
 
+      {% if categories.TR %}
+      <h1 class="mt-10 text-3xl font-bold text-gray-900 dark:text-white mb-4">
+        <svg class="inline-block w-7 h-7 mb-2 mr-2 text-blue-600" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5"></path>
+        </svg>
+        Transfer Categories
+      </h1>
+      <!-- Card Grid -->
+      <div
+        class="grid grid-flow-row gap-6 text-neutral-600 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {% for c in categories.TR %}
 
         <!-- Card Item -->
-        <div class="my-8 rounded shadow-lg shadow-gray-200 dark:shadow-gray-900 bg-white dark:bg-gray-800 duration-300 hover:-translate-y-1">
-          <div class="w-full text-3xl p-5 dark:text-gray-200">Card</div>
-        </div>
+        <a
+          class="relative p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 cursor-pointer">
+          <span class="absolute inset-x-0 top-0 bg-purple-600 rounded-tr-lg rounded-tl-lg" aria-hidden="true"
+            style="background-color: {{ c.details.color }}">
+            <h2 class="px-4 py-2 text-xl font-bold" style="color: {{ c.details.text_color }}">{{ c.details.name }}
+            </h2>
+          </span>
 
-        <!-- Card Item -->
-        <div class="my-8 rounded shadow-lg shadow-gray-200 dark:shadow-gray-900 bg-white dark:bg-gray-800 duration-300 hover:-translate-y-1">
-          <div class="w-full text-3xl p-5 dark:text-gray-200">Card</div>
-        </div>
+          <div class="flex flex-row justify-between mt-8 dark:text-white">
+            {% if c.transactions_count %}
+            <div class="font-bold">{{ user_settings.currency }} {{ c.total_amount.amount__sum|floatformat:0 }}</div>
 
-        <!-- Card Item -->
-        <div class="my-8 rounded shadow-lg shadow-gray-200 dark:shadow-gray-900 bg-white dark:bg-gray-800 duration-300 hover:-translate-y-1">
-          <div class="w-full text-3xl p-5 dark:text-gray-200">Card</div>
-        </div>
-        <!-- Card Item -->
-        <div class="my-8 rounded shadow-lg shadow-gray-200 dark:shadow-gray-900 bg-white dark:bg-gray-800 duration-300 hover:-translate-y-1">
-          <div class="w-full text-3xl p-5 dark:text-gray-200">Card</div>
-        </div>
+            <div>{{ c.transactions_count }} transaction{{ c.transactions_count|pluralize }}</div>
+            {% else %}
+            <div>No transactions</div>
+            {% endif %}
+          </div>
+        </a>
 
+        {% endfor %}
       </div>
+      {% endif %}
+
     </section>
-
-
-
-
-
   </div>
 </main>
 

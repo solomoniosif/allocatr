@@ -3,6 +3,7 @@ import json
 
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Count, Sum
 from django.shortcuts import render
 from django.views.generic import (
     CreateView,
@@ -372,7 +373,12 @@ class CategoryListView(LoginRequiredMixin, ListView):
             )
             if category.group in categories:
                 categories[category.group].append(
-                    {"details": category, "transactions": transactions}
+                    {
+                        "details": category,
+                        "transactions": transactions,
+                        "transactions_count": transactions.count(),
+                        "total_amount": transactions.aggregate(Sum("amount")),
+                    }
                 )
             else:
                 categories[category.group] = [
