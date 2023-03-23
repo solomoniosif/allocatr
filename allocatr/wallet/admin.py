@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import UserSettings, Account, Budget, Category, Transaction
+from .models import Account, Budget, Category, Month, Transaction, UserSettings
 
 
 @admin.register(UserSettings)
@@ -9,6 +9,11 @@ class UserSettingsAdmin(admin.ModelAdmin):
         "user",
         "currency",
     )
+
+
+@admin.register(Month)
+class MonthAdmin(admin.ModelAdmin):
+    list_display = ("user", "first_day", "last_day", "override_last_day")
 
 
 @admin.register(Account)

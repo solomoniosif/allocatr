@@ -1,5 +1,6 @@
 import uuid
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
+
 from colorfield.fields import ColorField
 
 from django.core.exceptions import ValidationError
@@ -62,6 +63,28 @@ class UserSettings(models.Model):
         return get_month_range(self.start_day_of_month, day_plus_five)
 
 
+class Month(models.Model):
+    user = models.ForeignKey(
+        User, verbose_name=_("User"), related_name="months", on_delete=models.CASCADE
+    )
+    first_day = models.DateField()
+    last_day = models.DateField(blank=True)
+    month_code = models.PositiveSmallIntegerField(blank=True, editable=False)
+    override_last_day = models.BooleanField(default=True)
+
+    class Meta:
+        unique_together = (("user", "month_code"),)
+
+    def save(self, *args, **kwargs):
+        self.month_code = datetime.strftime(self.first_day, "%y%m")
+        if self.override_last_day:
+            _, self.last_day = get_month_range(self.first_day.day, self.first_day)
+        super(Month, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.first_day.month} {self.first_day.year}"
+
+
 class Account(TimeStampedUUIDModel):
     class AccountType(models.TextChoices):
         GENERAL = "GA", _("General")
@@ -111,7 +134,7 @@ class Account(TimeStampedUUIDModel):
         return f"bg-{tailwind_color}"
 
     class Meta:
-        ordering = ["-active", "name"]
+        ordering = ["-active", "-created_at"]
         unique_together = (("name", "account_type"),)
 
     def __str__(self):
