@@ -16,6 +16,10 @@ module.exports = {
         "accentLightest": "#76a9fa",
         "accentDark": "#1a56db",
         "accentDarkest": "#1e429f",
+      },
+      screens: {
+        'xs': '475px',
+        '3xl': '1600px',
       }
     },
   },
