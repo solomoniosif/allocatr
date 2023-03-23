@@ -1,6 +1,6 @@
 <main
   hx-get="{% url 'wallet:accounts' %}"
-  hx-trigger="transactionListChanged from:body delay:1s, accountCreated from:body, accountDeleted from:body"
+  hx-trigger="transactionListChanged from:body delay:100ms, accountCreated from:body, accountDeleted from:body"
   hx-target="#dashboard-main"
   :hx-vals="getHtmxPeriodVals"
   class="h-full overflow-y-auto">
