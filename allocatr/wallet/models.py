@@ -9,7 +9,6 @@ from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.db import models
 
-from .managers import ExpenseManager, IncomeManager, TransferManager
 from .utils import COLOR_PALETTE, get_month_range, is_color_dark
 
 User = get_user_model()
@@ -152,11 +151,6 @@ class Category(TimeStampedUUIDModel):
     text_color = models.CharField(
         verbose_name=_("Text color"), max_length=12, blank=True, editable=False
     )
-
-    objects = models.Manager()
-    income = IncomeManager()
-    expense = ExpenseManager()
-    transfer = TransferManager()
 
     class Meta:
         verbose_name_plural = _("Categories")
@@ -302,16 +296,9 @@ class Budget(TimeStampedUUIDModel):
     budgeted_amount = models.DecimalField(
         verbose_name=_("Budgeted mount"), max_digits=10, decimal_places=2, default=0
     )
-    actual_amount = models.DecimalField(
-        verbose_name=_("Actual amount"), max_digits=10, decimal_places=2
-    )
+    categories = models.ManyToManyField(Category, related_name="budgets")
     start_date = models.DateField(verbose_name=_("Start date"))
     end_date = models.DateField(verbose_name=_("End date"))
 
     def __str__(self):
         return self.name
-
-
-class BudgetItem(TimeStampedUUIDModel):
-    budget = models.ForeignKey(Budget, on_delete=models.CASCADE)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
