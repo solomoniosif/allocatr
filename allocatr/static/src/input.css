@@ -3,15 +3,15 @@
 @tailwind utilities;
 
 .primaryBtn {
-    @apply mx-2 px-4 py-2 rounded-lg cursor-pointer bg-accent text-white scale-100 hover:scale-105 hover:bg-accentDarkest;
+    @apply mx-2 scale-100 cursor-pointer rounded-lg bg-accent px-4 py-2 text-white hover:scale-105 hover:bg-accentDarkest;
 }
 
 .secondaryBtn {
-    @apply mx-2 px-4 py-2 rounded-lg border border-gray-300 bg-white text-gray-900 hover:bg-gray-100 scale-100 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:hover:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700;
+    @apply mx-2 scale-100 rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-900 hover:scale-105 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:hover:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700;
 }
 
 .redBtn {
-    @apply mx-2 px-4 py-2 rounded-lg cursor-pointer bg-red-500 text-white scale-100 hover:scale-105 hover:bg-red-600;
+    @apply mx-2 scale-100 cursor-pointer rounded-lg bg-red-500 px-4 py-2 text-white hover:scale-105 hover:bg-red-600;
 }
 
 .success-toast {
@@ -44,6 +44,6 @@
     font-size: 18px !important;
 }
 
-.table {
-    @apply dark:bg-gray-800;
+.checkbox-input {
+    @apply h-6 w-6 rounded border-gray-300 bg-gray-100 text-accent focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:checked:border-accent dark:checked:bg-accent dark:focus:ring-blue-600 dark:focus:ring-offset-gray-800;
 }
