@@ -26,9 +26,9 @@
         <!-- Card Item -->
         <a
           hx-get="{% url 'wallet:category_detail' c.details.pk %}"
-          hx-target="#modal"
+          hx-target="#sticky-modal"
           hx-trigger="click"
-          @click="openModal"
+          @click="openStickyModal"
           class="relative p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 cursor-pointer dark:hover:bg-gray-700">
           <span class="absolute inset-x-0 top-0 bg-purple-600 rounded-tr-lg rounded-tl-lg" aria-hidden="true"
             style="background-color: {{ c.details.color }}">

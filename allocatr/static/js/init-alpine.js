@@ -45,16 +45,21 @@ function data() {
 
     // Modal
     isModalOpen: false,
+    isStickyModalOpen: false,
     trapCleanup: null,
     openModal() {
       this.isModalOpen = true
-    
       this.trapCleanup = focusTrap(document.querySelector('#modal'))
     },
     closeModal() {
       this.isModalOpen = false
-
       this.trapCleanup()
+    },
+    openStickyModal() {
+      this.isStickyModalOpen = true
+    },
+    closeStickyModal() {
+      this.isStickyModalOpen = false
     },
 
     // Transaction Modal

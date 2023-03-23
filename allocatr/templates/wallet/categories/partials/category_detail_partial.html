@@ -1,5 +1,5 @@
 <!-- Modal Header -->
-<header class="flex justify-between mt-2 rounded-lg px-4 py-3 scale-110 -translate-y-5"
+<header class="flex justify-between mt-2 rounded-lg pl-6 pr-8 py-3 scale-110 -translate-y-5"
   style="background-color: {{ category.color }}; color: {{ category.text_color }}">
   <h1 class="mt-1 text-2xl font-semibold text-gray-700 dark:text-gray-200" style="color: {{ category.text_color }}">
     <span class="px-3 py-1 rounded-lg">
@@ -26,7 +26,7 @@
   </h1>
   <button
     class="inline-flex items-center justify-center w-6 h-6 mt-2 text-gray-400 transition-colors duration-150 rounded dark:hover:text-gray-200 hover: hover:text-gray-700 focus:outline-none"
-    aria-label="close" @click="closeModal" style="color: {{ category.text_color }}">
+    aria-label="close" @click="closeStickyModal" style="color: {{ category.text_color }}">
     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" role="img" aria-hidden="true">
       <path
         d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
@@ -36,7 +36,7 @@
 </header>
 
 <!-- Modal body -->
-<div class="flex px-1 pb-4 max-w-xl text-gray-900 dark:text-white" id="modal-body">
+<div class="flex px-1 mb-4 max-w-xl text-gray-900 dark:text-white" id="modal-body">
 
   <div class="relative overflow-x-auto w-full">
     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -58,7 +58,7 @@
       </thead>
       <tbody>
         {% for tr in transactions %}
-        <tr hx-get="{% url 'wallet:transaction_detail' tr.pk %}" hx-target="#modal" hx-trigger="click"
+        <tr hx-get="{% url 'wallet:transaction_detail' tr.pk %}" hx-target="#modal" hx-trigger="click" @click="openModal"
           class="bg-white dark:bg-gray-800 border-b dark:border-gray-700 cursor-pointer dark:hover:bg-gray-600">
           <th scope="row" class="px-1 md:px-3 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
             {{ tr.title|capfirst }}
@@ -81,7 +81,7 @@
 
 </div>
 
-  <div class="flex flex-row justify-between">
+  <div class="flex flex-row justify-between px-4 mb-4">
     <div class="w-1/2 max-w-[130px]">
       <canvas id="transactions-chart"></canvas>
     </div>
@@ -92,7 +92,7 @@
 
 
 <!-- Modal Footer -->
-<footer class="flex items-center justify-end px-6 pt-2 pb-4 -mx-6 -mb-2 space-x-6 flex-row bg-white dark:bg-gray-800">
+<footer class="flex items-center justify-end px-6 pt-2 pb-4 -mx-2 -mb-1 space-x-6 flex-row bg-white dark:bg-gray-800">
   <button hx-post="{% url 'wallet:delete_category' category.pk %}" hx-trigger="confirmed"
     _="on click
                call twSwal.fire({title: 'Are you sure?', text:'You will not be able to revert this!', icon: 'warning', showConfirmButton: true, showCancelButton: true, confirmButtonText: 'Yes, delete it!'})
@@ -101,7 +101,7 @@
     Delete
   </button>
 
-  <button hx-get="{% url 'wallet:edit_category' category.pk %}" hx-trigger="click" hx-target="#modal" class="primaryBtn">
+  <button hx-get="{% url 'wallet:edit_category' category.pk %}" hx-trigger="click" hx-target="#modal" @click="openModal" class="primaryBtn">
     Edit category
   </button>
 

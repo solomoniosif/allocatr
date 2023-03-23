@@ -1,3 +1,4 @@
+from datetime import date
 import json
 
 from django.http import HttpResponse
@@ -24,8 +25,13 @@ class TransactionListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         qs = super().get_queryset()
-        first_period_day = self.request.GET["firstPeriodDay"]
-        last_period_day = self.request.GET["lastPeriodDay"]
+        first_period_day = self.request.GET.get("firstPeriodDay")
+        last_period_day = self.request.GET.get("lastPeriodDay")
+        if not first_period_day:
+            (
+                first_period_day,
+                last_period_day,
+            ) = self.request.user.settings.get_current_period(date.today())
         return qs.filter(
             account__user=self.request.user,
             date__gte=first_period_day,
