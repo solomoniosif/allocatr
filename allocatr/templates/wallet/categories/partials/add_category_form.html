@@ -33,7 +33,7 @@
 
     <div class="flex flex-wrap -mx-3 mb-6">
       <!-- Category Group -->
-      <div class="w-1/2 px-2">
+      <div class="w-1/2 xs:w-2/3 px-2">
         <label for="{{ form.group.id_for_label }}"
           class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 dark:text-gray-400">{{ form.group.label }}</label>
         {% render_field form.group class+="appearance-none block w-full bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %}
@@ -41,11 +41,25 @@
       </div>
 
       <!-- Color -->
-      <div x-data="{selectedColor: '{{ form.color.value }}'}" class="w-1/2 px-3">
+      <div x-data="{selectedColor: '{{ form.color.value }}'}" class="w-1/2 xs:w-1/3 px-3">
         <label for="{{ form.color.id_for_label }}"
           class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 dark:text-gray-400">Color</label>
         {% render_field form.color|append_attr:"x-model:selectedColor" class+="coloris block w-full bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %}
         {% for error in form.color.errors %}<p class="text-red-500 text-xs italic">{{ error }}</p>{% endfor %}
+      </div>
+    </div>
+
+    <div class="flex w-full sm:w-1/2 mb-6">
+      <!-- Status -->
+      <div class="flex w-full sm:w-1/2 mb-6">
+        <div class="flex items-center h-5">
+          {% render_field form.active class+="w-6 h-6 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" %}
+        </div>
+        <div class="ml-2 text-sm">
+          <label for="{{ form.active.id_for_label }}"
+            class="font-medium text-gray-900 dark:text-gray-300">{{ form.active.label }}</label>
+          {% for error in form.active.errors %}<p class="text-red-500 text-xs italic">{{ error }}</p>{% endfor %}
+        </div>
       </div>
     </div>
 

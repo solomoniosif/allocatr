@@ -137,7 +137,6 @@ class Category(TimeStampedUUIDModel):
         verbose_name=_("User"),
         related_name="categories",
         on_delete=models.CASCADE,
-        default=1,
     )
     group = models.CharField(
         verbose_name=_("Category group"),
@@ -146,6 +145,7 @@ class Category(TimeStampedUUIDModel):
         default=Group.EXPENSE,
     )
     name = models.CharField(_("Name"), max_length=100)
+    active = models.BooleanField(verbose_name=_("Active"), default=True)
     color = ColorField(
         verbose_name=_("Color on Dashboard"), samples=COLOR_PALETTE, default="#7DD181"
     )
