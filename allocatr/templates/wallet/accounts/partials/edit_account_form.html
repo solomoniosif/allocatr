@@ -60,7 +60,7 @@
       <!-- Balance can be negative -->
       <div class="flex w-full sm:w-1/2 mb-6">
         <div class="flex items-center h-5">
-          {% render_field form.balance_can_be_negative class+="w-6 h-6 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" %}
+          {% render_field form.balance_can_be_negative class+="checkbox-input" %}
         </div>
         <div class="ml-2 text-sm">
             <label for="{{ form.balance_can_be_negative.id_for_label }}" class="font-medium text-gray-900 dark:text-gray-300">{{ form.balance_can_be_negative.label }}</label>
@@ -70,7 +70,7 @@
       <!-- Status -->
       <div class="flex w-full sm:w-1/2 mb-6">
         <div class="flex items-center h-5">
-          {% render_field form.active class+="w-6 h-6 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" %}
+          {% render_field form.active class+="checkbox-input" %}
         </div>
         <div class="ml-2 text-sm">
             <label for="{{ form.active.id_for_label }}" class="font-medium text-gray-900 dark:text-gray-300">{{ form.active.label }}</label>
@@ -80,7 +80,7 @@
       <!-- Exclude from budget -->
       <div class="flex w-full sm:w-1/2 mb-6">
         <div class="flex items-center h-5">
-          {% render_field form.exclude_from_budget class+="w-6 h-6 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" %}
+          {% render_field form.exclude_from_budget class+="checkbox-input" %}
         </div>
         <div class="ml-2 text-sm">
             <label for="{{ form.exclude_from_budget.id_for_label }}" class="font-medium text-gray-900 dark:text-gray-300">{{ form.exclude_from_budget.label }}</label>
@@ -90,7 +90,7 @@
       <!-- Show on dashboard -->
       <div class="flex w-full sm:w-1/2 mb-6">
         <div class="flex items-center h-5">
-          {% render_field form.show_on_dashboard class+="w-6 h-6 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" %}
+          {% render_field form.show_on_dashboard class+="checkbox-input" %}
         </div>
         <div class="ml-2 text-sm">
             <label for="{{ form.show_on_dashboard.id_for_label }}" class="font-medium text-gray-900 dark:text-gray-300">{{ form.show_on_dashboard.label }}</label>
