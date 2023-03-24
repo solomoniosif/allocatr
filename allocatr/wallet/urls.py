@@ -13,35 +13,45 @@ urlpatterns = [
     path("next-month/<str:month>/", views.get_next_month, name="next_month"),
     # Transaction Views
     path(
-        "htmx/transactions/",
+        "transactions/",
         views.TransactionListView.as_view(),
         name="transaction_list",
     ),
     path(
-        "htmx/transaction/<int:pk>/",
+        "transactions/<int:pk>/",
         views.TransactionDetailView.as_view(),
         name="transaction_detail",
     ),
-    path("htmx/add-income/", views.IncomeCreateView.as_view(), name="add_income"),
     path(
-        "htmx/edit-income/<int:pk>/",
+        "transactions/add-income/", views.IncomeCreateView.as_view(), name="add_income"
+    ),
+    path(
+        "transactions/<int:pk>/edit-income/",
         views.IncomeUpdateView.as_view(),
         name="edit_income",
     ),
-    path("htmx/add-expense/", views.ExpenseCreateView.as_view(), name="add_expense"),
     path(
-        "htmx/edit-expense/<int:pk>/",
+        "transactions/add-expense/",
+        views.ExpenseCreateView.as_view(),
+        name="add_expense",
+    ),
+    path(
+        "transactions/<int:pk>/edit-expense/",
         views.ExpenseUpdateView.as_view(),
         name="edit_expense",
     ),
-    path("htmx/add-transfer/", views.TransferCreateView.as_view(), name="add_transfer"),
     path(
-        "htmx/edit-transfer/<int:pk>/",
+        "transactions/add-transfer/",
+        views.TransferCreateView.as_view(),
+        name="add_transfer",
+    ),
+    path(
+        "transactions/<int:pk>/edit-transfer/",
         views.TransferUpdateView.as_view(),
         name="edit_transfer",
     ),
     path(
-        "htmx/delete-transaction/<int:pk>/",
+        "transactions/<int:pk>/delete/",
         views.TransactionDeleteView.as_view(),
         name="delete_transaction",
     ),
@@ -53,16 +63,18 @@ urlpatterns = [
         name="account_detail",
     ),
     path(
-        "htmx/accounts/", views.AccountPartialListView.as_view(), name="accounts_list"
+        "accounts/partial/",
+        views.AccountPartialListView.as_view(),
+        name="accounts_list",
     ),
-    path("htmx/add-account/", views.AccountCreateView.as_view(), name="add_account"),
+    path("accounts/add/", views.AccountCreateView.as_view(), name="add_account"),
     path(
-        "htmx/edit-account/<int:pk>",
+        "accounts/<int:pk>/edit/",
         views.AccountUpdateView.as_view(),
         name="edit_account",
     ),
     path(
-        "htmx/delete-account/<int:pk>",
+        "accounts/<int:pk>/delete/",
         views.AccountDeleteView.as_view(),
         name="delete_account",
     ),
@@ -73,14 +85,14 @@ urlpatterns = [
         views.CategoryDetailView.as_view(),
         name="category_detail",
     ),
-    path("htmx/add-category/", views.CategoryCreateView.as_view(), name="add_category"),
+    path("categories/add/", views.CategoryCreateView.as_view(), name="add_category"),
     path(
-        "htmx/edit-category/<int:pk>/",
+        "categories/<int:pk>/edit/",
         views.CategoryUpdateView.as_view(),
         name="edit_category",
     ),
     path(
-        "htmx/delete-account/<int:pk>/",
+        "categories/<int:pk>/delete/",
         views.CategoryDeleteView.as_view(),
         name="delete_category",
     ),
