@@ -2,7 +2,7 @@
   hx-get="{% url 'wallet:accounts' %}"
   hx-trigger="transactionListChanged from:body delay:300ms, accountCreated from:body, accountDeleted from:body"
   hx-target="#dashboard-main"
-  :hx-vals="getSelectedMonth"
+  hx-vals='js:{month: getSelectedMonth()}'
   class="h-full overflow-y-auto">
   <div class="container px-6 mx-auto">
     <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">Your wallet accounts</h2>

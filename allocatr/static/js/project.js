@@ -124,3 +124,16 @@ const warningToast = Swal.mixin({
     }
 })
 window.warningToast = warningToast
+
+function getSelectedMonth() {
+    if (window.selectedMonth) {
+        return window.selectedMonth
+    } else {
+        const now = new Date();
+        const year = now.getFullYear();
+        const yearShort = year.toString().slice(-2);
+        const month = now.getMonth() + 1;
+        const monthStr = month.toString().padStart(2, "0");
+        return yearShort + monthStr;
+    }
+}

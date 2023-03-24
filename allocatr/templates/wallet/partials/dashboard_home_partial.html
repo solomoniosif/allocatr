@@ -16,10 +16,9 @@
       <!-- Transactions -->
       <div
         hx-get="{% url 'wallet:transaction_list' %}"
-        hx-trigger="load delay:200ms, transactionListChanged from:body delay:200ms"
+        hx-trigger="load delay:200ms, month-selected from:body"
         hx-target="this"
-        :hx-vals="getSelectedMonth"
-
+        hx-vals='js:{month: getSelectedMonth()}'
       >
       </div>
 

@@ -69,8 +69,6 @@ function data() {
     },
 
     // Period
-    firstDay: "",
-    lastDay: "",
     period: {},
     periodDisplay: "",
     getPeriodDisplay(firstDay, lastDay) {
@@ -109,28 +107,39 @@ function data() {
         }
       }
     },
-    getHtmxPeriodVals() {
-      const obj = {
-        firstPeriodDay: this.period.firstDay,
-        lastPeriodDay: this.period.lastDay
-      }
-      return JSON.stringify(obj)
-    },
     getSelectedMonth() {
       return JSON.stringify({ month: this.period.month })
     },
     baseUrl: window.location.origin,
     async getAndSetCurrentPeriod() {
-      this.period = await (await fetch(`${this.baseUrl}/current-month/`)).json();
-      this.periodDisplay = this.getPeriodDisplay(this.period.firstDay, this.period.lastDay);
+      const response = await fetch(`${this.baseUrl}/current-month/`);
+      if (response.ok) {
+        this.period = await response.json();
+        this.periodDisplay = this.getPeriodDisplay(this.period.firstDay, this.period.lastDay);
+        window.selectedMonth = this.period.month;
+        document.querySelector('body').dispatchEvent(new Event('month-selected'));
+      } else {
+        throw new Error(`Error fetching current month: ${response.status}`);
+      }
     },
     async getAndSetPreviousPeriod() {
-      this.period = await (await fetch(`${this.baseUrl}/previous-month/${this.period.month}/`)).json();
-      this.periodDisplay = this.getPeriodDisplay(this.period.firstDay, this.period.lastDay);
+      const response = await fetch(`${this.baseUrl}/previous-month/${this.period.month}/`);
+      if (response.ok) {
+        this.period = await response.json();
+        this.periodDisplay = this.getPeriodDisplay(this.period.firstDay, this.period.lastDay);
+        window.selectedMonth = this.period.month;
+        document.querySelector('body').dispatchEvent(new Event('month-selected'));
+      }
     },
     async getAndSetNextPeriod() {
-      this.period = await (await fetch(`${this.baseUrl}/next-month/${this.period.month}/`)).json();
-      this.periodDisplay = this.getPeriodDisplay(this.period.firstDay, this.period.lastDay);
+      const response = await fetch(`${this.baseUrl}/next-month/${this.period.month}/`);
+      if (response.ok) {
+        this.period = await response.json();
+        this.periodDisplay = this.getPeriodDisplay(this.period.firstDay, this.period.lastDay);
+        window.selectedMonth = this.period.month;
+        document.querySelector('body').dispatchEvent(new Event('month-selected'));
+      }
+
     },
     getContext() {
       const current_page = window.location.pathname;

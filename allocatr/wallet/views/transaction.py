@@ -26,6 +26,7 @@ class TransactionListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         qs = super().get_queryset()
         day_or_month = self.request.GET.get("month")
+        print(day_or_month)
         if not day_or_month:
             day_or_month = date.today()
         month = get_or_create_month(self.request.user, day_or_month)

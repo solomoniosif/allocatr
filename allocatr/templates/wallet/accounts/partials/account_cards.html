@@ -17,7 +17,7 @@
     hx-get="{% url 'wallet:account_detail' account.pk %}"
     hx-trigger="click"
     hx-target="#dashboard-main"
-    :hx-vals="getSelectedMonth"
+    hx-vals='js:{month: getSelectedMonth()}'
     hx-replace-url="true"
     >
     <div
