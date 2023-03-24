@@ -1,9 +1,9 @@
 
 <main
   hx-get="{% url 'wallet:account_detail' account.pk %}"
-  hx-trigger="transactionListChanged from:body delay:50ms"
+  hx-trigger="transactionListChanged from:body delay:300ms"
   hx-target="#dashboard-main"
-  :hx-vals="getHtmxPeriodVals"
+  :hx-vals="getSelectedMonth"
   hx-replace-url="true"
   class="h-full overflow-y-auto"
   >

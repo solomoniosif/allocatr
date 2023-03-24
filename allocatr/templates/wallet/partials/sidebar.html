@@ -39,7 +39,7 @@
           hx-get="{% url 'wallet:accounts' %}"
           hx-trigger="click"
           hx-target = "#dashboard-main"
-          :hx-vals="getHtmxPeriodVals"
+          :hx-vals="getSelectedMonth"
           hx-replace-url="true"
         >
           <i class="bi bi-window-stack"></i>
@@ -114,7 +114,7 @@
           hx-get="{% url 'wallet:categories' %}"
           hx-trigger="click"
           hx-target = "#dashboard-main"
-          :hx-vals="getHtmxPeriodVals"
+          :hx-vals="getSelectedMonth"
           hx-replace-url="true"
         >
           <i class="bi bi-tags"></i>
@@ -219,7 +219,7 @@
           hx-get="{% url 'wallet:accounts' %}"
           hx-trigger="click"
           hx-target = "#dashboard-main"
-          :hx-vals="getHtmxPeriodVals"
+          :hx-vals="getSelectedMonth"
           hx-replace-url="true"
           @click="closeSideMenu"
         >
@@ -295,7 +295,7 @@
           hx-get="{% url 'wallet:categories' %}"
           hx-trigger="click"
           hx-target = "#dashboard-main"
-          :hx-vals="getHtmxPeriodVals"
+          :hx-vals="getSelectedMonth"
           hx-replace-url="true"
           @click="closeSideMenu"
         >

@@ -10,7 +10,6 @@ from django.views.generic import (
     ListView,
     UpdateView,
 )
-from django.db.models import Q
 
 from ..forms import ExpenseForm, IncomeForm, TransferForm
 from ..mixins import RequirePostMixin
@@ -30,14 +29,6 @@ class TransactionListView(LoginRequiredMixin, ListView):
         if not day_or_month:
             day_or_month = date.today()
         month = get_or_create_month(self.request.user, day_or_month)
-
-        # first_period_day = self.request.GET.get("firstPeriodDay")
-        # last_period_day = self.request.GET.get("lastPeriodDay")
-        # if not first_period_day:
-        #     (
-        #         first_period_day,
-        #         last_period_day,
-        #     ) = self.request.user.settings.get_current_period(date.today())
         return qs.filter(
             account__user=self.request.user,
             date__gte=month.first_day,

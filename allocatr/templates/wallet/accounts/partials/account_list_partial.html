@@ -1,8 +1,8 @@
 <main
   hx-get="{% url 'wallet:accounts' %}"
-  hx-trigger="transactionListChanged from:body delay:100ms, accountCreated from:body, accountDeleted from:body"
+  hx-trigger="transactionListChanged from:body delay:300ms, accountCreated from:body, accountDeleted from:body"
   hx-target="#dashboard-main"
-  :hx-vals="getHtmxPeriodVals"
+  :hx-vals="getSelectedMonth"
   class="h-full overflow-y-auto">
   <div class="container px-6 mx-auto">
     <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">Your wallet accounts</h2>
@@ -40,7 +40,7 @@
 
                   <!-- View Button -->
                     <button hx-get="{% url 'wallet:account_detail' account.details.pk %}" hx-trigger="click"
-                      hx-target="#dashboard-main" :hx-vals="getHtmxPeriodVals" hx-replace-url="true"
+                      hx-target="#dashboard-main" :hx-vals="getSelectedMonth" hx-replace-url="true"
                       class="block px-3 py-2 w-full text-left hover:bg-gray-200 hover:text-gray-800 focus:outline-none">
                       View
                     </button>

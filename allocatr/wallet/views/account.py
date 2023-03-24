@@ -16,6 +16,8 @@ from ..forms import AccountForm
 from ..mixins import RequirePostMixin
 from ..models import Account, Transaction, UserSettings
 
+from ..services import get_or_create_month
+
 
 class AccountPartialListView(LoginRequiredMixin, ListView):
     model = Account
@@ -46,18 +48,16 @@ class AccountListView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user_settings = UserSettings.objects.get(user=self.request.user)
+        day_or_month = self.request.GET.get("month")
+        if not day_or_month:
+            day_or_month = date.today()
+        month = get_or_create_month(self.request.user, day_or_month)
         accounts = []
         for account in context["account_list"]:
-            first_period_day = self.request.GET.get("firstPeriodDay")
-            last_period_day = self.request.GET.get("lastPeriodDay")
-            if not first_period_day:
-                first_period_day, last_period_day = user_settings.get_current_period(
-                    date.today()
-                )
             transactions = Transaction.objects.filter(
                 Q(account=account) | Q(to_account=account),
-                date__gte=first_period_day,
-                date__lte=last_period_day,
+                date__gte=month.first_day,
+                date__lte=month.last_day,
             )
             accounts.append({"details": account, "transactions": transactions})
         context["accounts"] = accounts
@@ -77,16 +77,14 @@ class AccountDetailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user_settings = UserSettings.objects.get(user=self.request.user)
-        first_period_day = self.request.GET.get("firstPeriodDay")
-        last_period_day = self.request.GET.get("lastPeriodDay")
-        if not first_period_day:
-            first_period_day, last_period_day = user_settings.get_current_period(
-                date.today()
-            )
+        day_or_month = self.request.GET.get("month")
+        if not day_or_month:
+            day_or_month = date.today()
+        month = get_or_create_month(self.request.user, day_or_month)
         filtered_transactions = Transaction.objects.filter(
             Q(account=self.get_object()) | Q(to_account=self.get_object()),
-            date__gte=first_period_day,
-            date__lte=last_period_day,
+            date__gte=month.first_day,
+            date__lte=month.last_day,
         )
         context["transactions"] = filtered_transactions
         income_amounts = []
