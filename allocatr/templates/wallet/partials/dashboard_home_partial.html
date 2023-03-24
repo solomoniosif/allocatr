@@ -18,7 +18,7 @@
         hx-get="{% url 'wallet:transaction_list' %}"
         hx-trigger="load delay:200ms, transactionListChanged from:body delay:200ms"
         hx-target="this"
-        :hx-vals="getHtmxPeriodVals"
+        :hx-vals="getSelectedMonth"
 
       >
       </div>

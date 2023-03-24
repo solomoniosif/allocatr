@@ -3,7 +3,6 @@ import json
 
 from django.http import HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
-
 from django.views.generic import (
     CreateView,
     DeleteView,
@@ -17,6 +16,8 @@ from ..forms import ExpenseForm, IncomeForm, TransferForm
 from ..mixins import RequirePostMixin
 from ..models import Transaction
 
+from ..services import get_or_create_month
+
 
 class TransactionListView(LoginRequiredMixin, ListView):
     model = Transaction
@@ -25,17 +26,22 @@ class TransactionListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         qs = super().get_queryset()
-        first_period_day = self.request.GET.get("firstPeriodDay")
-        last_period_day = self.request.GET.get("lastPeriodDay")
-        if not first_period_day:
-            (
-                first_period_day,
-                last_period_day,
-            ) = self.request.user.settings.get_current_period(date.today())
+        day_or_month = self.request.GET.get("month")
+        if not day_or_month:
+            day_or_month = date.today()
+        month = get_or_create_month(self.request.user, day_or_month)
+
+        # first_period_day = self.request.GET.get("firstPeriodDay")
+        # last_period_day = self.request.GET.get("lastPeriodDay")
+        # if not first_period_day:
+        #     (
+        #         first_period_day,
+        #         last_period_day,
+        #     ) = self.request.user.settings.get_current_period(date.today())
         return qs.filter(
             account__user=self.request.user,
-            date__gte=first_period_day,
-            date__lte=last_period_day,
+            date__gte=month.first_day,
+            date__lte=month.last_day,
         )
 
 

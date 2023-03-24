@@ -116,6 +116,9 @@ function data() {
       }
       return JSON.stringify(obj)
     },
+    getSelectedMonth() {
+      return JSON.stringify({ month: this.period.month })
+    },
     baseUrl: window.location.origin,
     async getAndSetCurrentPeriod() {
       this.period = await (await fetch(`${this.baseUrl}/current-month/`)).json();

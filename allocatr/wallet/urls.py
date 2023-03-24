@@ -6,9 +6,6 @@ app_name = "wallet"
 urlpatterns = [
     # Home
     path("", views.DashboardHome.as_view(), name="home"),
-    # path("current-period/", views.current_period, name="current_period"),
-    # path("previous-period/<str:day>/", views.previous_period, name="previous_period"),
-    # path("next-period/<str:day>/", views.next_period, name="next_period"),
     path("current-month/", views.get_current_month, name="current_month"),
     path(
         "previous-month/<str:month>/", views.get_previous_month, name="previous_month"
