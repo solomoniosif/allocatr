@@ -198,7 +198,7 @@ class Transaction(TimeStampedUUIDModel):
         TRANSFER = "TR", _("Transfer")
         ADJUSTMENT = "AD", _("Balance Adjustment")
 
-    class RecurringFrequency(models.TextChoices):
+    class RecurrenceFrequency(models.TextChoices):
         MONTHLY = "MO", _("Monthly")
         QUARTERLY = "QU", _("Quarterly")
         BIANNUALY = "BI", _("Biannualy")
@@ -229,12 +229,12 @@ class Transaction(TimeStampedUUIDModel):
         on_delete=models.CASCADE,
     )
     notes = models.TextField(blank=True, null=True)
-    is_recurring = models.BooleanField(verbose_name=_("Is recurring"), default=False)
+    is_recurrent = models.BooleanField(verbose_name=_("Is recurrent"), default=False)
     recurrence = models.CharField(
         verbose_name=_("Recurrence"),
         max_length=2,
         blank=True,
-        choices=RecurringFrequency.choices,
+        choices=RecurrenceFrequency.choices,
     )
     is_planned = models.BooleanField(verbose_name=_("Is planned"), default=False)
 
