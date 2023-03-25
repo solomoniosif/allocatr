@@ -28,15 +28,19 @@
 
   {% with WIDGET_ERROR_CLASS='is-invalid' %}
   <form
-  _="on incomeCreated call successToast.fire({title: 'Income added successfully', icon: 'success'})"
-   class="w-full" hx-post="{% url 'wallet:add_income' %}" hx-headers='{"X-CSRFToken":"{{ csrf_token }}"}'>
+   class="w-full"
+   hx-post="{% url 'wallet:add_income' %}"
+   hx-headers='{"X-CSRFToken":"{{ csrf_token }}"}'
+   @show-message="successToast.fire({title: $event.detail.value})"
+   @income-created="closeModal"
+   >
     {% for hidden in form.hidden_fields %} {{ hidden }} {% endfor %}
 
     <div class="flex flex-wrap -mx-3 mb-6">
         <!-- Title -->
         <div class="w-full px-2">
-            <label for="{{ form.title.id_for_label }}" class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 dark:text-gray-400">{{ form.title.label }}</label>
-            {% render_field form.title class+="appearance-none block w-full bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" type="text" %}
+            <label for="{{ form.title.id_for_label }}" class="input-label">{{ form.title.label }}</label>
+            {% render_field form.title class+="text-input" type="text" %}
             {% for error in form.title.errors %}<p class="text-red-500 text-xs italic">{{ error }}</p>{% endfor %}
         </div>
     </div>
@@ -44,15 +48,15 @@
     <div class="flex flex-wrap -mx-3 mb-6">
         <!-- Amount -->
         <div class="w-1/2 px-2">
-            <label for="{{ form.amount.id_for_label }}" class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 dark:text-gray-400">{{ form.amount.label }}</label>
-            {% render_field form.amount class+="appearance-none block w-full bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %}
+            <label for="{{ form.amount.id_for_label }}" class="input-label">{{ form.amount.label }}</label>
+            {% render_field form.amount class+="text-input" %}
             {% for error in form.amount.errors %}<p class="text-red-500 text-xs italic">{{ error }}</p>{% endfor %}
         </div>
 
         <!-- Category -->
         <div class="w-1/2 px-2">
-            <label for="{{ form.category.id_for_label }}" class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 dark:text-gray-400">{{ form.category.label }}</label>
-            {% render_field form.category class+="appearance-none block w-full bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %}
+            <label for="{{ form.category.id_for_label }}" class="input-label">{{ form.category.label }}</label>
+            {% render_field form.category class+="text-input" %}
             {% for error in form.category.errors %}<p class="text-red-500 text-xs italic">{{ error }}</p>{% endfor %}
         </div>
     </div>
@@ -60,15 +64,15 @@
     <div class="flex flex-wrap -mx-3 mb-6">
         <!-- Account -->
         <div class="w-1/2 px-2">
-            <label for="{{ form.category.id_for_label }}" class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 dark:text-gray-400">{{ form.account.label }}</label>
-            {% render_field form.account  class+="appearance-none block w-full bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %}
+            <label for="{{ form.category.id_for_label }}" class="input-label">{{ form.account.label }}</label>
+            {% render_field form.account  class+="text-input" %}
             {% for error in form.account.errors %}<p class="text-red-500 text-xs italic">{{ error }}</p>{% endfor %}
         </div>
 
         <!-- Date -->
         <div class="w-1/2 px-2">
-            <label for="{{ form.date.id_for_label }}" class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 dark:text-gray-400">{{ form.date.label }}</label>
-            {% render_field form.date class+="appearance-none block w-full bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" type="date" placeholder="Date" %}
+            <label for="{{ form.date.id_for_label }}" class="input-label">{{ form.date.label }}</label>
+            {% render_field form.date class+="text-input" type="date" placeholder="Date" %}
             {% for error in form.date.errors %}<p class="text-red-500 text-xs italic">{{ error }}</p>{% endfor %}
         </div>
     </div>
@@ -76,8 +80,8 @@
     <!-- Note -->
     <div class="flex flex-wrap -mx-3 mb-6">
         <div class="w-full px-2">
-            <label for="{{ form.notes.id_for_label }}" class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 dark:text-gray-400">{{ form.notes.label }}</label>
-            {% render_field form.notes rows="2" class+="appearance-none block w-full bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" type="text" %}
+            <label for="{{ form.notes.id_for_label }}" class="input-label">{{ form.notes.label }}</label>
+            {% render_field form.notes rows="2" class+="text-input" type="text" %}
             {% for error in form.notes.errors %}<p class="text-red-500 text-xs italic">{{ error }}</p>{% endfor %}
         </div>
     </div>
@@ -89,7 +93,6 @@
             class="secondaryBtn"
         >Cancel</button>
         <button
-            @click="closeModal"
             type="submit"
             class="primaryBtn"
         >Add</button>

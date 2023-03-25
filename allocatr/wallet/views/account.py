@@ -132,7 +132,15 @@ class AccountCreateView(LoginRequiredMixin, CreateView):
         self.object = form.save()
         return HttpResponse(
             status=204,
-            headers={"HX-Trigger": json.dumps({"accountCreated": None})},
+            headers={
+                "HX-Trigger": json.dumps(
+                    {
+                        "account-created": None,
+                        "accounts-changed": None,
+                        "show-message": f"{form.instance.name.upper()} created",
+                    }
+                )
+            },
         )
 
     def form_invalid(self, form):
@@ -154,7 +162,15 @@ class AccountUpdateView(LoginRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         self.object = form.save()  # noqa
-        headers = {"HX-Trigger": json.dumps({"accountEdited": None})}
+        headers = {
+            "HX-Trigger": json.dumps(
+                {
+                    "account-edited": None,
+                    "accounts-changed": None,
+                    "show-message": f"{form.instance.name.upper()} updated",
+                }
+            )
+        }
         return HttpResponse(status=204, headers=headers)
 
 
@@ -163,6 +179,15 @@ class AccountDeleteView(LoginRequiredMixin, RequirePostMixin, DeleteView):
     success_url = None
 
     def form_valid(self, form):
+        name = self.object.name
         self.object.delete()
-        headers = {"HX-Trigger": json.dumps({"accountDeleted": None})}
+        headers = {
+            "HX-Trigger": json.dumps(
+                {
+                    "account-deleted": None,
+                    "accounts-changed": None,
+                    "show-message": f"{name.upper()} deleted",
+                }
+            )
+        }
         return HttpResponse(status=204, headers=headers)

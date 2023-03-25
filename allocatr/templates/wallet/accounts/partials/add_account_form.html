@@ -17,8 +17,8 @@
 <div class="px-1 py-6 space-y-3 max-w-xl text-gray-900 dark:text-white">
 
 
-  <form _="on accountCreated call successToast.fire({title: 'Account created successfully', icon: 'success'})"
-    class="w-full" hx-post="{% url 'wallet:add_account' %}">
+  <form
+    class="w-full" hx-post="{% url 'wallet:add_account' %}" @show-message="successToast.fire({title: $event.detail.value})" @account-created="closeModal()">
     {% for hidden in form.hidden_fields %} {{ hidden }} {% endfor %}
 
     <div class="flex flex-wrap -mx-3 mb-6">
@@ -102,7 +102,7 @@
 
     <footer class="flex items-center justify-end px-6 py-2 -mx-6 -mb-4 space-x-6 flex-row bg-white dark:bg-gray-800">
       <button @click="closeModal" class="secondaryBtn">Cancel</button>
-      <button @click="closeModal" type="submit" class="primaryBtn">Add</button>
+      <button type="submit" class="primaryBtn">Add</button>
     </footer>
 
   </form>

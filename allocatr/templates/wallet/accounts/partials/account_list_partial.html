@@ -1,6 +1,6 @@
 <main
   hx-get="{% url 'wallet:accounts' %}"
-  hx-trigger="transactionListChanged from:body delay:300ms, accountCreated from:body, accountDeleted from:body"
+  hx-trigger="transactionListChanged from:body, account-created from:body, account-deleted from:body"
   hx-target="#dashboard-main"
   hx-vals='js:{month: getSelectedMonth()}'
   class="h-full overflow-y-auto">
@@ -53,10 +53,12 @@
                     </button>
 
                     <!-- Delete Button -->
-                    <button hx-post="{% url 'wallet:delete_account' account.details.pk %}" hx-trigger="confirmed"
-                      _="on click call twSwal.fire({title: 'Are you sure?', text:'This account will be deleted! You will not be able to revert this!', icon: 'warning', showConfirmButton: true, showCancelButton: true, confirmButtonText: 'Yes, delete it!'})
-                        if result.isConfirmed trigger confirmed end on accountDeleted call successToast.fire({title: 'Account deleted successfully', icon: 'success'})"
-                        class="block px-3 py-2 w-full text-left hover:bg-gray-200 hover:text-gray-800 focus:outline-none">
+                    <button
+                      hx-post="{% url 'wallet:delete_account' account.details.pk %}"
+                      hx-trigger="isConfirmed"
+                      @click="twSwal.fire({title: 'Are you sure?', text:'This account will be deleted! You will not be able to revert this!', icon: 'warning', showConfirmButton: true, showCancelButton: true, confirmButtonText: 'Yes, delete it!'}).then(result => {if (result.isConfirmed) {$dispatch('isConfirmed')}})"
+                      @show-message="successToast.fire({title: $event.detail.value})"
+                      class="block px-3 py-2 w-full text-left hover:bg-gray-200 hover:text-gray-800 focus:outline-none">
                       Delete
                     </button>
 

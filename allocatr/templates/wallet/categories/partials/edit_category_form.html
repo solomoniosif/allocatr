@@ -2,7 +2,8 @@
 
 <!-- Modal Header -->
 <header class="flex justify-between pt-2">
-  <h1 class="text-2xl font-bold text-gray-700 dark:text-gray-200">Edit <span class="font-thin">{{ category.name }}</span></h1>
+  <h1 class="text-2xl font-bold text-gray-700 dark:text-gray-200">Edit <span
+      class="font-thin">{{ category.name }}</span></h1>
   <button
     class="inline-flex items-center justify-center w-6 h-6 text-gray-400 transition-colors duration-150 rounded dark:hover:text-gray-200 hover: hover:text-gray-700 focus:outline-none"
     aria-label="close" @click="closeModal">
@@ -17,8 +18,9 @@
 <div class="px-1 py-6 space-y-3 max-w-xl text-gray-900 dark:text-white">
 
 
-  <form _="on categoryEdited call successToast.fire({title: 'Category updated successfully', icon: 'success'})"
-    class="w-full" hx-post="{% url 'wallet:edit_category' category.pk %}">
+  <form
+    class="w-full" hx-post="{% url 'wallet:edit_category' category.pk %}"
+    @show-message="successToast.fire({title: $event.detail.value})" @category-edited="closeModal">
     {% for hidden in form.hidden_fields %} {{ hidden }} {% endfor %}
 
     <div class="flex flex-wrap -mx-3 mb-6">
@@ -65,7 +67,7 @@
 
     <footer class="flex items-center justify-end px-6 py-2 -mx-6 -mb-4 space-x-6 flex-row bg-white dark:bg-gray-800">
       <button @click="closeModal" class="secondaryBtn">Cancel</button>
-      <button @click="closeModal" type="submit" class="primaryBtn">Save</button>
+      <button type="submit" class="primaryBtn">Save</button>
     </footer>
 
   </form>
@@ -94,4 +96,5 @@
     border-top-right-radius: 4px;
     border-bottom-right-radius: 4px;
   }
+
 </style>

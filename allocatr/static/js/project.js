@@ -137,3 +137,9 @@ function getSelectedMonth() {
         return yearShort + monthStr;
     }
 }
+
+const toastMessage = message => {
+    successToast.fire({
+        title: message
+    })
+}

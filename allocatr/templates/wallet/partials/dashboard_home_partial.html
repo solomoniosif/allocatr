@@ -8,7 +8,7 @@
       <!-- User accounts -->
       <div
         hx-get="{% url 'wallet:accounts_list' %}"
-        hx-trigger="load, transactionListChanged from:body"
+        hx-trigger="load, transactions-changed from:body"
         hx-target="this"
       >
       </div>
@@ -16,7 +16,7 @@
       <!-- Transactions -->
       <div
         hx-get="{% url 'wallet:transaction_list' %}"
-        hx-trigger="load delay:200ms, month-selected from:body"
+        hx-trigger="load delay:200ms, transactions-changed from:body, month-selected from:body"
         hx-target="this"
         hx-vals='js:{month: getSelectedMonth()}'
       >

@@ -13,12 +13,21 @@
         </path>
       </svg>
       {% elif category.group == "IN"%}
-      <svg class="inline-block w-8 h-8 p-1 rounded-full" style="background-color: {{ category.text_color }}; color: {{ category.color }}"  fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"></path>
+      <svg class="inline-block w-8 h-8 p-1 rounded-full"
+        style="background-color: {{ category.text_color }}; color: {{ category.color }}" fill="none"
+        stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round"
+          d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3">
+        </path>
       </svg>
       {% elif category.group == "TR"%}
-      <svg class="inline-block w-8 h-8 p-1 rounded-full" style="background-color: {{ category.text_color }}; color: {{ category.color }}"  fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5"></path>
+      <svg class="inline-block w-8 h-8 p-1 rounded-full"
+        style="background-color: {{ category.text_color }}; color: {{ category.color }}" fill="none"
+        stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round"
+          d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5"></path>
       </svg>
       {% endif %}
     </span>
@@ -58,7 +67,8 @@
       </thead>
       <tbody>
         {% for tr in transactions %}
-        <tr hx-get="{% url 'wallet:transaction_detail' tr.pk %}" hx-target="#modal" hx-trigger="click" @click="openModal"
+        <tr hx-get="{% url 'wallet:transaction_detail' tr.pk %}" hx-target="#modal" hx-trigger="click"
+          @click="openModal"
           class="bg-white dark:bg-gray-800 border-b dark:border-gray-700 cursor-pointer dark:hover:bg-gray-600">
           <th scope="row" class="px-1 md:px-3 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
             {{ tr.title|capfirst }}
@@ -81,27 +91,27 @@
 
 </div>
 
-  <div class="flex flex-row justify-between px-4 mb-4">
-    <div class="w-1/2 max-w-[130px]">
-      <canvas id="transactions-chart"></canvas>
-    </div>
-    <div class="w-1/2">
-      <p class="text-gray-800 dark:text-white text-2xl font-bold">{{ user_settings.currency }} {{ amount_total.amount__sum|floatformat:0 }}</p>
-    </div>
+<div class="flex flex-row justify-between px-4 mb-4">
+  <div class="w-1/2 max-w-[130px]">
+    <canvas id="transactions-chart"></canvas>
   </div>
+  <div class="w-1/2">
+    <p class="text-gray-800 dark:text-white text-2xl font-bold">{{ user_settings.currency }}
+      {{ amount_total.amount__sum|floatformat:0 }}</p>
+  </div>
+</div>
 
 
 <!-- Modal Footer -->
 <footer class="flex items-center justify-end px-6 pt-2 pb-4 -mx-2 -mb-1 space-x-6 flex-row bg-white dark:bg-gray-800">
-  <button hx-post="{% url 'wallet:delete_category' category.pk %}" hx-trigger="confirmed"
-    _="on click
-               call twSwal.fire({title: 'Are you sure?', text:'You will not be able to revert this!', icon: 'warning', showConfirmButton: true, showCancelButton: true, confirmButtonText: 'Yes, delete it!'})
-               if result.isConfirmed trigger confirmed end on categoryDeleted call successToast.fire({title: 'Category deleted successfully', icon: 'success'})"
-    class="redBtn">
+  <button hx-post="{% url 'wallet:delete_category' category.pk %}" hx-trigger="isConfirmed"
+    @click="twSwal.fire({title: 'Are you sure?', text:'This category will be deleted! You will not be able to revert this!', icon: 'warning', showConfirmButton: true, showCancelButton: true, confirmButtonText: 'Yes, delete it!'}).then(result => {if (result.isConfirmed) {$dispatch('isConfirmed')}})"
+    @show-message="successToast.fire({title: $event.detail.value})" class="redBtn">
     Delete
   </button>
 
-  <button hx-get="{% url 'wallet:edit_category' category.pk %}" hx-trigger="click" hx-target="#modal" @click="openModal" class="primaryBtn">
+  <button hx-get="{% url 'wallet:edit_category' category.pk %}" hx-trigger="click" hx-target="#modal" @click="openModal"
+    class="primaryBtn">
     Edit category
   </button>
 
@@ -109,22 +119,22 @@
 
 <script>
   new Chart(
-    document.getElementById('transactions-chart').getContext('2d'),
-    {
+    document.getElementById('transactions-chart').getContext('2d'), {
       type: 'doughnut',
       data: {
-        labels: {{ transaction_names|safe }},
+        labels: {{ transaction_names | safe }},
         datasets: [{
-        data: {{ amounts|safe }},
+          data: {{ amounts | safe }},
         }],
       },
       options: {
         plugins: {
           legend: {
             display: false
-            }
           }
+        }
       }
     }
   );
+
 </script>

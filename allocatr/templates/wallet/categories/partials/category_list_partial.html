@@ -1,6 +1,6 @@
 <main
   hx-get="{% url 'wallet:categories' %}"
-  hx-trigger="transactionListChanged from:body delay:300ms, categoryCreated from:body, categoryDeleted from:body"
+  hx-trigger="transactions-changed from:body, categories-changed from:body"
   hx-target="#dashboard-main"
   hx-vals='js:{month: getSelectedMonth()}'
   class="h-full overflow-y-auto">
@@ -29,7 +29,7 @@
           hx-target="#sticky-modal"
           hx-trigger="click"
           @click="openStickyModal"
-          class="relative p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 cursor-pointer dark:hover:bg-gray-700">
+          class="category-card">
           <span class="absolute inset-x-0 top-0 bg-purple-600 rounded-tr-lg rounded-tl-lg" aria-hidden="true"
             style="background-color: {{ c.details.color }}">
             <h2 class="px-4 py-2 text-xl font-bold" style="color: {{ c.details.text_color }}">{{ c.details.name }}
@@ -68,10 +68,10 @@
         <!-- Card Item -->
         <a
           hx-get="{% url 'wallet:category_detail' c.details.pk %}"
-          hx-target="#modal"
+          hx-target="#sticky-modal"
           hx-trigger="click"
-          @click="openModal"
-          class="relative p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 cursor-pointer">
+          @click="openStickyModal"
+          class="category-card">
           <span class="absolute inset-x-0 top-0 bg-purple-600 rounded-tr-lg rounded-tl-lg" aria-hidden="true"
             style="background-color: {{ c.details.color }}">
             <h2 class="px-4 py-2 text-xl font-bold" style="color: {{ c.details.text_color }}">{{ c.details.name }}
@@ -108,10 +108,10 @@
         <!-- Card Item -->
         <a
           hx-get="{% url 'wallet:category_detail' c.details.pk %}"
-          hx-target="#modal"
+          hx-target="#sticky-modal"
           hx-trigger="click"
-          @click="openModal"
-          class="relative p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 cursor-pointer">
+          @click="openStickyModal"
+          class="category-card">
           <span class="absolute inset-x-0 top-0 bg-purple-600 rounded-tr-lg rounded-tl-lg" aria-hidden="true"
             style="background-color: {{ c.details.color }}">
             <h2 class="px-4 py-2 text-xl font-bold" style="color: {{ c.details.text_color }}">{{ c.details.name }}

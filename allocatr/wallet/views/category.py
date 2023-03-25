@@ -103,7 +103,15 @@ class CategoryCreateView(LoginRequiredMixin, CreateView):
         self.object = form.save()
         return HttpResponse(
             status=204,
-            headers={"HX-Trigger": json.dumps({"categoryCreated": None})},
+            headers={
+                "HX-Trigger": json.dumps(
+                    {
+                        "category-created": None,
+                        "categories-changed": None,
+                        "show-message": f"Category {form.instance.name.upper()}  created",
+                    }
+                )
+            },
         )
 
     def form_invalid(self, form):
@@ -125,7 +133,15 @@ class CategoryUpdateView(LoginRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         self.object = form.save()  # noqa
-        headers = {"HX-Trigger": json.dumps({"categoryEdited": None})}
+        headers = {
+            "HX-Trigger": json.dumps(
+                {
+                    "category-edited": None,
+                    "categories-changed": None,
+                    "show-message": f"Category {form.instance.name.upper()}  updated",
+                }
+            )
+        }
         return HttpResponse(status=204, headers=headers)
 
 
@@ -134,6 +150,15 @@ class CategoryDeleteView(LoginRequiredMixin, RequirePostMixin, DeleteView):
     success_url = None
 
     def form_valid(self, form):
+        name = self.object.name
         self.object.delete()
-        headers = {"HX-Trigger": json.dumps({"categoryDeleted": None})}
+        headers = {
+            "HX-Trigger": json.dumps(
+                {
+                    "category-deleted": None,
+                    "categories-changed": None,
+                    "show-message": f"Category {name.upper()}  deleted",
+                }
+            )
+        }
         return HttpResponse(status=204, headers=headers)

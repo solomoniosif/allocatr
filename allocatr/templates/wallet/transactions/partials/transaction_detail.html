@@ -66,10 +66,13 @@
 
 <!-- Modal Footer -->
 <footer class="flex items-center justify-end px-6 pt-2 pb-4 -mx-6 -mb-2 space-x-6 flex-row bg-white dark:bg-gray-800">
-  <button hx-post="{% url 'wallet:delete_transaction' transaction.pk %}" hx-trigger="confirmed"
-    _="on click
-             call twSwal.fire({title: 'Are you sure?', text:'You will not be able to revert this!', icon: 'warning', showConfirmButton: true, showCancelButton: true, confirmButtonText: 'Yes, delete it!'})
-             if result.isConfirmed trigger confirmed end on transactionDeleted call successToast.fire({title: 'Transaction deleted successfully', icon: 'success'})" class="redBtn">
+  <button
+    hx-post="{% url 'wallet:delete_transaction' transaction.pk %}"
+    hx-trigger="isConfirmed"
+    @click="twSwal.fire({title: 'Are you sure?', text:'This transaction will be deleted! You will not be able to revert this!', icon: 'warning', showConfirmButton: true, showCancelButton: true, confirmButtonText: 'Yes, delete it!'}).then(result => {if (result.isConfirmed) {$dispatch('isConfirmed')}})"
+    @show-message="successToast.fire({title: $event.detail.value})"
+    class="redBtn"
+    >
     Delete
   </button>
 

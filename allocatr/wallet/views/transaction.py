@@ -54,7 +54,11 @@ class IncomeCreateView(LoginRequiredMixin, CreateView):
             status=204,
             headers={
                 "HX-Trigger": json.dumps(
-                    {"transactionListChanged": None, "incomeCreated": None}
+                    {
+                        "transactions-changed": None,
+                        "income-created": None,
+                        "show-message": f"Income {form.instance.title.upper()} added successfully",
+                    }
                 )
             },
         )
@@ -71,7 +75,11 @@ class ExpenseCreateView(LoginRequiredMixin, CreateView):
             status=204,
             headers={
                 "HX-Trigger": json.dumps(
-                    {"transactionListChanged": None, "expenseCreated": None}
+                    {
+                        "transactions-changed": None,
+                        "expense-created": None,
+                        "show-message": f"Expense {form.instance.title.upper()} added successfully",
+                    }
                 )
             },
         )
@@ -88,7 +96,11 @@ class TransferCreateView(LoginRequiredMixin, CreateView):
             status=204,
             headers={
                 "HX-Trigger": json.dumps(
-                    {"transactionListChanged": None, "transferCreated": None}
+                    {
+                        "transactions-changed": None,
+                        "transfer-created": None,
+                        "show-message": f"Transfer {form.instance.title.upper()} added successfully",
+                    }
                 )
             },
         )
@@ -105,7 +117,11 @@ class IncomeUpdateView(LoginRequiredMixin, UpdateView):
         self.object = form.save()  # noqa
         headers = {
             "HX-Trigger": json.dumps(
-                {"transactionListChanged": None, "incomeEdited": None}
+                {
+                    "transactions-changed": None,
+                    "income-edited": None,
+                    "show-message": f"Income {form.instance.title.upper()} updated",
+                }
             )
         }
         return HttpResponse(status=204, headers=headers)
@@ -122,7 +138,11 @@ class ExpenseUpdateView(LoginRequiredMixin, UpdateView):
         self.object = form.save()  # noqa
         headers = {
             "HX-Trigger": json.dumps(
-                {"transactionListChanged": None, "expenseEdited": None}
+                {
+                    "transactions-changed": None,
+                    "expense-edited": None,
+                    "show-message": f"Expense {form.instance.title.upper()} updated",
+                }
             )
         }
         return HttpResponse(status=204, headers=headers)
@@ -139,7 +159,11 @@ class TransferUpdateView(LoginRequiredMixin, UpdateView):
         self.object = form.save()  # noqa
         headers = {
             "HX-Trigger": json.dumps(
-                {"transactionListChanged": None, "transferEdited": None}
+                {
+                    "transactions-changed": None,
+                    "transfer-edited": None,
+                    "show-message": f"Transfer {form.instance.title.upper()} updated",
+                }
             )
         }
         return HttpResponse(status=204, headers=headers)
@@ -150,10 +174,15 @@ class TransactionDeleteView(LoginRequiredMixin, RequirePostMixin, DeleteView):
     success_url = None
 
     def form_valid(self, form):
+        name = self.object.title
         self.object.delete()
         headers = {
             "HX-Trigger": json.dumps(
-                {"transactionListChanged": None, "transactionDeleted": None}
+                {
+                    "transactions-changed": None,
+                    "transaction-deleted": None,
+                    "show-message": f"Transaction {name.upper()} deleted",
+                }
             )
         }
         return HttpResponse(status=204, headers=headers)
