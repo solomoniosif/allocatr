@@ -1,15 +1,5 @@
-from datetime import date
-import json
-
-from django.http import HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import (
-    CreateView,
-    DeleteView,
-    DetailView,
-    ListView,
-    UpdateView,
-)
+from django.views.generic import ListView
 
 from ..models import Budget
 

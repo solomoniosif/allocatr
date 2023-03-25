@@ -1,9 +1,9 @@
-from datetime import date
 import json
+from datetime import date
 
-from django.http import HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Sum
+from django.http import HttpResponse
 from django.views.generic import (
     CreateView,
     DeleteView,
@@ -15,7 +15,6 @@ from django.views.generic import (
 from ..forms import CategoryForm
 from ..mixins import RequirePostMixin
 from ..models import Category, Transaction, UserSettings
-
 from ..services import get_or_create_month
 
 
@@ -117,7 +116,7 @@ class CategoryCreateView(LoginRequiredMixin, CreateView):
     def form_invalid(self, form):
         print("Form invalid")
         print(form.errors)
-        super(CategoryCreateView, self).form_invalid(form)
+        super().form_invalid(form)
         return HttpResponse(
             form.errors,
             status=400,

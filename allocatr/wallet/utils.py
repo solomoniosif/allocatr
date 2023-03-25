@@ -1,6 +1,6 @@
 from datetime import date
-from dateutil.relativedelta import relativedelta
 
+from dateutil.relativedelta import relativedelta
 
 COLOR_PALETTE = [
     # Red
@@ -134,4 +134,3 @@ def get_month_range(start_day_of_month: int, date_to_check: date):
         ) - relativedelta(months=1)
     last_day = first_day + relativedelta(months=1) - relativedelta(days=1)
     return first_day, last_day
-

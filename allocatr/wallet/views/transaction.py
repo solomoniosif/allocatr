@@ -1,8 +1,8 @@
-from datetime import date
 import json
+from datetime import date
 
-from django.http import HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponse
 from django.views.generic import (
     CreateView,
     DeleteView,
@@ -14,7 +14,6 @@ from django.views.generic import (
 from ..forms import ExpenseForm, IncomeForm, TransferForm
 from ..mixins import RequirePostMixin
 from ..models import Transaction
-
 from ..services import get_or_create_month
 
 

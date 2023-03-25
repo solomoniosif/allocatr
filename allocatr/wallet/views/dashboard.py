@@ -3,11 +3,10 @@ from datetime import date
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
-from django.views.generic import (
-    TemplateView,
-)
-from ..services import get_or_create_month
+from django.views.generic import TemplateView
+
 from ..models import UserSettings
+from ..services import get_or_create_month
 
 User = get_user_model()
 

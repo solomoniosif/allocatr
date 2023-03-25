@@ -1,5 +1,3 @@
-from colorfield.widgets import ColorWidget
-
 from django import forms
 from django.utils import timezone
 

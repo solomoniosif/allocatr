@@ -5,11 +5,7 @@ from .models import Account, Budget, Category, Month, Transaction, UserSettings
 
 @admin.register(UserSettings)
 class UserSettingsAdmin(admin.ModelAdmin):
-    list_display = (
-        "user",
-        "currency",
-        "start_day_of_month"
-    )
+    list_display = ("user", "currency", "start_day_of_month")
 
 
 @admin.register(Month)

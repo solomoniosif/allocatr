@@ -2,13 +2,12 @@ import uuid
 from datetime import date, datetime, timedelta
 
 from colorfield.fields import ColorField
-
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
-from django.contrib.auth import get_user_model
+from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext as _
-from django.db import models
 
 from .utils import COLOR_PALETTE, get_month_range, is_color_dark
 
@@ -79,7 +78,7 @@ class Month(models.Model):
         self.month_code = datetime.strftime(self.first_day, "%y%m")
         if self.override_last_day:
             _, self.last_day = get_month_range(self.first_day.day, self.first_day)
-        super(Month, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.first_day.strftime('%B')} {self.first_day.year}"
@@ -142,7 +141,7 @@ class Account(TimeStampedUUIDModel):
 
     def save(self, *args, **kwargs):
         self.text_color = "white" if is_color_dark(self.color) else "black"
-        super(Account, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     def get_absolute_url(self):
         return reverse("wallet:account_detail", kwargs={"pk": self.pk})
@@ -184,7 +183,7 @@ class Category(TimeStampedUUIDModel):
 
     def save(self, *args, **kwargs):
         self.text_color = "white" if is_color_dark(self.color) else "black"
-        super(Category, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
 
 class Transaction(TimeStampedUUIDModel):
