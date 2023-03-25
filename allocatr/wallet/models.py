@@ -9,6 +9,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext as _
 
+from .querysets import AccountQuerySet, CategoryQuerySet, TransactionQuerySet
 from .utils import COLOR_PALETTE, get_month_range, is_color_dark
 
 User = get_user_model()
@@ -125,6 +126,8 @@ class Account(TimeStampedUUIDModel):
         verbose_name=_("Text color"), max_length=12, blank=True, editable=False
     )
 
+    objects = AccountQuerySet.as_manager()
+
     def get_bg_color(self):
         tailwind_color = "red-500"
         for color in COLOR_PALETTE:
@@ -174,6 +177,8 @@ class Category(TimeStampedUUIDModel):
         verbose_name=_("Text color"), max_length=12, blank=True, editable=False
     )
 
+    objects = CategoryQuerySet.as_manager()
+
     class Meta:
         verbose_name_plural = _("Categories")
         ordering = ["group", "name"]
@@ -191,6 +196,13 @@ class Transaction(TimeStampedUUIDModel):
         INCOME = "IN", _("Income")
         EXPENSE = "EX", _("Expense")
         TRANSFER = "TR", _("Transfer")
+        ADJUSTMENT = "AD", _("Balance Adjustment")
+
+    class RecurringFrequency(models.TextChoices):
+        MONTHLY = "MO", _("Monthly")
+        QUARTERLY = "QU", _("Quarterly")
+        BIANNUALY = "BI", _("Biannualy")
+        ANNUALY = "AN", _("Annualy")
 
     title = models.CharField(verbose_name=_("Title"), max_length=100)
     amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
@@ -199,6 +211,9 @@ class Transaction(TimeStampedUUIDModel):
         verbose_name=_("Transaction type"),
         max_length=2,
         choices=TransactionType.choices,
+    )
+    category = models.ForeignKey(
+        Category, verbose_name=_("Category"), on_delete=models.PROTECT
     )
     account = models.ForeignKey(
         Account,
@@ -214,9 +229,15 @@ class Transaction(TimeStampedUUIDModel):
         on_delete=models.CASCADE,
     )
     notes = models.TextField(blank=True, null=True)
-    category = models.ForeignKey(
-        Category, verbose_name=_("Category"), on_delete=models.PROTECT
+    is_recurring = models.BooleanField(verbose_name=_("Is recurring"), default=False)
+    recurrence = models.CharField(
+        verbose_name=_("Recurrence"),
+        max_length=2,
+        blank=True,
+        choices=RecurringFrequency.choices,
     )
+
+    objects = TransactionQuerySet.as_manager()
 
     def get_absolute_url(self):
         return reverse("wallet:transaction-detail", kwargs={"pk": self.pk})
