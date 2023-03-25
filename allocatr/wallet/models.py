@@ -82,7 +82,7 @@ class Month(models.Model):
         super(Month, self).save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.first_day.month} {self.first_day.year}"
+        return f"{self.first_day.strftime('%B')} {self.first_day.year}"
 
 
 class Account(TimeStampedUUIDModel):
