@@ -42,5 +42,5 @@ class TransactionQuerySet(models.QuerySet):
     def adjustment(self):
         return self.filter(transaction_type="AD")
 
-    def recurring(self):
-        return self.filter(is_recurring=True)
+    def recurrent(self):
+        return self.filter(is_recurrent=True)
