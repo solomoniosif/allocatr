@@ -8,12 +8,13 @@ class UserSettingsAdmin(admin.ModelAdmin):
     list_display = (
         "user",
         "currency",
+        "start_day_of_month"
     )
 
 
 @admin.register(Month)
 class MonthAdmin(admin.ModelAdmin):
-    list_display = ("user", "first_day", "last_day", "override_last_day")
+    list_display = ("__str__", "user", "first_day", "last_day")
 
 
 @admin.register(Account)
@@ -24,19 +25,19 @@ class AccountAdmin(admin.ModelAdmin):
         "account_type",
         "current_balance",
         "active",
-        "exclude_from_budget",
     )
     list_display_links = ("name",)
+    list_filter = ("account_type", "active")
 
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ("name", "group")
+    list_display = ("name", "user", "group")
 
 
 @admin.register(Transaction)
 class TransactionAdmin(admin.ModelAdmin):
-    list_display = ("title", "transaction_type", "amount", "date", "account", "notes")
+    list_display = ("title", "transaction_type", "amount", "date", "account")
     list_display_links = ("title",)
     list_filter = ("transaction_type", "account")
     search_fields = ("title",)
@@ -46,3 +47,4 @@ class TransactionAdmin(admin.ModelAdmin):
 @admin.register(Budget)
 class BudgetAdmin(admin.ModelAdmin):
     list_display = ("name", "user", "month", "budgeted_amount")
+    list_filter = ("user", "month", "categories")
