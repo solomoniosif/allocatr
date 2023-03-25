@@ -320,7 +320,9 @@ class Budget(TimeStampedUUIDModel):
         verbose_name=_("Budgeted mount"), max_digits=10, decimal_places=2
     )
     categories = models.ManyToManyField(Category, related_name="budgets")
-    month = models.OneToOneField(Month, related_name="budget", on_delete=models.CASCADE)
+    month = models.ForeignKey(
+        Month, verbose_name=_("Month"), related_name="budgets", on_delete=models.CASCADE
+    )
     is_master = models.BooleanField(default=False)
 
     def __str__(self):
