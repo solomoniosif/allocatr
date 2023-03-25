@@ -1,6 +1,6 @@
 <main
   hx-get="{% url 'wallet:categories' %}"
-  hx-trigger="transactions-changed from:body, categories-changed from:body"
+  hx-trigger="transactions-changed from:body, categories-changed from:body, month-selected from:body"
   hx-target="#dashboard-main"
   hx-vals='js:{month: getSelectedMonth()}'
   class="h-full overflow-y-auto">

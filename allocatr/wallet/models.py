@@ -317,11 +317,11 @@ class Budget(TimeStampedUUIDModel):
     )
     name = models.CharField(verbose_name=_("Name"), max_length=150)
     budgeted_amount = models.DecimalField(
-        verbose_name=_("Budgeted mount"), max_digits=10, decimal_places=2, default=0
+        verbose_name=_("Budgeted mount"), max_digits=10, decimal_places=2
     )
     categories = models.ManyToManyField(Category, related_name="budgets")
-    start_date = models.DateField(verbose_name=_("Start date"))
-    end_date = models.DateField(verbose_name=_("End date"))
+    month = models.OneToOneField(Month, related_name="budget", on_delete=models.CASCADE)
+    is_master = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
