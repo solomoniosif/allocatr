@@ -30,11 +30,11 @@ class UserSettings(models.Model):
     class Currency(models.TextChoices):
         AUD = "AUD", _("Australia Dollar")
         CAD = "CAD", _("Canada Dollar")
-        CNY = "¥", _("China Yuan Renminbi")
-        EUR = "€", _("Euro Member Countries")
-        RON = "lei", _("Romania Leu")
-        GBP = "£", _("United Kingdom Pound")
-        USD = "$", _("United States Dollar")
+        CNY = "RMB", _("China Yuan Renminbi")
+        EUR = "EUR", _("Euro Member Countries")
+        RON = "RON", _("Romania Leu")
+        GBP = "GBP", _("United Kingdom Pound")
+        USD = "USD", _("United States Dollar")
 
     user = models.OneToOneField(User, related_name="settings", on_delete=models.CASCADE)
     currency = models.CharField(
@@ -236,6 +236,7 @@ class Transaction(TimeStampedUUIDModel):
         blank=True,
         choices=RecurringFrequency.choices,
     )
+    is_planned = models.BooleanField(verbose_name=_("Is planned"), default=False)
 
     objects = TransactionQuerySet.as_manager()
 
@@ -262,43 +263,47 @@ class Transaction(TimeStampedUUIDModel):
                 _("For a transfer transaction a destination account must be specified!")
             )
 
+    def update_account_balance(self):
+        if not self.is_planned:
+            if self.transaction_type == self.TransactionType.INCOME:
+                if self.pkid is not None:
+                    old_transaction = Transaction.objects.get(pk=self.pkid)
+                    old_transaction.account.current_balance -= old_transaction.amount
+                    old_transaction.account.save()
+                    self.account.refresh_from_db()
+                    self.account.current_balance += self.amount
+                else:
+                    self.account.current_balance += self.amount
+            elif self.transaction_type == self.TransactionType.EXPENSE:
+                if self.pkid is not None:
+                    old_transaction = Transaction.objects.get(pk=self.pkid)
+                    old_transaction.account.current_balance += old_transaction.amount
+                    old_transaction.account.save()
+                    self.account.refresh_from_db()
+                    self.account.current_balance -= self.amount
+                else:
+                    self.account.current_balance -= self.amount
+            elif self.transaction_type == self.TransactionType.TRANSFER:
+                if self.pkid is not None:
+                    old_transaction = Transaction.objects.get(pk=self.pkid)
+                    old_transaction.account.current_balance += old_transaction.amount
+                    old_transaction.to_account.current_balance -= old_transaction.amount
+                    old_transaction.account.save()
+                    old_transaction.to_account.save()
+                    self.account.refresh_from_db()
+                    self.to_account.refresh_from_db()
+                    self.account.current_balance -= self.amount
+                    self.to_account.current_balance += self.amount
+                    self.to_account.save()
+                else:
+                    self.account.current_balance -= self.amount
+                    self.to_account.current_balance += self.amount
+                    self.to_account.save()
+            self.account.save()
+
     def save(self, *args, **kwargs):
-        if self.transaction_type == self.TransactionType.INCOME:
-            if self.pkid is not None:
-                old_transaction = Transaction.objects.get(pk=self.pkid)
-                old_transaction.account.current_balance -= old_transaction.amount
-                old_transaction.account.save()
-                self.account.refresh_from_db()
-                self.account.current_balance += self.amount
-            else:
-                self.account.current_balance += self.amount
-        elif self.transaction_type == self.TransactionType.EXPENSE:
-            if self.pkid is not None:
-                old_transaction = Transaction.objects.get(pk=self.pkid)
-                old_transaction.account.current_balance += old_transaction.amount
-                old_transaction.account.save()
-                self.account.refresh_from_db()
-                self.account.current_balance -= self.amount
-            else:
-                self.account.current_balance -= self.amount
-        elif self.transaction_type == self.TransactionType.TRANSFER:
-            if self.pkid is not None:
-                old_transaction = Transaction.objects.get(pk=self.pkid)
-                old_transaction.account.current_balance += old_transaction.amount
-                old_transaction.to_account.current_balance -= old_transaction.amount
-                old_transaction.account.save()
-                old_transaction.to_account.save()
-                self.account.refresh_from_db()
-                self.to_account.refresh_from_db()
-                self.account.current_balance -= self.amount
-                self.to_account.current_balance += self.amount
-                self.to_account.save()
-            else:
-                self.account.current_balance -= self.amount
-                self.to_account.current_balance += self.amount
-                self.to_account.save()
-        self.account.save()
         super().save(*args, **kwargs)
+        self.update_account_balance()
 
     def delete(self, *args, **kwargs):
         if self.transaction_type == self.TransactionType.INCOME:
