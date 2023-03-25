@@ -15,6 +15,8 @@ class IncomeForm(forms.ModelForm):
             "category",
             "notes",
             "transaction_type",
+            "is_recurrent",
+            "recurrence_frequency",
         )
 
     def __init__(self, *args, **kwargs):
@@ -37,6 +39,8 @@ class ExpenseForm(forms.ModelForm):
             "category",
             "notes",
             "transaction_type",
+            "is_recurrent",
+            "recurrence_frequency",
         )
 
     def __init__(self, *args, **kwargs):
@@ -90,6 +94,56 @@ class TransferForm(forms.ModelForm):
         to_account_pk = self.data.get("to_account")
         to_account = Account.objects.get(pk=to_account_pk)
         return f"Transfer from {account} to {to_account}"
+
+
+class PlannedIncomeForm(forms.ModelForm):
+    class Meta:
+        model = Transaction
+        fields = (
+            "title",
+            "amount",
+            "date",
+            "account",
+            "category",
+            "notes",
+            "transaction_type",
+            "is_planned",
+        )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        income_categories = Category.objects.filter(group=Category.Group.INCOME)
+        self.fields["category"].queryset = income_categories
+        self.fields["transaction_type"].initial = "IN"
+        self.fields["transaction_type"].widget = forms.HiddenInput()
+        self.fields["date"].initial = timezone.now()
+        self.fields["is_planned"].initial = True
+        self.fields["is_planned"].widget = forms.HiddenInput()
+
+
+class PlannedExpenseForm(forms.ModelForm):
+    class Meta:
+        model = Transaction
+        fields = (
+            "title",
+            "amount",
+            "date",
+            "account",
+            "category",
+            "notes",
+            "transaction_type",
+            "is_planned",
+        )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        expense_categories = Category.objects.filter(group=Category.Group.EXPENSE)
+        self.fields["category"].queryset = expense_categories
+        self.fields["transaction_type"].initial = "EX"
+        self.fields["transaction_type"].widget = forms.HiddenInput()
+        self.fields["date"].initial = timezone.now()
+        self.fields["is_planned"].initial = True
+        self.fields["is_planned"].widget = forms.HiddenInput()
 
 
 class AccountForm(forms.ModelForm):

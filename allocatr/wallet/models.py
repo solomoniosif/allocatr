@@ -231,7 +231,7 @@ class Transaction(TimeStampedUUIDModel):
     notes = models.TextField(blank=True, null=True)
     is_recurrent = models.BooleanField(verbose_name=_("Is recurrent"), default=False)
     recurrence_frequency = models.CharField(
-        verbose_name=_("Recurrence"),
+        verbose_name=_("Recurrence frequency"),
         max_length=2,
         blank=True,
         choices=RecurrenceFrequency.choices,
