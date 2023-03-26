@@ -11,13 +11,7 @@ from django.views.generic import (
     UpdateView,
 )
 
-from ..forms import (
-    ExpenseForm,
-    IncomeForm,
-    PlannedExpenseForm,
-    PlannedIncomeForm,
-    TransferForm,
-)
+from ..forms import ExpenseForm, IncomeForm, TransferForm
 from ..mixins import RequirePostMixin
 from ..models import Transaction
 from ..services import get_or_create_month
@@ -50,27 +44,6 @@ class TransactionDetailView(LoginRequiredMixin, DetailView):
 class IncomeCreateView(LoginRequiredMixin, CreateView):
     model = Transaction
     form_class = IncomeForm
-    template_name = "wallet/transactions/partials/add_income.html"
-
-    def form_valid(self, form):
-        self.object = form.save()  # noqa
-        return HttpResponse(
-            status=204,
-            headers={
-                "HX-Trigger": json.dumps(
-                    {
-                        "transactions-changed": None,
-                        "income-created": None,
-                        "show-message": f"Income {form.instance.title.upper()} added",
-                    }
-                )
-            },
-        )
-
-
-class PlannedIncomeCreateView(LoginRequiredMixin, CreateView):
-    model = Transaction
-    form_class = PlannedIncomeForm
     template_name = "wallet/transactions/partials/add_income.html"
 
     def form_valid(self, form):
@@ -133,14 +106,10 @@ class TransferCreateView(LoginRequiredMixin, CreateView):
 
 class IncomeUpdateView(LoginRequiredMixin, UpdateView):
     model = Transaction
+    form_class = IncomeForm
     context_object_name = "income"
     template_name = "wallet/transactions/partials/edit_income.html"
     success_url = None
-
-    def get_form_class(self):
-        if self.object.is_planned:
-            return PlannedIncomeForm
-        return IncomeForm
 
     def form_valid(self, form):
         self.object = form.save()  # noqa
@@ -158,15 +127,10 @@ class IncomeUpdateView(LoginRequiredMixin, UpdateView):
 
 class ExpenseUpdateView(LoginRequiredMixin, UpdateView):
     model = Transaction
-    form_class = PlannedExpenseForm
+    form_class = ExpenseForm
     context_object_name = "expense"
     template_name = "wallet/transactions/partials/edit_expense.html"
     success_url = None
-
-    # def get_form_class(self):
-    #     if self.object.is_planned:
-    #         return PlannedExpenseForm
-    #     return ExpenseForm
 
     def form_valid(self, form):
         self.object = form.save()  # noqa

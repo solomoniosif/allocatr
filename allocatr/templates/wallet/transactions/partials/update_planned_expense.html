@@ -19,9 +19,12 @@
 
   {% with WIDGET_ERROR_CLASS='is-invalid' %}
   <form class="w-full" hx-post="{% url 'wallet:edit_expense' expense.pk %}"
-    hx-headers='{"X-CSRFToken":"{{ csrf_token }}"}'
+    hx-headers='{"X-CSRFToken":"{{ csrf_token }}"}' x-data="{ transactionIsPlanned: $refs.selectIsPlanned.checked }"
     @show-message="successToast.fire({title: $event.detail.value})" @expense-edited="closeModal">
     {% for hidden in form.hidden_fields %} {{ hidden }} {% endfor %}
+
+    <div class="text-3xl font-bold text-white" x-text="transactionIsPlanned"></div>
+    <span class="italic font-thin text-2xl" x-show="transactionIsPlanned">Planned Expense</span>
 
     <div class="flex flex-wrap -mx-3 mb-6">
       <!-- Title -->
@@ -73,7 +76,37 @@
       </div>
     </div>
 
+    <div class="flex flex-wrap -mx-3 mb-6"
+      x-data="{showFrequencyOptions: {% if form.is_recurrent.value %}true{% else %}false{% endif %} }">
+      <!-- Is recurrent -->
+      <div class="w-1/2 px-3">
+        <label for="{{ form.is_recurrent.id_for_label }}" class="input-label">{{ form.is_recurrent.label }}</label>
+        {% render_field form.is_recurrent class+="checkbox-input" x-model="showFrequencyOptions" %}
+        {% for error in form.is_recurrent.errors %}<p class="text-red-500 text-xs italic">{{ error }}</p>{% endfor %}
+      </div>
+
+      <!-- Recurrence frequency -->
+      <div x-show="showFrequencyOptions" class="w-1/2 px-2">
+        <label for="{{ form.recurrence_frequency.id_for_label }}"
+          class="input-label">{{ form.recurrence_frequency.label }}</label>
+        {% render_field form.recurrence_frequency class+="text-input" type="date" placeholder="Date" %}
+        {% for error in form.recurrence_frequency.errors %}<p class="text-red-500 text-xs italic">{{ error }}</p>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Is planned -->
+    <div class="hidden w-1/2 px-3">
+      <label for="{{ form.is_planned.id_for_label }}" class="input-label">{{ form.is_planned.label }}</label>
+      {% render_field form.is_planned class+="checkbox-input" x-ref="selectIsPlanned" %}
+      {% for error in form.is_planned.errors %}<p class="text-red-500 text-xs italic">{{ error }}</p>{% endfor %}
+    </div>
+
     <footer class="flex flex-row items-center justify-end px-6 py-2 -mx-6 -mb-4 space-x-6 bg-white dark:bg-gray-800">
+      {% if form.is_planned.value  %}
+      <button class="primaryBtn self-start" @click="$refs.selectIsPlanned.checked=false">Set
+        paid</button>
+      {% endif %}
       <button @click.prevent="closeModal" class="secondaryBtn">Cancel</button>
       <button type="submit" class="primaryBtn">Save</button>
     </footer>

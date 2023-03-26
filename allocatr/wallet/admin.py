@@ -1,6 +1,14 @@
 from django.contrib import admin
 
-from .models import Account, Budget, Category, Month, Transaction, UserSettings
+from .models import (
+    Account,
+    Budget,
+    Category,
+    Month,
+    PlannedTransaction,
+    Transaction,
+    UserSettings,
+)
 
 
 @admin.register(UserSettings)
@@ -38,6 +46,18 @@ class TransactionAdmin(admin.ModelAdmin):
     list_filter = ("transaction_type", "account")
     search_fields = ("title",)
     date_hierarchy = "date"
+
+
+@admin.register(PlannedTransaction)
+class PlannedTransactionAdmin(admin.ModelAdmin):
+    list_display = (
+        "title",
+        "transaction_type",
+        "amount",
+        "date",
+        "account",
+        "is_duplicated",
+    )
 
 
 @admin.register(Budget)

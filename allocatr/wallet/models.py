@@ -199,12 +199,6 @@ class Transaction(TimeStampedUUIDModel):
         TRANSFER = "TR", _("Transfer")
         ADJUSTMENT = "AD", _("Balance Adjustment")
 
-    class RecurrenceFrequency(models.TextChoices):
-        MONTHLY = "MO", _("Monthly")
-        QUARTERLY = "QU", _("Quarterly")
-        BIANNUALY = "BI", _("Biannualy")
-        ANNUALY = "AN", _("Annualy")
-
     title = models.CharField(verbose_name=_("Title"), max_length=100)
     amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     date = models.DateField(default=date.today)
@@ -230,14 +224,6 @@ class Transaction(TimeStampedUUIDModel):
         on_delete=models.CASCADE,
     )
     notes = models.TextField(blank=True, null=True)
-    is_recurrent = models.BooleanField(verbose_name=_("Is recurrent"), default=False)
-    recurrence_frequency = models.CharField(
-        verbose_name=_("Recurrence frequency"),
-        max_length=2,
-        blank=True,
-        choices=RecurrenceFrequency.choices,
-    )
-    is_planned = models.BooleanField(verbose_name=_("Is planned"), default=False)
 
     objects = TransactionQuerySet.as_manager()
 
@@ -265,74 +251,43 @@ class Transaction(TimeStampedUUIDModel):
             )
 
     def update_account_balance(self):
-        if not self.is_planned:
-            if self.transaction_type == self.TransactionType.INCOME:
-                if self.pkid is not None:
-                    old_transaction = Transaction.objects.get(pk=self.pkid)
-                    old_transaction.account.current_balance -= old_transaction.amount
-                    old_transaction.account.save()
-                    self.account.refresh_from_db()
-                    self.account.current_balance += self.amount
-                else:
-                    self.account.current_balance += self.amount
-            elif self.transaction_type == self.TransactionType.EXPENSE:
-                if self.pkid is not None:
-                    old_transaction = Transaction.objects.get(pk=self.pkid)
-                    old_transaction.account.current_balance += old_transaction.amount
-                    old_transaction.account.save()
-                    self.account.refresh_from_db()
-                    self.account.current_balance -= self.amount
-                else:
-                    self.account.current_balance -= self.amount
-            elif self.transaction_type == self.TransactionType.TRANSFER:
-                if self.pkid is not None:
-                    old_transaction = Transaction.objects.get(pk=self.pkid)
-                    old_transaction.account.current_balance += old_transaction.amount
-                    old_transaction.to_account.current_balance -= old_transaction.amount
-                    old_transaction.account.save()
-                    old_transaction.to_account.save()
-                    self.account.refresh_from_db()
-                    self.to_account.refresh_from_db()
-                    self.account.current_balance -= self.amount
-                    self.to_account.current_balance += self.amount
-                    self.to_account.save()
-                else:
-                    self.account.current_balance -= self.amount
-                    self.to_account.current_balance += self.amount
-                    self.to_account.save()
-            self.account.save()
-
-    def duplicate_recurrent_transaction(self):
-        new_transaction = Transaction(
-            title=self.title,
-            amount=self.amount,
-            date=self.date,
-            transaction_type=self.transaction_type,
-            category=self.category,
-            account=self.account,
-            to_account=self.to_account,
-            notes=self.notes,
-            is_recurrent=self.is_recurrent,
-            recurrence_frequency=self.recurrence_frequency,
-            is_planned=True,
-        )
-        new_transaction.save()
-        if self.transaction_type == self.TransactionType.TRANSFER:
-            new_transaction.to_account = self.to_account
-            new_transaction.save()
-        if self.recurrence_frequency == self.RecurrenceFrequency.MONTHLY:
-            new_transaction.date = self.date + relativedelta(months=1)
-        elif self.recurrence_frequency == self.RecurrenceFrequency.QUARTERLY:
-            new_transaction.date = self.date + relativedelta(months=3)
-        elif self.recurrence_frequency == self.RecurrenceFrequency.BIANNUALY:
-            new_transaction.date = self.date + relativedelta(months=6)
-        elif self.recurrence_frequency == self.RecurrenceFrequency.ANNUALY:
-            new_transaction.date = self.date + relativedelta(years=1)
-        new_transaction.save()
+        if self.transaction_type == self.TransactionType.INCOME:
+            if self.pkid is not None:
+                old_transaction = Transaction.objects.get(pk=self.pkid)
+                old_transaction.account.current_balance -= old_transaction.amount
+                old_transaction.account.save()
+                self.account.refresh_from_db()
+                self.account.current_balance += self.amount
+            else:
+                self.account.current_balance += self.amount
+        elif self.transaction_type == self.TransactionType.EXPENSE:
+            if self.pkid is not None:
+                old_transaction = Transaction.objects.get(pk=self.pkid)
+                old_transaction.account.current_balance += old_transaction.amount
+                old_transaction.account.save()
+                self.account.refresh_from_db()
+                self.account.current_balance -= self.amount
+            else:
+                self.account.current_balance -= self.amount
+        elif self.transaction_type == self.TransactionType.TRANSFER:
+            if self.pkid is not None:
+                old_transaction = Transaction.objects.get(pk=self.pkid)
+                old_transaction.account.current_balance += old_transaction.amount
+                old_transaction.to_account.current_balance -= old_transaction.amount
+                old_transaction.account.save()
+                old_transaction.to_account.save()
+                self.account.refresh_from_db()
+                self.to_account.refresh_from_db()
+                self.account.current_balance -= self.amount
+                self.to_account.current_balance += self.amount
+                self.to_account.save()
+            else:
+                self.account.current_balance -= self.amount
+                self.to_account.current_balance += self.amount
+                self.to_account.save()
+        self.account.save()
 
     def save(self, *args, **kwargs):
-        if self.is_recurrent and not self.is_planned and self._state.adding:
-            self.duplicate_recurrent_transaction()
         self.update_account_balance()
         super().save(*args, **kwargs)
 
@@ -352,7 +307,7 @@ class Transaction(TimeStampedUUIDModel):
         return f"{self.get_transaction_type_display()} » {self.title} » {self.amount}"
 
     def __hash__(self):
-        return hash(self.pkid)
+        return hash(self.id)
 
     def __eq__(self, other):
         return self.pkid == other.pkid
@@ -365,6 +320,105 @@ class Transaction(TimeStampedUUIDModel):
 
     def is_transfer(self):
         return self.transaction_type == self.TransactionType.TRANSFER
+
+
+class PlannedTransaction(TimeStampedUUIDModel):
+    class TransactionType(models.TextChoices):
+        INCOME = "IN", _("Income")
+        EXPENSE = "EX", _("Expense")
+
+    class RecurrenceFrequency(models.TextChoices):
+        MONTHLY = "MO", _("Monthly")
+        QUARTERLY = "QU", _("Quarterly")
+        BIANNUALY = "BI", _("Biannualy")
+        ANNUALY = "AN", _("Annualy")
+
+    title = models.CharField(verbose_name=_("Title"), max_length=100)
+    amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    date = models.DateField(default=date.today)
+    transaction_type = models.CharField(
+        verbose_name=_("Transaction type"),
+        max_length=2,
+        choices=TransactionType.choices,
+    )
+    category = models.ForeignKey(
+        Category,
+        verbose_name=_("Category"),
+        related_name="planned_transactions",
+        on_delete=models.PROTECT,
+    )
+    account = models.ForeignKey(
+        Account,
+        verbose_name=_("Account"),
+        related_name="planned_transactions",
+        on_delete=models.CASCADE,
+    )
+    to_account = models.ForeignKey(
+        Account,
+        verbose_name=_("Transfer destination account"),
+        blank=True,
+        null=True,
+        on_delete=models.CASCADE,
+    )
+    notes = models.TextField(blank=True, null=True)
+    is_recurring = models.BooleanField(default=False)
+    recurrence_frequency = models.CharField(
+        max_length=2, choices=RecurrenceFrequency.choices, blank=True, null=True
+    )
+    recurrence_id = models.UUIDField(blank=True, null=True)
+    is_duplicated = models.BooleanField(default=False)
+    is_completed = models.BooleanField(default=False)
+
+    def duplicate_recurring_transaction(self):
+        if self.recurrence_frequency == self.RecurrenceFrequency.MONTHLY:
+            next_date = self.date + relativedelta(months=1)
+            if next_date > date.today() + relativedelta(months=1, days=15):
+                return False
+        elif self.recurrence_frequency == self.RecurrenceFrequency.QUARTERLY:
+            next_date = self.date + relativedelta(months=3)
+            if next_date > date.today() + relativedelta(months=3, days=15):
+                return False
+        elif self.recurrence_frequency == self.RecurrenceFrequency.BIANNUALY:
+            next_date = self.date + relativedelta(months=6)
+            if next_date > date.today() + relativedelta(months=6, days=15):
+                return False
+        elif self.recurrence_frequency == self.RecurrenceFrequency.ANNUALY:
+            next_date = self.date + relativedelta(years=1)
+            if next_date > date.today() + relativedelta(years=1, days=15):
+                return False
+
+        start_bracket = self.title.rfind("[")
+        end_bracket = self.title.rfind("]")
+        if start_bracket != -1 and end_bracket != -1:
+            new_title = self.title[:start_bracket] + f" [{next_date.strftime('%B %Y')}]"
+        else:
+            new_title = f"{self.title} [{next_date.strftime('%B %Y')}]"
+
+        new_transaction = PlannedTransaction(
+            title=new_title,
+            amount=self.amount,
+            date=next_date,
+            transaction_type=self.transaction_type,
+            category=self.category,
+            account=self.account,
+            to_account=self.to_account,
+            notes=self.notes,
+            is_recurring=self.is_recurring,
+            recurrence_frequency=self.recurrence_frequency,
+            recurrence_id=self.recurrence_id or self.id,
+            is_duplicated=False,
+            is_completed=False,
+        )
+        new_transaction.save()
+        return True
+
+    def save(self, *args, **kwargs):
+        if not self.recurrence_id:
+            self.recurrence_id = self.id
+        if self.is_recurring and not self.is_duplicated:
+            was_duplicated = self.duplicate_recurring_transaction()
+            self.is_duplicated = was_duplicated
+        super().save(*args, **kwargs)
 
 
 class Budget(TimeStampedUUIDModel):
