@@ -24,9 +24,7 @@ class PlannedTransactionListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         qs = super().get_queryset()
-        day_or_month = self.request.GET.get("month")
-        if not day_or_month:
-            day_or_month = date.today()
+        day_or_month = self.request.GET.get("month", date.today())
         month = get_or_create_month(self.request.user, day_or_month)
         return qs.filter(
             account__user=self.request.user,

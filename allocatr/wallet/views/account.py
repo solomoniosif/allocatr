@@ -47,9 +47,7 @@ class AccountListView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user_settings = UserSettings.objects.get(user=self.request.user)
-        day_or_month = self.request.GET.get("month")
-        if not day_or_month:
-            day_or_month = date.today()
+        day_or_month = self.request.GET.get("month", date.today())
         month = get_or_create_month(self.request.user, day_or_month)
         accounts = []
         for account in context["account_list"]:
@@ -76,9 +74,7 @@ class AccountDetailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user_settings = UserSettings.objects.get(user=self.request.user)
-        day_or_month = self.request.GET.get("month")
-        if not day_or_month:
-            day_or_month = date.today()
+        day_or_month = self.request.GET.get("month", date.today())
         month = get_or_create_month(self.request.user, day_or_month)
         filtered_transactions = Transaction.objects.filter(
             Q(account=self.get_object()) | Q(to_account=self.get_object()),

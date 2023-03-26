@@ -28,9 +28,7 @@ class CategoryListView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user_settings = UserSettings.objects.get(user=self.request.user)
-        day_or_month = self.request.GET.get("month")
-        if not day_or_month:
-            day_or_month = date.today()
+        day_or_month = self.request.GET.get("month", date.today())
         month = get_or_create_month(self.request.user, day_or_month)
         categories = {}
         for category in context["category_list"]:
@@ -70,9 +68,7 @@ class CategoryDetailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user_settings = UserSettings.objects.get(user=self.request.user)
-        day_or_month = self.request.GET.get("month")
-        if not day_or_month:
-            day_or_month = date.today()
+        day_or_month = self.request.GET.get("month", date.today())
         month = get_or_create_month(self.request.user, day_or_month)
         filtered_transactions = Transaction.objects.filter(
             category=self.get_object(),
@@ -107,7 +103,7 @@ class CategoryCreateView(LoginRequiredMixin, CreateView):
                     {
                         "category-created": None,
                         "categories-changed": None,
-                        "show-message": f"Category {form.instance.name.upper()}  created",
+                        "show-message": f"Category {form.instance.name}  created",
                     }
                 )
             },
@@ -137,7 +133,7 @@ class CategoryUpdateView(LoginRequiredMixin, UpdateView):
                 {
                     "category-edited": None,
                     "categories-changed": None,
-                    "show-message": f"Category {form.instance.name.upper()}  updated",
+                    "show-message": f"Category {form.instance.name}  updated",
                 }
             )
         }
@@ -156,7 +152,7 @@ class CategoryDeleteView(LoginRequiredMixin, RequirePostMixin, DeleteView):
                 {
                     "category-deleted": None,
                     "categories-changed": None,
-                    "show-message": f"Category {name.upper()}  deleted",
+                    "show-message": f"Category {name}  deleted",
                 }
             )
         }
