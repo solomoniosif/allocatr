@@ -1,7 +1,7 @@
 from django import forms
 from django.utils import timezone
 
-from .models import Account, Category, Transaction
+from .models import Account, Category, PlannedTransaction, Transaction
 
 
 class IncomeForm(forms.ModelForm):
@@ -119,3 +119,53 @@ class CategoryForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["color"].widget = forms.TextInput()
+
+
+class PlannedIncomeForm(forms.ModelForm):
+    class Meta:
+        model = PlannedTransaction
+        fields = {
+            "title",
+            "amount",
+            "date",
+            "account",
+            "category",
+            "notes",
+            "transaction_type",
+            "is_recurring",
+            "recurrence_frequency",
+            "is_completed",
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        income_categories = Category.objects.filter(group=Category.Group.INCOME)
+        self.fields["category"].queryset = income_categories
+        self.fields["transaction_type"].initial = "IN"
+        self.fields["transaction_type"].widget = forms.HiddenInput()
+        self.fields["date"].initial = timezone.now()
+
+
+class PlannedExpenseForm(forms.ModelForm):
+    class Meta:
+        model = PlannedTransaction
+        fields = {
+            "title",
+            "amount",
+            "date",
+            "account",
+            "category",
+            "notes",
+            "transaction_type",
+            "is_recurring",
+            "recurrence_frequency",
+            "is_completed",
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        expense_categories = Category.objects.filter(group=Category.Group.EXPENSE)
+        self.fields["category"].queryset = expense_categories
+        self.fields["transaction_type"].initial = "EX"
+        self.fields["transaction_type"].widget = forms.HiddenInput()
+        self.fields["date"].initial = timezone.now()
