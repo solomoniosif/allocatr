@@ -1,12 +1,10 @@
+<head>
+  <title>allocatr | {{ account.name|title }}</title>
+</head>
 
-<main
-  hx-get="{% url 'wallet:account_detail' account.pk %}"
-  hx-trigger="transactions-changed from:body"
-  hx-target="#dashboard-main"
-  hx-vals='js:{month: getSelectedMonth()}'
-  hx-replace-url="true"
-  class="h-full overflow-y-auto"
-  >
+<main hx-get="{% url 'wallet:account_detail' account.pk %}" hx-trigger="transactions-changed from:body"
+  hx-target="#dashboard-main" hx-vals='js:{month: getSelectedMonth()}' hx-replace-url="true"
+  class="h-full overflow-y-auto">
   <div class="container px-6 mx-auto bg-gray-200 dark:bg-gray-900">
     <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">{{ account.name|title }}</h2>
 
@@ -17,7 +15,8 @@
         class="flex items-center p-4 bg-white rounded-lg shadow-lg shadow-gray-500 md:max-w-xs dark:bg-gray-800 dark:shadow-gray-700"
         style="background-color: {{ account.color }}; color: {{ account.text_color }}">
         <div>
-          <p class="mb-2 text-xl text-center font-medium text-gray-600 dark:text-gray-400" style="color: {{ account.text_color }}">
+          <p class="mb-2 text-xl text-center font-medium text-gray-600 dark:text-gray-400"
+            style="color: {{ account.text_color }}">
             Account balance
           </p>
           <p class="text-3xl font-bold dark:text-gray-200" style="color: {{ account.text_color }}">
@@ -60,110 +59,115 @@
         </div>
       </div>
 
-      <div class="flex items-center p-4 bg-white  text-gray-800 rounded-lg shadow-md shadow-gray-500 md:max-w-xs dark:bg-gray-800 dark:text-white dark:shadow-red-200">
+      <div
+        class="flex items-center p-4 bg-white  text-gray-800 rounded-lg shadow-md shadow-gray-500 md:max-w-xs dark:bg-gray-800 dark:text-white dark:shadow-red-200">
 
       </div>
 
     </div>
 
     <div class="flex flex-wrap flex-row">
-        <!-- Transactions Table -->
-        <div class="w-full overflow-hidden rounded-lg shadow-md">
-          <table class="w-full whitespace-no-wrap md:inline-table">
-            <caption class="px-5 py-3 text-xl font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800">
-              Latest Transactions
-            </caption>
-            <thead>
-              <tr
-                class="text-xs font-semibold tracking-wide text-left bg-gray-50 text-gray-500 uppercase border-b dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800"
-              >
-                <th class="px-4 py-3">Type</th>
-                <th class="px-4 py-3">Transaction</th>
-                <th class="px-4 py-3">Category</th>
-                <th class="px-4 py-3">Amount</th>
-                <th class="px-4 py-3">Date</th>
-              </tr>
-            </thead>
+      <!-- Transactions Table -->
+      <div class="w-full overflow-hidden rounded-lg shadow-md">
+        <table class="w-full whitespace-no-wrap md:inline-table">
+          <caption
+            class="px-5 py-3 text-xl font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800">
+            Latest Transactions
+          </caption>
+          <thead>
+            <tr
+              class="text-xs font-semibold tracking-wide text-left bg-gray-50 text-gray-500 uppercase border-b dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800">
+              <th class="px-4 py-3">Type</th>
+              <th class="px-4 py-3">Transaction</th>
+              <th class="px-4 py-3">Category</th>
+              <th class="px-4 py-3">Amount</th>
+              <th class="px-4 py-3">Date</th>
+            </tr>
+          </thead>
 
-            <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
-              {% for tr in transactions %}
-              <tr
-                hx-get="{% url 'wallet:transaction_detail' tr.pk %}"
-                hx-target="#modal"
-                hx-trigger="click"
-                hx-replace-url="false"
-                @click="openModal"
-                class="cursor-pointer text-gray-700 bg-white  hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700"
-              >
-                <!-- Transaction Type -->
-                <td class="px-4 py-3">
-                  {% if tr.get_transaction_type_display == 'Income' %}
-                  <i class="bi bi-arrow-up-right text-green-600"></i>
-                  {% elif tr.get_transaction_type_display == 'Expense' %}
-                  <i class="bi bi-arrow-down-right text-red-600"></i>
-                  {% elif tr.get_transaction_type_display == 'Transfer' %}
-                  <i class="bi bi-arrow-left-right text-blue-500"></i>
-                  {% endif %}
-                </td>
+          <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+            {% for tr in transactions %}
+            <tr hx-get="{% url 'wallet:transaction_detail' tr.pk %}" hx-target="#modal" hx-trigger="click"
+              hx-replace-url="false" @click="openModal"
+              class="cursor-pointer text-gray-700 bg-white  hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700">
+              <!-- Transaction Type -->
+              <td class="px-4 py-3">
+                {% if tr.get_transaction_type_display == 'Income' %}
+                <i class="bi bi-arrow-up-right text-green-600"></i>
+                {% elif tr.get_transaction_type_display == 'Expense' %}
+                <i class="bi bi-arrow-down-right text-red-600"></i>
+                {% elif tr.get_transaction_type_display == 'Transfer' %}
+                <i class="bi bi-arrow-left-right text-blue-500"></i>
+                {% endif %}
+              </td>
 
-                <!-- Transaction Title -->
-                <td class="px-4 py-3 text-sm font-bold dark:hover:text-white">
-                  {{ tr.title|capfirst }}
-                </td>
+              <!-- Transaction Title -->
+              <td class="px-4 py-3 text-sm font-bold dark:hover:text-white">
+                {{ tr.title|capfirst }}
+              </td>
 
-                <!-- Transaction Category -->
-                <td class="text-gray-700 dark:text-gray-400">
-                  <span
-                    class="px-2 py-1 text-xs rounded-full"
-                    style="background-color: {{ tr.category.color }}; color: {{ tr.category.text_color }}; opacity: 0.8;"
-                    >{{ tr.category }}</span
-                  >
-                </td>
+              <!-- Transaction Category -->
+              <td class="text-gray-700 dark:text-gray-400">
+                <span class="px-2 py-1 text-xs rounded-full"
+                  style="background-color: {{ tr.category.color }}; color: {{ tr.category.text_color }}; opacity: 0.8;">{{ tr.category }}</span>
+              </td>
 
-                <!-- Transaction Amount -->
-                <td class="px-4 py-3 text-sm">{{ tr.amount|floatformat:0 }}</td>
+              <!-- Transaction Amount -->
+              <td class="px-4 py-3 text-sm">{{ tr.amount|floatformat:0 }}</td>
 
-                <!-- Transaction Date -->
-                <td class="px-4 py-3 text-sm">{{ tr.date|date:"d M Y" }}</td>
-              </tr>
-              {% empty %}
-              <div class="text-xl font-bold">No Transactions</div>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
+              <!-- Transaction Date -->
+              <td class="px-4 py-3 text-sm">{{ tr.date|date:"d M Y" }}</td>
+            </tr>
+            {% empty %}
+            <div class="text-xl font-bold">No Transactions</div>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
 
-        <div class="w-1/2 p-5 mb-10">
-          <canvas id="expenses-pie-chart" ></canvas>
-        </div>
+      <div class="w-1/2 p-5 mb-10">
+        <canvas id="expenses-pie-chart"></canvas>
+      </div>
 
 
     </div>
   </div>
 
-<script>
-  const expenses = {{ expenses|safe }};
-  const amounts = {{ expenses_amounts|safe }};
-  const config = {
-    type: 'doughnut',
-    data: {
-      labels: expenses,
-      datasets: [{
-        label: 'Account Expenses',
-        data: amounts,
-        backgroundColor: {{ expense_colors|safe }}
-      }],
-    },
-    options: {
-      plugins: {
-          legend: {
-              display: false
-          }
+  <script>
+    const expenses = {
+      {
+        expenses | safe
       }
-  }
-  };
+    };
+    const amounts = {
+      {
+        expenses_amounts | safe
+      }
+    };
+    const config = {
+      type: 'doughnut',
+      data: {
+        labels: expenses,
+        datasets: [{
+          label: 'Account Expenses',
+          data: amounts,
+          backgroundColor: {
+            {
+              expense_colors | safe
+            }
+          }
+        }],
+      },
+      options: {
+        plugins: {
+          legend: {
+            display: false
+          }
+        }
+      }
+    };
 
-  const ctx = document.getElementById('expenses-pie-chart').getContext('2d');
-  window.myPie = new Chart(ctx, config);
+    const ctx = document.getElementById('expenses-pie-chart').getContext('2d');
+    window.myPie = new Chart(ctx, config);
 
-</script>
+  </script>

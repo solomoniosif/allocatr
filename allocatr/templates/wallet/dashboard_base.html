@@ -10,7 +10,7 @@
   <div class="flex flex-col flex-1 w-full bg-gray-200 dark:bg-gray-900">
     {% include 'wallet/partials/header/header.html' %}
 
-    <div id="dashboard-main">
+    <div id="dashboard-main" hx-ext="head-support">
       {% block dashboard_main %}
 
       {% endblock dashboard_main %}
