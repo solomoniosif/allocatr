@@ -17,6 +17,7 @@ class IncomeForm(forms.ModelForm):
             "transaction_type",
             "is_recurrent",
             "recurrence_frequency",
+            "is_planned",
         )
 
     def __init__(self, *args, **kwargs):
@@ -41,6 +42,7 @@ class ExpenseForm(forms.ModelForm):
             "transaction_type",
             "is_recurrent",
             "recurrence_frequency",
+            "is_planned",
         )
 
     def __init__(self, *args, **kwargs):
@@ -107,6 +109,8 @@ class PlannedIncomeForm(forms.ModelForm):
             "category",
             "notes",
             "transaction_type",
+            "is_recurrent",
+            "recurrence_frequency",
             "is_planned",
         )
 
@@ -132,6 +136,8 @@ class PlannedExpenseForm(forms.ModelForm):
             "category",
             "notes",
             "transaction_type",
+            "is_recurrent",
+            "recurrence_frequency",
             "is_planned",
         )
 
@@ -143,7 +149,7 @@ class PlannedExpenseForm(forms.ModelForm):
         self.fields["transaction_type"].widget = forms.HiddenInput()
         self.fields["date"].initial = timezone.now()
         self.fields["is_planned"].initial = True
-        self.fields["is_planned"].widget = forms.HiddenInput()
+        # self.fields["is_planned"].widget = forms.HiddenInput()
 
 
 class AccountForm(forms.ModelForm):

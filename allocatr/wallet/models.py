@@ -2,6 +2,7 @@ import uuid
 from datetime import date, datetime, timedelta
 
 from colorfield.fields import ColorField
+from dateutil.relativedelta import relativedelta
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -301,9 +302,39 @@ class Transaction(TimeStampedUUIDModel):
                     self.to_account.save()
             self.account.save()
 
+    def duplicate_recurrent_transaction(self):
+        new_transaction = Transaction(
+            title=self.title,
+            amount=self.amount,
+            date=self.date,
+            transaction_type=self.transaction_type,
+            category=self.category,
+            account=self.account,
+            to_account=self.to_account,
+            notes=self.notes,
+            is_recurrent=self.is_recurrent,
+            recurrence_frequency=self.recurrence_frequency,
+            is_planned=True,
+        )
+        new_transaction.save()
+        if self.transaction_type == self.TransactionType.TRANSFER:
+            new_transaction.to_account = self.to_account
+            new_transaction.save()
+        if self.recurrence_frequency == self.RecurrenceFrequency.MONTHLY:
+            new_transaction.date = self.date + relativedelta(months=1)
+        elif self.recurrence_frequency == self.RecurrenceFrequency.QUARTERLY:
+            new_transaction.date = self.date + relativedelta(months=3)
+        elif self.recurrence_frequency == self.RecurrenceFrequency.BIANNUALY:
+            new_transaction.date = self.date + relativedelta(months=6)
+        elif self.recurrence_frequency == self.RecurrenceFrequency.ANNUALY:
+            new_transaction.date = self.date + relativedelta(years=1)
+        new_transaction.save()
+
     def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
+        if self.is_recurrent and not self.is_planned and self._state.adding:
+            self.duplicate_recurrent_transaction()
         self.update_account_balance()
+        super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
         if self.transaction_type == self.TransactionType.INCOME:

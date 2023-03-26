@@ -7,8 +7,7 @@
     </caption>
     <thead>
       <tr
-        class="text-xs font-semibold tracking-wide text-left bg-gray-50 text-gray-500 uppercase border-b dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800"
-      >
+        class="text-xs font-semibold tracking-wide text-left bg-gray-50 text-gray-500 uppercase border-b dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800">
         <th class="px-4 py-3">Type</th>
         <th class="px-4 py-3">Category</th>
         <th class="px-4 py-3">Transaction</th>
@@ -20,13 +19,8 @@
 
     <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
       {% for tr in transactions %}
-      <tr
-        hx-get="{% url 'wallet:transaction_detail' tr.pk %}"
-        hx-target="#modal"
-        hx-trigger="click"
-        @click="openModal"
-        class="cursor-pointer text-gray-700 bg-white  hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700"
-      >
+      <tr hx-get="{% url 'wallet:transaction_detail' tr.pk %}" hx-target="#modal" hx-trigger="click" @click="openModal"
+        class="cursor-pointer text-gray-700 bg-white  hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700">
         <!-- Transaction Type -->
         <td class="px-4 py-3">
           {% if tr.get_transaction_type_display == 'Income' %}
@@ -45,26 +39,25 @@
 
         <!-- Transaction Category -->
         <td class="text-gray-700 dark:text-gray-400">
-          <span
-            class="px-2 py-1 text-xs rounded-full"
-            style="background-color: {{ tr.category.color }}; color: {{ tr.category.text_color }}; opacity: 0.8;"
-            >{{ tr.category }}</span
-          >
+          <span class="px-2 py-1 text-xs rounded-full"
+            style="background-color: {{ tr.category.color }}; color: {{ tr.category.text_color }}; opacity: 0.8;">{{ tr.category }}</span>
         </td>
 
         <!-- Transaction Amount -->
         <td class="px-4 py-3 text-sm">{{ tr.amount|floatformat:0 }}</td>
 
         <td class="px-4 py-3 text-xs">
-          <span
-            class="px-2 py-1 font-semibold leading-tight rounded-full"
-            style="background-color: {{ tr.account.color }}; color: {{ tr.account.text_color }}"
-          >
+          <span class="px-2 py-1 font-semibold leading-tight rounded-full"
+            style="background-color: {{ tr.account.color }}; color: {{ tr.account.text_color }}">
             {{ tr.account.name }}
           </span>
         </td>
 
-        <td class="px-4 py-3 text-sm">{{ tr.date|date:"d M Y" }}</td>
+        <!-- Transaction Date -->
+        <td class="px-4 py-3 text-sm">
+          {% if tr.is_planned %}Planned for {% endif %}
+          {{ tr.date|date:"d M Y" }}
+        </td>
       </tr>
       {% endfor %}
     </tbody>
@@ -76,60 +69,52 @@
   {% for tr in transactions %}
   <div
     class="relative grid grid-cols-12 p-2 bg-white rounded-lg shadow-xl md:max-w-xs cursor-pointer scale-100 dark:bg-gray-800 dark:text-gray-100 dark:hover:bg-gray-700  hover:scale-105 ease-in duration-100"
-    hx-get="{% url 'wallet:transaction_detail' tr.pk %}"
-    hx-target="#modal"
-    hx-trigger="click"
-    @click="openModal"
-  >
-    <span
-      class="absolute inset-y-0 left-0 w-3 rounded-tl-lg rounded-bl-lg"
-      style="background-color: {{ tr.category.color }}"
-      aria-hidden="true"
-    ></span>
+    hx-get="{% url 'wallet:transaction_detail' tr.pk %}" hx-target="#modal" hx-trigger="click" @click="openModal">
+    <span class="absolute inset-y-0 left-0 w-3 rounded-tl-lg rounded-bl-lg"
+      style="background-color: {{ tr.category.color }}" aria-hidden="true"></span>
 
 
-      <!-- Transaction Title -->
-      <p class="col-span-9 px-4 py-2 text-md font-semibold tracking-wide dark:hover:text-white">{{ tr.title|title }}</p>
+    <!-- Transaction Title -->
+    <p class="col-span-9 px-4 py-2 text-md font-semibold tracking-wide dark:hover:text-white">{{ tr.title|title }}</p>
 
-      <div class="col-span-3 relative py-2">
-        <!-- Transaction Type -->
-        <span class="absolute top-0 -right-1 px-3 py-1 text-md">
-          {% if tr.get_transaction_type_display == 'Income' %}
-          <i class="bi bi-arrow-up-right text-green-600"></i>
-          {% elif tr.get_transaction_type_display == 'Expense' %}
-          <i class="bi bi-arrow-down-right text-red-600"></i>
-          {% elif tr.get_transaction_type_display == 'Transfer' %}
-          <i class="bi bi-arrow-left-right text-blue-500"></i>
-          {% endif %}
-        </span>
-        <!-- Transaction Amount -->
-        <span class="absolute top-0 right-2 px-3 py-1">
-          <span>{{currency}}</span><span class="px-2 py-3 text-sm">{{ tr.amount|floatformat:0 }}</span>
-        </span>
+    <div class="col-span-3 relative py-2">
+      <!-- Transaction Type -->
+      <span class="absolute top-0 -right-1 px-3 py-1 text-md">
+        {% if tr.get_transaction_type_display == 'Income' %}
+        <i class="bi bi-arrow-up-right text-green-600"></i>
+        {% elif tr.get_transaction_type_display == 'Expense' %}
+        <i class="bi bi-arrow-down-right text-red-600"></i>
+        {% elif tr.get_transaction_type_display == 'Transfer' %}
+        <i class="bi bi-arrow-left-right text-blue-500"></i>
+        {% endif %}
+      </span>
+      <!-- Transaction Amount -->
+      <span class="absolute top-0 right-2 px-3 py-1">
+        <span>{{currency}}</span><span class="px-2 py-3 text-sm">{{ tr.amount|floatformat:0 }}</span>
+      </span>
 
-      </div>
+    </div>
 
-      <!-- Transaction Category -->
-      <div class="col-span-6 p-1">
-        <span
-          class="m-3 px-2 py-1 border rounded-lg text-xs"
-          style="border-color: {{ tr.category.color }}"
-          >{{ tr.category }}</span>
-      </div>
+    <!-- Transaction Category -->
+    <div class="col-span-6 p-1">
+      <span class="m-3 px-2 py-1 border rounded-lg text-xs"
+        style="border-color: {{ tr.category.color }}">{{ tr.category }}</span>
+    </div>
 
-      <!-- Transaction Account -->
-      <p class="col-span-6 px-4 py-3 text-xs relative">
-        <span
-          class="absolute bottom-1 right-1 px-2 py-1 font-semibold leading-tight rounded-full"
-          style="background-color: {{ tr.account.color }}; color: {{ tr.account.text_color }}"
-        >
-          <span class="font-light">Account </span>{{ tr.account.name }}
-        </span>
-      </p>
+    <!-- Transaction Account -->
+    <p class="col-span-6 px-4 py-3 text-xs relative">
+      <span class="absolute bottom-1 right-1 px-2 py-1 font-semibold leading-tight rounded-full"
+        style="background-color: {{ tr.account.color }}; color: {{ tr.account.text_color }}">
+        <span class="font-light">Account </span>{{ tr.account.name }}
+      </span>
+    </p>
 
-      <p class="relative px-4 py-2">
-        <div class="absolute -top-2 right-20 text-xs opacity-70 shadow-2xl rounded-lg bg-gray-200 text-black px-2 py-0.5 dark:bg-gray-900 dark:text-white">{{ tr.date|date:"d F Y" }}</div>
-      </p>
+    <!-- Transaction Date -->
+    <p class="relative px-4 py-2">
+      <div
+        class="absolute -top-2 right-20 text-xs opacity-70 shadow-2xl rounded-lg bg-gray-200 text-black px-2 py-0.5 dark:bg-gray-900 dark:text-white">
+        {{ tr.date|date:"d F Y" }}</div>
+    </p>
 
 
   </div>
