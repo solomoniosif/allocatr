@@ -387,12 +387,11 @@ class PlannedTransaction(TimeStampedUUIDModel):
             if next_date > date.today() + relativedelta(years=1, days=15):
                 return False
 
-        start_bracket = self.title.rfind("[")
-        end_bracket = self.title.rfind("]")
-        if start_bracket != -1 and end_bracket != -1:
-            new_title = self.title[:start_bracket] + f" [{next_date.strftime('%B %Y')}]"
+        delimiter = self.title.rfind("|")
+        if delimiter != -1:
+            new_title = self.title[:delimiter] + f" | {next_date.strftime('%B %Y')}"
         else:
-            new_title = f"{self.title} [{next_date.strftime('%B %Y')}]"
+            new_title = f"{self.title} | {next_date.strftime('%B %Y')}"
 
         new_transaction = PlannedTransaction(
             title=new_title,
