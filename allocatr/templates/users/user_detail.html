@@ -1,4 +1,4 @@
-{% extends "wallet/base.html" %}
+{% extends "base.html" %}
 {% load static %}
 
 {% block title %}User: {{ object.username }}{% endblock %}
@@ -44,6 +44,6 @@
 
 {% include 'wallet/partials/modal.html' %}
 
-{% include 'wallet/partials/mobile_add_menu.html' with add_buttons='wallet/partials/add_buttons/add_transactions.html' %}
+{% include 'wallet/partials/mobile_add_menu.html' %}
 
 {% endblock content %}

@@ -57,8 +57,8 @@ class CategoryListView(LoginRequiredMixin, ListView):
 
     def get_template_names(self):
         if self.request.headers.get("HX-Request"):
-            return "wallet/categories/partials/category_list_partial.html"
-        return "wallet/categories/dashboard_categories.html"
+            return "wallet/categories/partials/list.html"
+        return "wallet/categories/category_list.html"
 
 
 class CategoryDetailView(LoginRequiredMixin, DetailView):
@@ -84,14 +84,14 @@ class CategoryDetailView(LoginRequiredMixin, DetailView):
 
     def get_template_names(self):
         if self.request.headers.get("HX-Request"):
-            return "wallet/categories/partials/category_detail_partial.html"
+            return "wallet/categories/partials/detail.html"
         return "wallet/categories/category_detail.html"
 
 
 class CategoryCreateView(LoginRequiredMixin, CreateView):
     model = Category
     form_class = CategoryForm
-    template_name = "wallet/categories/partials/add_category_form.html"
+    template_name = "wallet/categories/partials/add_category.html"
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -123,7 +123,7 @@ class CategoryUpdateView(LoginRequiredMixin, UpdateView):
     model = Category
     form_class = CategoryForm
     context_object_name = "category"
-    template_name = "wallet/categories/partials/edit_category_form.html"
+    template_name = "wallet/categories/partials/update_category.html"
     success_url = None
 
     def form_valid(self, form):

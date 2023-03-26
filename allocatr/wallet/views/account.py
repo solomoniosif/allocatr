@@ -63,8 +63,8 @@ class AccountListView(LoginRequiredMixin, ListView):
 
     def get_template_names(self):
         if self.request.headers.get("HX-Request"):
-            return "wallet/accounts/partials/account_list_partial.html"
-        return "wallet/accounts/dashboard_accounts.html"
+            return "wallet/accounts/partials/list.html"
+        return "wallet/accounts/account_list.html"
 
 
 class AccountDetailView(LoginRequiredMixin, DetailView):
@@ -113,14 +113,14 @@ class AccountDetailView(LoginRequiredMixin, DetailView):
 
     def get_template_names(self):
         if self.request.headers.get("HX-Request"):
-            return "wallet/accounts/partials/account_detail_partial.html"
+            return "wallet/accounts/partials/detail.html"
         return "wallet/accounts/account_detail.html"
 
 
 class AccountCreateView(LoginRequiredMixin, CreateView):
     model = Account
     form_class = AccountForm
-    template_name = "wallet/accounts/partials/add_account_form.html"
+    template_name = "wallet/accounts/partials/add_account.html"
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -152,7 +152,7 @@ class AccountUpdateView(LoginRequiredMixin, UpdateView):
     model = Account
     form_class = AccountForm
     context_object_name = "account"
-    template_name = "wallet/accounts/partials/edit_account_form.html"
+    template_name = "wallet/accounts/partials/update_account.html"
     success_url = None
 
     def form_valid(self, form):

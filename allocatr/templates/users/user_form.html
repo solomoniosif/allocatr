@@ -1,4 +1,4 @@
-{% extends "wallet/base.html" %}
+{% extends "base.html" %}
 {% load widget_tweaks %}
 
 {% block title %}{{ user.username }}{% endblock %}
@@ -77,5 +77,5 @@
 
 {% include 'wallet/partials/modal.html' %}
 
-{% include 'wallet/partials/mobile_add_menu.html' with add_buttons='wallet/partials/add_buttons/add_transactions.html' %}
+{% include 'wallet/partials/mobile_add_menu.html' %}
 {% endblock %}

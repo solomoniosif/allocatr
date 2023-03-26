@@ -20,8 +20,8 @@ class DashboardHome(LoginRequiredMixin, TemplateView):
 
     def get_template_names(self):
         if self.request.headers.get("HX-Request"):
-            return "wallet/partials/dashboard_home_partial.html"
-        return "wallet/dashboard_home.html"
+            return "wallet/home/partials/home.html"
+        return "wallet/home/dashboard_home.html"
 
 
 def get_current_month(request):

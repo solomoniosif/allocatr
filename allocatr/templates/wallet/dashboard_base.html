@@ -1,6 +1,6 @@
-{% extends "wallet/base.html" %}
+{% extends "base.html" %}
 
-{% block title %}allocatr » Home{% endblock title %}
+{% block title %}allocatr | Home{% endblock title %}
 
 {% block content %}
 
@@ -21,10 +21,6 @@
 
 {% include 'wallet/partials/modal.html' %}
 
-{% include 'wallet/partials/mobile_add_menu.html' with add_buttons='wallet/partials/add_buttons/add_transactions.html' %}
+{% include 'wallet/partials/mobile_add_menu.html' %}
 
 {% endblock content %}
-
-{% block inline_javascript %}
-{{ block.super }}
-{% endblock inline_javascript %}

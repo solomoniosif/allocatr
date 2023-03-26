@@ -20,7 +20,7 @@ from ..services import get_or_create_month
 class TransactionListView(LoginRequiredMixin, ListView):
     model = Transaction
     context_object_name = "transactions"
-    template_name = "wallet/transactions/partials/transaction_list.html"
+    template_name = "wallet/transactions/partials/list.html"
 
     def get_queryset(self):
         qs = super().get_queryset()
@@ -36,7 +36,7 @@ class TransactionListView(LoginRequiredMixin, ListView):
 class TransactionDetailView(LoginRequiredMixin, DetailView):
     model = Transaction
     context_object_name = "transaction"
-    template_name = "wallet/transactions/partials/transaction_detail.html"
+    template_name = "wallet/transactions/partials/detail.html"
 
 
 class IncomeCreateView(LoginRequiredMixin, CreateView):
@@ -106,7 +106,7 @@ class IncomeUpdateView(LoginRequiredMixin, UpdateView):
     model = Transaction
     form_class = IncomeForm
     context_object_name = "income"
-    template_name = "wallet/transactions/partials/edit_income.html"
+    template_name = "wallet/transactions/partials/update_income.html"
     success_url = None
 
     def form_valid(self, form):
@@ -127,7 +127,7 @@ class ExpenseUpdateView(LoginRequiredMixin, UpdateView):
     model = Transaction
     form_class = ExpenseForm
     context_object_name = "expense"
-    template_name = "wallet/transactions/partials/edit_expense.html"
+    template_name = "wallet/transactions/partials/update_expense.html"
     success_url = None
 
     def form_valid(self, form):
@@ -148,7 +148,7 @@ class TransferUpdateView(LoginRequiredMixin, UpdateView):
     model = Transaction
     form_class = TransferForm
     context_object_name = "transfer"
-    template_name = "wallet/transactions/partials/edit_transfer.html"
+    template_name = "wallet/transactions/partials/update_transfer.html"
     success_url = None
 
     def form_valid(self, form):
