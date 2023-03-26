@@ -23,11 +23,13 @@ class TestUserAdmin:
             url,
             data={
                 "username": "test",
+                "first_name": "John",
+                "last_name": "Doe",
                 "password1": "My_R@ndom-P@ssw0rd",
                 "password2": "My_R@ndom-P@ssw0rd",
             },
         )
-        assert response.status_code == 302
+        assert response.status_code == 200
         assert User.objects.filter(username="test").exists()
 
     def test_view_user(self, admin_client):

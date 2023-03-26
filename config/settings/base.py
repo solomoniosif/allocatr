@@ -96,7 +96,7 @@ AUTHENTICATION_BACKENDS = [
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-user-model
 AUTH_USER_MODEL = "users.User"
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-redirect-url
-LOGIN_REDIRECT_URL = "users:redirect"
+LOGIN_REDIRECT_URL = "wallet:home"
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-url
 LOGIN_URL = "account_login"
 
@@ -113,7 +113,7 @@ PASSWORD_HASHERS = [
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-password-validators
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"  # noqa
     },
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
@@ -297,13 +297,15 @@ JAZZMIN_SETTINGS = {
         },
         # model admin to link to (Permissions checked against model)
         {"model": "users.User"},
-        # App with dropdown menu to all its models pages (Permissions checked against models)
-        {"core": "account"},
+        # App with dropdown menu to all its models pages
+        # (Permissions checked against models)
+        {"wallet": "account"},
     ],
     #############
     # User Menu #
     #############
-    # Additional links to include in the user menu on the top right ("app" url type is not allowed)
+    # Additional links to include in the user menu
+    # on the top right ("app" url type is not allowed)
     "usermenu_links": [
         {
             "name": "Support",
@@ -323,8 +325,13 @@ JAZZMIN_SETTINGS = {
     "hide_apps": [],
     # Hide these models when generating side menu (e.g auth.user)
     "hide_models": [],
-    # List of apps (and/or models) to base side menu ordering off of (does not need to contain all apps/models)
-    "order_with_respect_to": ["users", "wallet", "auth", ],
+    # List of apps (and/or models) to base side menu ordering off of
+    # (does not need to contain all apps/models)
+    "order_with_respect_to": [
+        "users",
+        "wallet",
+        "auth",
+    ],
     # Custom links to append to app groups, keyed on app name
     "custom_links": {
         "books": [
@@ -345,7 +352,7 @@ JAZZMIN_SETTINGS = {
         "users.User": "fas fa-user",
         "account.EmailAddress": "fas fa-envelope",
         "sites.Site": "fas fa-globe",
-        "wallet.Account": "fas fa-credit-card",  # <i class="fa-regular fa-credit-card"></i>
+        "wallet.Account": "fas fa-credit-card",
         "wallet.Transaction": "fas fa-list",
         "wallet.Category": "fas fa-tag",
         "wallet.Budget": "fas fa-chart-line",

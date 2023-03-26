@@ -25,6 +25,8 @@ class TestUserAdminCreationForm:
         form = UserAdminCreationForm(
             {
                 "username": user.username,
+                "first_name": user.first_name,
+                "last_name": user.last_name,
                 "password1": user.password,
                 "password2": user.password,
             }
