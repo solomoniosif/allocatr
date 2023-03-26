@@ -1,19 +1,36 @@
-{% extends "account/base.html" %}
+{% extends "wallet/dashboard_base.html" %}
 
 {% load i18n %}
 
 {% block head_title %}{% translate "Sign Out" %}{% endblock %}
 
-{% block inner %}
-<h1>{% translate "Sign Out" %}</h1>
+{% block dashboard_main %}
+<head>
+  <title>allocatr | Signout ?</title>
+</head>
 
-<p>{% translate 'Are you sure you want to sign out?' %}</p>
+<div class="container bg-gray-200 text-gray-900 dark:bg-gray-900 dark:text-white">
 
-<form method="post" action="{% url 'account_logout' %}">
-  {% csrf_token %}
-  {% if redirect_field_value %}
-  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
-  {% endif %}
-  <button class="btn btn-danger" type="submit">{% translate 'Sign Out' %}</button>
-</form>
+  <div class="flex flex-col mt-5 items-center justify-center text-center px-6 py-8 mx-auto min-h-1/2">
+    <div
+      class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+      <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+        <h1 class="text-xl font-semibold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+          {% translate 'Are you sure you want to sign out?' %}
+        </h1>
+        <form class="space-y-4 md:space-y-6" method="post" action="{% url 'account_logout' %}">
+          {% csrf_token %}
+          {% if redirect_field_value %}
+          <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+          {% endif %}
+          <button class="primaryBtn text-center text-xl" type="submit">{% translate 'Sign Out' %}</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+
 {% endblock %}

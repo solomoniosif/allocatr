@@ -1,59 +1,106 @@
-{% extends "account/base.html" %}
+{% extends "base.html" %}
 
 {% load i18n %}
 {% load account socialaccount %}
-{% load crispy_forms_tags %}
+{% load widget_tweaks %}
 
 {% block head_title %}{% translate "Sign In" %}{% endblock %}
 
-{% block inner %}
-
-<h1>{% translate "Sign In" %}</h1>
+{% block content %}
 
 {% get_providers as socialaccount_providers %}
 
 {% if socialaccount_providers %}
-  <p>
-    {% translate "Please sign in with one of your existing third party accounts:" %}
-    {% if ACCOUNT_ALLOW_REGISTRATION %}
-      {% blocktranslate trimmed %}
-        Or, <a href="{{ signup_url }}">sign up</a>
-        for a {{ site_name }} account and sign in below:
-      {% endblocktranslate %}
-    {% endif %}
-  </p>
+<p>
+  {% translate "Please sign in with one of your existing third party accounts:" %}
+  {% if ACCOUNT_ALLOW_REGISTRATION %}
+  {% blocktranslate trimmed %}
+  Or, <a href="{{ signup_url }}">sign up</a>
+  for a {{ site_name }} account and sign in below:
+  {% endblocktranslate %}
+  {% endif %}
+</p>
 
-  <div class="socialaccount_ballot">
+<div class="socialaccount_ballot">
 
-    <ul class="socialaccount_providers">
-      {% include "socialaccount/snippets/provider_list.html" with process="login" %}
-    </ul>
+  <ul class="socialaccount_providers">
+    {% include "socialaccount/snippets/provider_list.html" with process="login" %}
+  </ul>
 
-    <div class="login-or">{% translate "or" %}</div>
+  <div class="login-or">{% translate "or" %}</div>
 
-  </div>
+</div>
 
-  {% include "socialaccount/snippets/login_extra.html" %}
+{% include "socialaccount/snippets/login_extra.html" %}
 
 {% else %}
-  {% if ACCOUNT_ALLOW_REGISTRATION %}
-    <p>
-      {% blocktranslate trimmed %}
-        If you have not created an account yet, then please
-        <a href="{{ signup_url }}">sign up</a> first.
-      {% endblocktranslate %}
-    </p>
-  {% endif %}
+{% if ACCOUNT_ALLOW_REGISTRATION %}
+<p class="hidden">
+  {% blocktranslate trimmed %}
+  If you have not created an account yet, then please
+  <a href="{{ signup_url }}">sign up</a> first.
+  {% endblocktranslate %}
+</p>
+{% endif %}
 {% endif %}
 
-<form class="login" method="POST" action="{% url 'account_login' %}">
-  {% csrf_token %}
-  {{ form|crispy }}
-  {% if redirect_field_value %}
-  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-  {% endif %}
-  <a class="button secondaryAction" href="{% url 'account_reset_password' %}">{% translate "Forgot Password?" %}</a>
-  <button class="primaryAction btn btn-primary" type="submit">{% translate "Sign In" %}</button>
-</form>
+<section class="bg-gray-50 dark:bg-gray-900">
+  <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto h-screen lg:py-0">
+    <a href="#" class="flex items-center mb-6 text-3xl font-semibold text-gray-900 dark:text-white">
+      allocatr
+    </a>
+    <div
+      class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+      <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+        <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+          Sign in to your account
+        </h1>
+
+        {% with WIDGET_ERROR_CLASS='is-invalid' %}
+        <form class="space-y-4 md:space-y-6" method="POST" action="{% url 'account_login' %}">
+          {% csrf_token %}
+          <div>
+            <label for="{{ form.login.id_for_label }}" class="input-label">{{ form.lopgin.label }}</label>
+            {% render_field form.login class+="text-input" %}
+            {% for error in form.login.errors %}<p class="text-red-500 text-xs italic">{{ error }}</p>{% endfor %}
+          </div>
+          <div>
+            <label for="{{ form.password.id_for_label }}" class="input-label">{{ form.password.label }}</label>
+            {% render_field form.password class+="text-input" placeholder="••••••••" %}
+            {% for error in form.password.errors %}<p class="text-red-500 text-xs italic">{{ error }}</p>{% endfor %}
+          </div>
+
+          {% if redirect_field_value %}
+          <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+          {% endif %}
+
+          <div class="flex items-center justify-between">
+            <div class="flex items-start">
+              <div class="flex items-center h-5">
+                {% render_field form.remember class+="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800" %}
+
+              </div>
+              <div class="ml-3 text-sm">
+                <label for="{{ form.remember.id_for_label }}"
+                  class="text-gray-500 dark:text-gray-300">{{ form.remember.label }}</label>
+              </div>
+            </div>
+            <a href="{% url 'account_reset_password' %}"
+              class="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500">{% translate "Forgot Password?" %}</a>
+          </div>
+          <button type="submit" class="primaryBtn text-center">Sign in</button>
+          {% if ACCOUNT_ALLOW_REGISTRATION %}
+          <p class="text-sm font-light text-gray-500 dark:text-gray-400">
+            Don't have an account yet? <a href="{{ signup_url }}"
+              class="font-medium text-primary-600 hover:underline dark:text-primary-500">Sign up</a>
+          </p>
+          {% endif %}
+        </form>
+        {% endwith %}
+
+      </div>
+    </div>
+  </div>
+</section>
 
 {% endblock %}
