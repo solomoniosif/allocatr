@@ -3,7 +3,8 @@
     "python.pythonPath": "./venv/Scripts/python",
     "python.formatting.provider": "black",
     "files.exclude": {
-        "**/.git": false
+        "**/.git": false,
+        "**/__pycache__": true
     },
     "[python]": {
         "editor.codeActionsOnSave": {
