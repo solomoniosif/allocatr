@@ -1,0 +1,19 @@
+<head>
+  <title>allocatr | Planned Transactions</title>
+</head>
+
+<main hx-get="{% url 'wallet:planned_transactions' %}"
+  hx-trigger="transactions-changed from:body, month-selected from:body" hx-target="#dashboard-main"
+  hx-vals='js:{month: getSelectedMonth()}' class="h-full overflow-y-auto">
+  <div class="container px-6 mx-auto">
+
+    <div class="flex flex-wrap flex-row">
+    </div>
+
+    <section class="px-5 py-4">
+
+      <div class="text-gray-900 dark:text-white text-2xl">Planned transactions</div>
+
+    </section>
+  </div>
+</main>

@@ -20,7 +20,6 @@ from ..services import get_or_create_month
 class PlannedTransactionListView(LoginRequiredMixin, ListView):
     model = PlannedTransaction
     context_object_name = "planned_transactions"
-    template_name = "wallet/planned_transactions/partials/planned_transaction_list.html"
 
     def get_queryset(self):
         qs = super().get_queryset()
@@ -31,6 +30,11 @@ class PlannedTransactionListView(LoginRequiredMixin, ListView):
             date__gte=month.first_day,
             date__lte=month.last_day,
         )
+
+    def get_template_names(self):
+        if self.request.headers.get("HX-Request"):
+            return "wallet/planned_transactions/partials/list.html"
+        return "wallet/planned_transactions/plannedtransaction_list.html"
 
 
 class PlannedTransactionDetailView(LoginRequiredMixin, DetailView):

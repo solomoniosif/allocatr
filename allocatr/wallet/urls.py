@@ -56,6 +56,12 @@ urlpatterns = [
         views.TransactionDeleteView.as_view(),
         name="delete_transaction",
     ),
+    # Planned Transaction Views
+    path(
+        "planned-transactions/",
+        views.PlannedTransactionListView.as_view(),
+        name="planned_transactions",
+    ),
     # Account Views
     path("accounts/", views.AccountListView.as_view(), name="accounts"),
     path(
