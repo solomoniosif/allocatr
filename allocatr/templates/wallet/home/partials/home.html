@@ -1,29 +1,33 @@
+<head>
+  <title>allocatr | Home</title>
+</head>
 
 <main class="h-full overflow-y-auto">
-    <div class="container px-6 mx-auto bg-gray-200 dark:bg-gray-900">
-      <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-        Welcome {{ user.first_name|title }}
-      </h2>
+  <div class="container px-6 mx-auto bg-gray-200 dark:bg-gray-900">
+    <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+      Welcome {{ user.first_name|title }}
+    </h2>
 
-      <!-- User accounts -->
-      <div
-        hx-get="{% url 'wallet:accounts_list' %}"
-        hx-trigger="load, transactions-changed from:body"
-        hx-target="this"
-      >
-      </div>
-
-      <!-- Transactions -->
-      <div
-        hx-get="{% url 'wallet:transaction_list' %}"
-        hx-trigger="load delay:200ms, transactions-changed from:body, month-selected from:body"
-        hx-target="this"
-        hx-vals='js:{month: getSelectedMonth()}'
-      >
-      </div>
-
+    <!-- User accounts -->
+    <div hx-get="{% url 'wallet:accounts_list' %}" hx-trigger="load, transactions-changed from:body" hx-target="this">
     </div>
-  </main>
+
+    <!-- Transactions -->
+    <div hx-get="{% url 'wallet:transaction_list_partial' %}"
+      hx-trigger="load delay:200ms, transactions-changed from:body, month-selected from:body" hx-target="this"
+      hx-vals='js:{month: getSelectedMonth()}'>
+    </div>
+
+    <div class="p-3 max-w-5 mt-5 rounded-xl bg-accent">
+      <a class="w-full" hx-get="{% url 'wallet:transactions' %}" hx-trigger="click" hx-target="#dashboard-main"
+        hx-vals='js:{month: getSelectedMonth()}' hx-replace-url="true">
+        <i class="bi bi-list"></i>
+        <span class="ml-2">All Transactions</span>
+      </a>
+    </div>
+
+  </div>
+</main>
 
 
-  {% include 'wallet/partials/mobile_add_menu.html' %}
+{% include 'wallet/partials/mobile_add_menu.html' %}

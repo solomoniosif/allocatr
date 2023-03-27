@@ -1037,16 +1037,16 @@ select {
   margin-top: 1rem;
 }
 
+.mt-5 {
+  margin-top: 1.25rem;
+}
+
 .mt-6 {
   margin-top: 1.5rem;
 }
 
 .mt-8 {
   margin-top: 2rem;
-}
-
-.mt-5 {
-  margin-top: 1.25rem;
 }
 
 .block {
@@ -1123,6 +1123,10 @@ select {
 
 .w-1 {
   width: 0.25rem;
+}
+
+.w-1\.5 {
+  width: 0.375rem;
 }
 
 .w-1\/2 {
@@ -1203,6 +1207,10 @@ select {
 
 .flex-shrink-0 {
   flex-shrink: 0;
+}
+
+.grow {
+  flex-grow: 1;
 }
 
 .-translate-x-20 {
@@ -1408,6 +1416,10 @@ select {
 
 .rounded-md {
   border-radius: 0.375rem;
+}
+
+.rounded-xl {
+  border-radius: 0.75rem;
 }
 
 .rounded-l-lg {
@@ -1657,11 +1669,6 @@ select {
   padding-bottom: 0.5rem;
 }
 
-.py-2\.5 {
-  padding-top: 0.625rem;
-  padding-bottom: 0.625rem;
-}
-
 .py-3 {
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
@@ -1762,6 +1769,10 @@ select {
 
 .font-medium {
   font-weight: 500;
+}
+
+.font-normal {
+  font-weight: 400;
 }
 
 .font-semibold {
@@ -2022,6 +2033,10 @@ select {
 
 .ease-out {
   transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+}
+
+[x-cloak] {
+  display: none;
 }
 
 .primaryBtn {
@@ -2728,11 +2743,6 @@ select {
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
   }
-
-  .sm\:text-sm {
-    font-size: 0.875rem;
-    line-height: 1.25rem;
-  }
 }
 
 @media (min-width: 768px) {
@@ -2758,10 +2768,6 @@ select {
 
   .md\:h-4 {
     height: 1rem;
-  }
-
-  .md\:h-screen {
-    height: 100vh;
   }
 
   .md\:w-4 {

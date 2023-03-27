@@ -3,6 +3,7 @@ from datetime import date
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
+from django.shortcuts import render
 from django.views.generic import (
     CreateView,
     DeleteView,
@@ -17,10 +18,25 @@ from ..models import Transaction
 from ..services import get_or_create_month
 
 
-class TransactionListView(LoginRequiredMixin, ListView):
+def transaction_list_view(request):
+    day_or_month = request.GET.get("month", date.today())
+    month = get_or_create_month(request.user, day_or_month)
+    transactions = Transaction.objects.filter(
+        account__user=request.user,
+        date__gte=month.first_day,
+        date__lte=month.last_day,
+    )
+    return render(
+        request,
+        "wallet/transactions/partials/list.html",
+        {"transactions": transactions},
+    )
+
+
+class TransactionPartialListView(LoginRequiredMixin, ListView):
     model = Transaction
     context_object_name = "transactions"
-    template_name = "wallet/transactions/partials/list.html"
+    template_name = "wallet/transactions/partials/all_transactions_list_partial.html"
 
     def get_queryset(self):
         qs = super().get_queryset()
