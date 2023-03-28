@@ -67,3 +67,15 @@
 .category-card {
     @apply relative cursor-pointer rounded-lg border border-gray-200 bg-white p-6 shadow hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700;
 }
+
+.dropdown-button {
+    @apply inline-flex w-full items-center whitespace-nowrap rounded-md px-4 py-2 transition-colors duration-150 hover:bg-accent hover:text-white;
+}
+
+.pagination li {
+    @apply inline-block px-2 py-0.5 text-gray-400;
+}
+
+li.active {
+    @apply rounded-full bg-accent text-center font-bold text-white;
+}

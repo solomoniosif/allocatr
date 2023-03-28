@@ -13,7 +13,7 @@
 
       <!-- Desktop View (table)-->
       <div class="overflow-auto rounded-lg shadow-xl hidden md:block">
-        <table id="transactions-table" class="w-full">
+        <table id="transactions-table" class="w-full dark:border dark:border-gray-800">
 
           <!-- Table Header from Flowbite Blocks -->
           <caption class="relative bg-white dark:bg-gray-800 rounded-tr-lg rounded-tl-lg">
@@ -37,14 +37,17 @@
                 </div>
               </div>
 
+              <!-- Pagination -->
+              <ul class="pagination flex flex-row space-x-2"></ul>
+
               <div
                 class="flex flex-col items-stretch justify-end flex-shrink-0 w-full space-y-2 md:w-auto md:flex-row md:space-y-0 md:items-center md:space-x-3">
 
                 <div class="flex items-center w-full space-x-3 md:w-auto">
 
-                  <!-- Sort Dropdown -->
-                  <div>
-                    <button id="sortDropdownButton"
+                  <!-- Sort Menu -->
+                  <div class="relative" x-data="{open: false}">
+                    <button id="sortDropdownButton" @click="open = !open"
                       class="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg md:w-auto focus:outline-none hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
                       type="button">
                       Sort
@@ -54,26 +57,28 @@
                           d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
                       </svg>
                     </button>
-                    <div
-                      class="z-10 hidden bg-white divide-y divide-gray-100 rounded shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
+                    <div x-show="open" x-on:click.away="open = false"
+                      class="absolute z-10 bg-white divide-y divide-gray-100 rounded-lg px-1 shadow dark:bg-gray-700 dark:divide-gray-600">
                       <ul class="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="sortDropdownButton">
                         <li>
-                          <a href="#"
-                            class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Mass
-                            Edit</a>
+                          <button class="sort dropdown-button text-sm" data-sort="tr__type">By Type</button>
+                        </li>
+                        <li>
+                          <button class="sort dropdown-button text-sm" data-sort="tr__title">By Title</button>
+                        </li>
+                        <li>
+                          <button class="sort dropdown-button text-sm" data-sort="tr__date">By Date</button>
+                        </li>
+                        <li>
+                          <button class="sort dropdown-button text-sm" data-sort="tr__amount">By Amount</button>
                         </li>
                       </ul>
-                      <div class="py-1">
-                        <a href="#"
-                          class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Delete
-                          all</a>
-                      </div>
                     </div>
                   </div>
 
                   <!-- Filter Dropdown -->
-                  <div>
-                    <button id="filterDropdownButton" data-dropdown-toggle="filterDropdown"
+                  <div class="relative" x-data="{open: false}">
+                    <button id="filterDropdownButton" @click="open = !open"
                       class="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg md:w-auto focus:outline-none hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
                       type="button">
                       <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="w-4 h-4 mr-2 text-gray-400"
@@ -91,18 +96,19 @@
                     </button>
 
                     <!-- Filter Dropdown Menu -->
-                    <div id="filterDropdown" class="z-10 hidden w-48 p-3 bg-white rounded-lg shadow dark:bg-gray-700">
-                      <h6 class="mb-3 text-sm font-medium text-gray-900 dark:text-white">
-                        Category
-                      </h6>
+                    <div x-show="open" @click.away="open = false"
+                      class=" absolute z-10 w-48 p-3 bg-white rounded-lg shadow dark:bg-gray-700">
+                      <button @click="filterExpense" class="dropdown-button">Expense</button>
                       <ul class="space-y-2 text-sm" aria-labelledby="dropdownDefault">
+
                         <li class="flex items-center">
-                          <input id="apple" type="checkbox" value=""
-                            class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
+                          <input id="apple" type="checkbox" value="" data-filter="tr__category"
+                            class=" filter w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
                           <label for="apple" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">
                             Apple (56)
                           </label>
                         </li>
+
                         <li class="flex items-center">
                           <input id="fitbit" type="checkbox" value=""
                             class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
@@ -110,6 +116,7 @@
                             Fitbit (56)
                           </label>
                         </li>
+
                         <li class="flex items-center">
                           <input id="dell" type="checkbox" value=""
                             class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
@@ -117,13 +124,7 @@
                             Dell (56)
                           </label>
                         </li>
-                        <li class="flex items-center">
-                          <input id="asus" type="checkbox" value="" checked
-                            class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
-                          <label for="asus" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">
-                            Asus (97)
-                          </label>
-                        </li>
+
                       </ul>
                     </div>
                   </div>
@@ -194,6 +195,7 @@
 
 
           </tbody>
+
         </table>
       </div>
 
@@ -238,10 +240,23 @@
 
 
 <script>
-  var options = {
-    valueNames: ['tr__type', 'tr__category', 'tr__title', 'tr__amount', 'tr__account', 'tr__date']
+  let options = {
+    valueNames: ['tr__type', 'tr__category', 'tr__title', 'tr__amount', 'tr__account', 'tr__date'],
+    page: 10,
+    pagination: true
   };
 
-  var userList = new List('transactions-table', options);
+  let transactionList = new List('transactions-table', options);
+
+  // Filter by type
+  function filterExpense() {
+    transactionList.filter(function (tr) {
+      if (tr._values.tr__type.includes("bi-arrow-down-right")) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+  }
 
 </script>
