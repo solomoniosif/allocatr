@@ -7,40 +7,205 @@
   hx-target="#dashboard-main" hx-vals='js:{month: getSelectedMonth()}' class="h-full overflow-y-auto">
   <div class="container px-6 mx-auto">
 
-    <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">All transactions</h2>
+    <!-- New Implementation -->
+    <div class=" mt-10 w-full overflow-hiddenh-screen bg-gray-200 text-gray-900 dark:bg-gray-900 dark:text-white">
+      <h1 class="text-2xl font-semibold mb-2">Transactions</h1>
 
-    <div class="w-full overflow-hidden rounded-lg shadow-md">
+      <!-- Desktop View (table)-->
+      <div class="overflow-auto rounded-lg shadow-xl hidden md:block">
+        <table id="transactions-table" class="w-full">
 
-      <!-- Desktop View -->
-      <table id="transaction-table" class="w-full hidden whitespace-no-wrap md:inline-table">
-        <caption class="p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800">
-          Latest transactions
-          <input class="search text-input" placeholder="Search" />
-          <button class="sort primaryBtn" data-sort="tr__title">
-            Sort
-          </button>
-          <p class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400"></p>
-        </caption>
-        <thead>
-          <tr
-            class="text-xs font-semibold tracking-wide text-left bg-gray-50 text-gray-500 uppercase border-b dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800">
-            <th class="px-4 py-3">Type</th>
-            <th class="px-4 py-3">Category</th>
-            <th class="px-4 py-3">Transaction</th>
-            <th class="px-4 py-3">Amount</th>
-            <th class="px-4 py-3">Account</th>
-            <th class="px-4 py-3">Date</th>
-          </tr>
-        </thead>
+          <!-- Table Header from Flowbite Blocks -->
+          <caption class="relative bg-white dark:bg-gray-800 rounded-tr-lg rounded-tl-lg">
+            <div class="flex flex-col items-center justify-between p-4 space-y-3 md:flex-row md:space-y-0 md:space-x-4">
 
-        <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800 list">
-          {% for tr in transactions %}
-          <tr hx-get="{% url 'wallet:transaction_detail' tr.pk %}" hx-target="#modal" hx-trigger="click"
-            @click="openModal"
-            class="cursor-pointer text-gray-700 bg-white  hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700">
+              <!-- Search Input -->
+              <div class="w-60">
+                <label for="simple-search" class="sr-only">Search</label>
+                <div class="relative w-full">
+                  <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                    <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor"
+                      viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd"
+                        d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                        clip-rule="evenodd" />
+                    </svg>
+                  </div>
+                  <input
+                    class="search block w-full p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                    placeholder="Search">
+                </div>
+              </div>
 
-            <!-- Transaction Type -->
-            <td class="px-4 py-3 tr__type">
+              <div
+                class="flex flex-col items-stretch justify-end flex-shrink-0 w-full space-y-2 md:w-auto md:flex-row md:space-y-0 md:items-center md:space-x-3">
+
+                <div class="flex items-center w-full space-x-3 md:w-auto">
+
+                  <!-- Sort Dropdown -->
+                  <div>
+                    <button id="sortDropdownButton"
+                      class="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg md:w-auto focus:outline-none hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                      type="button">
+                      Sort
+                      <svg class="ml-1 w-5 h-5" fill="currentColor" viewbox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path clip-rule="evenodd" fill-rule="evenodd"
+                          d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
+                      </svg>
+                    </button>
+                    <div
+                      class="z-10 hidden bg-white divide-y divide-gray-100 rounded shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
+                      <ul class="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="sortDropdownButton">
+                        <li>
+                          <a href="#"
+                            class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Mass
+                            Edit</a>
+                        </li>
+                      </ul>
+                      <div class="py-1">
+                        <a href="#"
+                          class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Delete
+                          all</a>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Filter Dropdown -->
+                  <div>
+                    <button id="filterDropdownButton" data-dropdown-toggle="filterDropdown"
+                      class="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg md:w-auto focus:outline-none hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                      type="button">
+                      <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="w-4 h-4 mr-2 text-gray-400"
+                        viewbox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd"
+                          d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z"
+                          clip-rule="evenodd" />
+                      </svg>
+                      Filter
+                      <svg class="-mr-1 ml-1.5 w-5 h-5" fill="currentColor" viewbox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path clip-rule="evenodd" fill-rule="evenodd"
+                          d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
+                      </svg>
+                    </button>
+
+                    <!-- Filter Dropdown Menu -->
+                    <div id="filterDropdown" class="z-10 hidden w-48 p-3 bg-white rounded-lg shadow dark:bg-gray-700">
+                      <h6 class="mb-3 text-sm font-medium text-gray-900 dark:text-white">
+                        Category
+                      </h6>
+                      <ul class="space-y-2 text-sm" aria-labelledby="dropdownDefault">
+                        <li class="flex items-center">
+                          <input id="apple" type="checkbox" value=""
+                            class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
+                          <label for="apple" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">
+                            Apple (56)
+                          </label>
+                        </li>
+                        <li class="flex items-center">
+                          <input id="fitbit" type="checkbox" value=""
+                            class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
+                          <label for="fitbit" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">
+                            Fitbit (56)
+                          </label>
+                        </li>
+                        <li class="flex items-center">
+                          <input id="dell" type="checkbox" value=""
+                            class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
+                          <label for="dell" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">
+                            Dell (56)
+                          </label>
+                        </li>
+                        <li class="flex items-center">
+                          <input id="asus" type="checkbox" value="" checked
+                            class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
+                          <label for="asus" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">
+                            Asus (97)
+                          </label>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </caption>
+
+          <thead class="border-b-1 border-gray-200 bg-white dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700">
+            <tr>
+              <th class="w-6 p-3 text-sm font-semibold tracking-wide text-left">Type</th>
+              <th class="p-3 text-sm font-semibold tracking-wide text-left">Transaction</th>
+              <th class="w-24 p-3 text-sm font-semibold tracking-wide text-left">Category</th>
+              <th class="w-24 p-3 text-sm font-semibold tracking-wide text-left">Amount</th>
+              <th class="w-32 p-3 text-sm font-semibold tracking-wide text-left">Account</th>
+              <th class="w-32 p-3 text-sm font-semibold tracking-wide text-left">Date</th>
+            </tr>
+          </thead>
+
+          <tbody
+            class="list divide-y divide-gray-200 bg-white text-gray-800 dark:bg-gray-800 dark:text-gray-100 dark:divide-none">
+
+            <!-- Transaction Rows -->
+            {% for tr in transactions %}
+            <tr hx-get="{% url 'wallet:transaction_detail' tr.pk %}" hx-target="#modal" hx-trigger="click"
+              @click="openModal"
+              class="py-1 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 {% if forloop.counter|divisibleby:2 %} bg-white dark:bg-gray-800 {% else %} bg-gray-100 dark:bg-gray-900 {% endif %}">
+
+              <!-- Transaction Type -->
+              <td class="p-3 text-sm whitespace-nowrap tr__type">
+                {% if tr.get_transaction_type_display == 'Income' %}
+                <i class="bi bi-arrow-up-right text-green-600"></i>
+                {% elif tr.get_transaction_type_display == 'Expense' %}
+                <i class="bi bi-arrow-down-right text-red-600"></i>
+                {% elif tr.get_transaction_type_display == 'Transfer' %}
+                <i class="bi bi-arrow-left-right text-blue-500"></i>
+                {% endif %}
+              </td>
+
+              <!-- Transaction Title -->
+              <td class="p-3 text-sm whitespace-nowrap tr__title">
+                {{ tr.title|title }}
+              </td>
+
+              <!-- Transaction Category -->
+              <td class="p-3 text-sm whitespace-nowrap tr__category">
+                <span class="px-2 py-1 text-xs font-medium uppercase tracking-wider rounded-lg"
+                  style="background-color: {{ tr.category.color }}; color: {{ tr.category.text_color }}; opacity: 0.8;">{{ tr.category }}
+                </span>
+              </td>
+
+              <!-- Transaction Amount -->
+              <td class="p-3 text-sm whitespace-nowrap tr__amount">RON {{ tr.amount|floatformat:0 }}</td>
+
+              <!-- Transaction Account -->
+              <td class="p-3 text-sm whitespace-nowrap tr__account">
+                <span class="px-2 py-1 text-xs font-medium uppercase tracking-wider rounded-lg"
+                  style="background-color: {{ tr.account.color }}; color: {{ tr.account.text_color }}">
+                  {{ tr.account.name }}
+                </span>
+              </td>
+
+              <!-- Transaction Date -->
+              <td class="p-3 text-sm whitespace-nowrap tr__date">{{ tr.date|date:"d M Y" }}</td>
+            </tr>
+            {% endfor %}
+
+
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Mobile View (grid of cards) -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:hidden">
+
+        {% for tr in transactions %}
+
+        <!-- Transaction Card -->
+        <div class="bg-white space-y-3 p-4 rounded-lg shadow">
+          <div class="flex items-center space-x-2 text-sm">
+            <div>
               {% if tr.get_transaction_type_display == 'Income' %}
               <i class="bi bi-arrow-up-right text-green-600"></i>
               {% elif tr.get_transaction_type_display == 'Expense' %}
@@ -48,98 +213,24 @@
               {% elif tr.get_transaction_type_display == 'Transfer' %}
               <i class="bi bi-arrow-left-right text-blue-500"></i>
               {% endif %}
-            </td>
-
-            <!-- Transaction Title -->
-            <td class="px-4 py-3 text-sm font-bold dark:hover:text-white tr__title">
-              {{ tr.title|title }}
-            </td>
-
-            <!-- Transaction Category -->
-            <td class="text-gray-700 dark:text-gray-400 tr__category">
-              <span class="px-2 py-1 text-xs rounded-full"
-                style="background-color: {{ tr.category.color }}; color: {{ tr.category.text_color }}; opacity: 0.8;">{{ tr.category }}</span>
-            </td>
-
-            <!-- Transaction Amount -->
-            <td class="px-4 py-3 text-sm tr__amount">{{ tr.amount|floatformat:0 }}</td>
-
-            <!-- Transaction Account -->
-            <td class="px-4 py-3 text-xs tr__account">
-              <span class="px-2 py-1 font-semibold leading-tight rounded-full"
-                style="background-color: {{ tr.account.color }}; color: {{ tr.account.text_color }}">
-                {{ tr.account.name }}
+            </div>
+            <div class="text-gray-500">{{ tr.date|date:"d M Y" }}</div>
+            <div>
+              <span class="px-2 py-1 text-xs font-medium uppercase tracking-wider rounded-lg"
+                style="background-color: {{ tr.category.color }}; color: {{ tr.category.text_color }}; opacity: 0.8;">{{ tr.category }}
               </span>
-            </td>
-
-            <!-- Transaction Date -->
-            <td class="px-4 py-3 text-sm tr__date">
-              {% if tr.is_planned %}Planned for {% endif %}
-              {{ tr.date|date:"d M Y" }}
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-
-    </div>
-
-    <!-- Mobile View -->
-    <div class="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-4 md:hidden">
-      {% for tr in transactions %}
-      <div
-        class="relative grid grid-cols-12 p-2 bg-white rounded-lg shadow-xl md:max-w-xs cursor-pointer scale-100 dark:bg-gray-800 dark:text-gray-100 dark:hover:bg-gray-700  hover:scale-105 ease-in duration-100"
-        hx-get="{% url 'wallet:transaction_detail' tr.pk %}" hx-target="#modal" hx-trigger="click" @click="openModal">
-        <span class="absolute inset-y-0 left-0 w-3 rounded-tl-lg rounded-bl-lg"
-          style="background-color: {{ tr.category.color }}" aria-hidden="true"></span>
-
-
-        <!-- Transaction Title -->
-        <p class="col-span-9 px-4 py-2 text-md font-semibold tracking-wide dark:hover:text-white">{{ tr.title|title }}
-        </p>
-
-        <div class="col-span-3 relative py-2">
-          <!-- Transaction Type -->
-          <span class="absolute top-0 -right-1 px-3 py-1 text-md">
-            {% if tr.get_transaction_type_display == 'Income' %}
-            <i class="bi bi-arrow-up-right text-green-600"></i>
-            {% elif tr.get_transaction_type_display == 'Expense' %}
-            <i class="bi bi-arrow-down-right text-red-600"></i>
-            {% elif tr.get_transaction_type_display == 'Transfer' %}
-            <i class="bi bi-arrow-left-right text-blue-500"></i>
-            {% endif %}
-          </span>
-          <!-- Transaction Amount -->
-          <span class="absolute top-0 right-2 px-3 py-1">
-            <span>{{currency}}</span><span class="px-2 py-3 text-sm">{{ tr.amount|floatformat:0 }}</span>
-          </span>
-
+            </div>
+          </div>
+          <div class="text-sm text-gray-700">
+            {{ tr.title|title }}
+          </div>
+          <div class="text-sm font-medium text-black">
+            RON {{ tr.amount|floatformat:0 }}
+          </div>
         </div>
-
-        <!-- Transaction Category -->
-        <div class="col-span-6 p-1">
-          <span class="m-3 px-2 py-1 border rounded-lg text-xs"
-            style="border-color: {{ tr.category.color }}">{{ tr.category }}</span>
-        </div>
-
-        <!-- Transaction Account -->
-        <p class="col-span-6 px-4 py-3 text-xs relative">
-          <span class="absolute bottom-1 right-1 px-2 py-1 font-semibold leading-tight rounded-full"
-            style="background-color: {{ tr.account.color }}; color: {{ tr.account.text_color }}">
-            <span class="font-light">Account </span>{{ tr.account.name }}
-          </span>
-        </p>
-
-        <!-- Transaction Date -->
-        <p class="relative px-4 py-2">
-          <div
-            class="absolute -top-2 right-20 text-xs opacity-70 shadow-2xl rounded-lg bg-gray-200 text-black px-2 py-0.5 dark:bg-gray-900 dark:text-white">
-            {{ tr.date|date:"d F Y" }}</div>
-        </p>
-
+        {% endfor %}
 
       </div>
-      {% endfor %}
     </div>
 
   </div>
@@ -151,6 +242,6 @@
     valueNames: ['tr__type', 'tr__category', 'tr__title', 'tr__amount', 'tr__account', 'tr__date']
   };
 
-  var userList = new List('transaction-table', options);
+  var userList = new List('transactions-table', options);
 
 </script>
