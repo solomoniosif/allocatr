@@ -1,14 +1,18 @@
 {
-    "editor.formatOnSave": true,
-    "python.pythonPath": "./venv/Scripts/python",
-    "python.formatting.provider": "black",
-    "files.exclude": {
-        "**/.git": false,
-        "**/__pycache__": true
-    },
     "[python]": {
         "editor.codeActionsOnSave": {
             "source.organizeImports": true
         }
     },
+    "editor.formatOnSave": true,
+    "python.pythonPath": "./venv/Scripts/python",
+    "python.formatting.provider": "black",
+    "files.insertFinalNewline": true,
+    "files.trimFinalNewlines": true,
+    "files.trimTrailingWhitespace": true,
+    "files.exclude": {
+        "**/.git": false,
+        "**/__pycache__": true
+    },
+    "python.linting.flake8Enabled": true,
 }

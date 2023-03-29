@@ -137,3 +137,48 @@ function getSelectedMonth() {
         return yearShort + monthStr;
     }
 }
+
+window.allTransactionsList = function () {
+    return {
+        transactionList: new List('transactions-table', {
+            valueNames: ['tr__type', 'tr__category', 'tr__title', 'tr__amount', 'tr__account', 'tr__date'],
+            page: 10,
+            pagination: true
+        }),
+        activeFilter: false,
+        filterIncome() {
+            this.transactionList.filter(function (tr) {
+                if (tr.values().tr__type.includes("#income-icon")) {
+                    return true;
+                } else {
+                    return false;
+                }
+            });
+        },
+        filterExpenses() {
+            this.transactionList.filter(function (tr) {
+                if (tr.values().tr__type.includes("#expense-icon")) {
+                    return true;
+                } else {
+                    return false;
+                }
+            });
+        },
+        filterTransfers() {
+            this.transactionList.filter(function (tr) {
+                if (tr.values().tr__type.includes("#transfer-icon")) {
+                    return true;
+                } else {
+                    return false;
+                }
+            })
+        },
+        removeFilters() {
+            this.transactionList.filter();
+        },
+        searched: false,
+        updateSearched() {
+            this.searched = this.transactionList.searched;
+        }
+    }
+}

@@ -8,12 +8,12 @@
   <div class="container px-6 mx-auto">
 
     <!-- New Implementation -->
-    <div class=" mt-10 w-full overflow-hiddenh-screen bg-gray-200 text-gray-900 dark:bg-gray-900 dark:text-white">
-      <h1 class="text-2xl font-semibold mb-2">Transactions</h1>
+    <div class=" mt-10 w-full overflow-hidden h-screen">
+      <h1 class="text-2xl font-semibold mb-2 text-gray-800 dark:text-gray-200 ">Transactions</h1>
 
       <!-- Desktop View (table)-->
       <div class="overflow-auto rounded-lg shadow-xl hidden md:block">
-        <table id="transactions-table" class="w-full dark:border dark:border-gray-800">
+        <table id="transactions-table" class="w-full dark:border dark:border-gray-950" x-data="allTransactionsList()">
 
           <!-- Table Header from Flowbite Blocks -->
           <caption class="relative bg-white dark:bg-gray-800 rounded-tr-lg rounded-tl-lg">
@@ -22,7 +22,8 @@
               <!-- Search Input -->
               <div class="w-60">
                 <label for="simple-search" class="sr-only">Search</label>
-                <div class="relative w-full">
+                <div class="relative w-full"
+                  :class="{'border-accent border rounded-lg shadow-accent shadow': searched }">
                   <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                     <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor"
                       viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -33,9 +34,11 @@
                   </div>
                   <input
                     class="search block w-full p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                    placeholder="Search">
+                    :class="{'shadow-accentLightest': searched }" placeholder="Search" @change="updateSearched()">
                 </div>
               </div>
+
+              <p class="font-semibold dark:text-gray-200"><span x-text="transactionList.size()"></span> transactions</p>
 
               <!-- Pagination -->
               <ul class="pagination flex flex-row space-x-2"></ul>
@@ -77,12 +80,12 @@
                   </div>
 
                   <!-- Filter Dropdown -->
-                  <div class="relative" x-data="{open: false}">
+                  <div class="relative" x-data="{open: false, filterApplied: false}">
                     <button id="filterDropdownButton" @click="open = !open"
                       class="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg md:w-auto focus:outline-none hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
-                      type="button">
-                      <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="w-4 h-4 mr-2 text-gray-400"
-                        viewbox="0 0 20 20" fill="currentColor">
+                      :class="{'shadow-accent shadow border-accent': filterApplied }" type="button">
+                      <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="w-5 h-5 mr-2 text-gray-400"
+                        :class="{'fill-accent': filterApplied }" viewbox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd"
                           d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z"
                           clip-rule="evenodd" />
@@ -97,35 +100,51 @@
 
                     <!-- Filter Dropdown Menu -->
                     <div x-show="open" @click.away="open = false"
-                      class=" absolute z-10 w-48 p-3 bg-white rounded-lg shadow dark:bg-gray-700">
-                      <button @click="filterExpense" class="dropdown-button">Expense</button>
+                      class="absolute z-20  p-3 bg-white rounded-lg shadow dark:bg-gray-700">
+
                       <ul class="space-y-2 text-sm" aria-labelledby="dropdownDefault">
 
                         <li class="flex items-center">
-                          <input id="apple" type="checkbox" value="" data-filter="tr__category"
-                            class=" filter w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
-                          <label for="apple" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">
-                            Apple (56)
+                          <input id="income-filter" type="radio" name="filter-radio"
+                            @click="filterIncome(); filterApplied = true"
+                            class=" filter w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500 dark:checked:bg-accent" />
+                          <label for="income-filter" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">
+                            Income
                           </label>
                         </li>
 
                         <li class="flex items-center">
-                          <input id="fitbit" type="checkbox" value=""
-                            class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
-                          <label for="fitbit" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">
-                            Fitbit (56)
+                          <input id="expenses-filter" type="radio" name="filter-radio"
+                            @click="filterExpenses(); filterApplied = true"
+                            class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500 dark:checked:bg-accent" />
+                          <label for="expenses-filter"
+                            class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">
+                            Expense
                           </label>
                         </li>
 
                         <li class="flex items-center">
-                          <input id="dell" type="checkbox" value=""
-                            class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
-                          <label for="dell" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">
-                            Dell (56)
+                          <input id="transfers-filter" type="radio" name="filter-radio"
+                            @click="filterTransfers(); filterApplied = true"
+                            class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500 dark:checked:bg-accent" />
+                          <label for="transfers-filter"
+                            class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">
+                            Transfer
+                          </label>
+                        </li>
+
+                        <li class="flex items-center">
+                          <input id="remove-filters" type="radio" name="filter-radio"
+                            @click="removeFilters(); filterApplied = false"
+                            class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500 dark:checked:bg-accent" />
+                          <label for="remove-filters"
+                            class="ml-2 text-sm font-medium whitespace-nowrap text-gray-900 dark:text-gray-100">
+                            Reset filters
                           </label>
                         </li>
 
                       </ul>
+
                     </div>
                   </div>
 
@@ -134,7 +153,7 @@
             </div>
           </caption>
 
-          <thead class="border-b-1 border-gray-200 bg-white dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700">
+          <thead class=" bg-white dark:bg-gray-800 dark:text-gray-100">
             <tr>
               <th class="w-6 p-3 text-sm font-semibold tracking-wide text-left">Type</th>
               <th class="p-3 text-sm font-semibold tracking-wide text-left">Transaction</th>
@@ -146,28 +165,34 @@
           </thead>
 
           <tbody
-            class="list divide-y divide-gray-200 bg-white text-gray-800 dark:bg-gray-800 dark:text-gray-100 dark:divide-none">
+            class="list divide-y divide-gray-200 bg-white text-gray-800 dark:bg-gray-800 dark:text-gray-100 dark:divide-gray-950">
 
             <!-- Transaction Rows -->
             {% for tr in transactions %}
             <tr hx-get="{% url 'wallet:transaction_detail' tr.pk %}" hx-target="#modal" hx-trigger="click"
               @click="openModal"
-              class="py-1 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 {% if forloop.counter|divisibleby:2 %} bg-white dark:bg-gray-800 {% else %} bg-gray-100 dark:bg-gray-900 {% endif %}">
-
+              class="py-1 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 bg-gray-100 dark:bg-gray-800">
+              <!-- {% if forloop.counter|divisibleby:2 %} bg-white dark:bg-gray-800 {% else %} bg-gray-100 dark:bg-gray-900 {% endif %} -->
               <!-- Transaction Type -->
               <td class="p-3 text-sm whitespace-nowrap tr__type">
                 {% if tr.get_transaction_type_display == 'Income' %}
-                <i class="bi bi-arrow-up-right text-green-600"></i>
+                <svg viewBox="0 0 22 22" class="svg-icon fill-green-500">
+                  <use xlink:href="#income-icon"></use>
+                </svg>
                 {% elif tr.get_transaction_type_display == 'Expense' %}
-                <i class="bi bi-arrow-down-right text-red-600"></i>
+                <svg viewBox="0 0 22 22" class="svg-icon fill-red-500">
+                  <use xlink:href="#expense-icon"></use>
+                </svg>
                 {% elif tr.get_transaction_type_display == 'Transfer' %}
-                <i class="bi bi-arrow-left-right text-blue-500"></i>
+                <svg viewBox="0 0 22 22" class="svg-icon fill-blue-500">
+                  <use xlink:href="#transfer-icon"></use>
+                </svg>
                 {% endif %}
               </td>
 
               <!-- Transaction Title -->
               <td class="p-3 text-sm whitespace-nowrap tr__title">
-                {{ tr.title|title }}
+                {{ tr.title|capfirst }}
               </td>
 
               <!-- Transaction Category -->
@@ -237,26 +262,3 @@
 
   </div>
 </section>
-
-
-<script>
-  let options = {
-    valueNames: ['tr__type', 'tr__category', 'tr__title', 'tr__amount', 'tr__account', 'tr__date'],
-    page: 10,
-    pagination: true
-  };
-
-  let transactionList = new List('transactions-table', options);
-
-  // Filter by type
-  function filterExpense() {
-    transactionList.filter(function (tr) {
-      if (tr._values.tr__type.includes("bi-arrow-down-right")) {
-        return true;
-      } else {
-        return false;
-      }
-    });
-  }
-
-</script>

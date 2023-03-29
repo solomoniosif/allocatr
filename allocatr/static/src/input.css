@@ -52,6 +52,10 @@
     @apply h-6 w-6 rounded border-gray-300 bg-gray-100 text-accent focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:checked:border-accent dark:checked:bg-accent dark:focus:ring-blue-600 dark:focus:ring-offset-gray-800;
 }
 
+.checkbox-input-sm {
+    @apply h-4 w-4 rounded border-gray-300 bg-gray-100 text-accent focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:checked:border-accent dark:checked:bg-accent dark:focus:ring-blue-600 dark:focus:ring-offset-gray-800;
+}
+
 .text-input {
     @apply block w-full appearance-none rounded border border-gray-300 bg-gray-100 p-3 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500;
 }
@@ -78,4 +82,8 @@
 
 li.active {
     @apply rounded-full bg-accent text-center font-bold text-white;
+}
+
+.svg-icon {
+    @apply inline-block h-6 w-6;
 }

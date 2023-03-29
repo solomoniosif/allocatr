@@ -154,10 +154,13 @@ function data() {
       }
     },
     updateChart(chart, labels, data) {
-      console.log('updateChart function was called')
       chart.data.labels = labels;
       chart.data.datasets = [{ data: data }];
       chart.update();
+    },
+    generateNewList(elementId, options) {
+      const list = new List(elementId, options);
+      return list;
     }
   }
 }
