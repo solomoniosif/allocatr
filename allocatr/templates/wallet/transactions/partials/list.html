@@ -12,8 +12,9 @@
       <h1 class="text-2xl font-semibold mb-2 text-gray-800 dark:text-gray-200 ">Transactions</h1>
 
       <!-- Desktop View (table)-->
-      <div class="overflow-auto rounded-lg shadow-xl hidden md:block">
-        <table id="transactions-table" class="w-full dark:border dark:border-gray-950" x-data="allTransactionsList()">
+      <div x-data="allTransactionsList()" id="transactions-table"
+        class="overflow-auto rounded-lg shadow-xl hidden md:block">
+        <table class="p-6 w-full dark:border dark:border-gray-800">
 
           <!-- Table Header from Flowbite Blocks -->
           <caption class="relative bg-white dark:bg-gray-800 rounded-tr-lg rounded-tl-lg">
@@ -37,11 +38,6 @@
                     :class="{'shadow-accentLightest': searched }" placeholder="Search" @change="updateSearched()">
                 </div>
               </div>
-
-              <p class="font-semibold dark:text-gray-200"><span x-text="transactionList.size()"></span> transactions</p>
-
-              <!-- Pagination -->
-              <ul class="pagination flex flex-row space-x-2"></ul>
 
               <div
                 class="flex flex-col items-stretch justify-end flex-shrink-0 w-full space-y-2 md:w-auto md:flex-row md:space-y-0 md:items-center md:space-x-3">
@@ -165,13 +161,13 @@
           </thead>
 
           <tbody
-            class="list divide-y divide-gray-200 bg-white text-gray-800 dark:bg-gray-800 dark:text-gray-100 dark:divide-gray-950">
+            class="list divide-y divide-gray-200 bg-white text-gray-800 dark:bg-gray-800 dark:text-gray-100 dark:divide-gray-800">
 
             <!-- Transaction Rows -->
             {% for tr in transactions %}
             <tr hx-get="{% url 'wallet:transaction_detail' tr.pk %}" hx-target="#modal" hx-trigger="click"
               @click="openModal"
-              class="py-1 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 bg-gray-100 dark:bg-gray-800">
+              class="py-1 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 bg-gray-100 dark:bg-gray-900">
               <!-- {% if forloop.counter|divisibleby:2 %} bg-white dark:bg-gray-800 {% else %} bg-gray-100 dark:bg-gray-900 {% endif %} -->
               <!-- Transaction Type -->
               <td class="p-3 text-sm whitespace-nowrap tr__type">
@@ -217,11 +213,20 @@
               <td class="p-3 text-sm whitespace-nowrap tr__date">{{ tr.date|date:"d M Y" }}</td>
             </tr>
             {% endfor %}
-
-
           </tbody>
-
         </table>
+
+        <div
+          class="hidden px-4 py-2.5 text-xs font-semibold tracking-wide text-gray-800 uppercase  bg-gray-50 sm:grid-cols-9 dark:text-gray-200 dark:bg-gray-800 md:grid">
+          <span class="flex col-span-4 mt-2 sm:mt-auto sm:justify-start">
+            <nav aria-label="Table navigation">
+              <ul class="pagination inline-flex items-center space-x-1"></ul>
+            </nav>
+          </span>
+          <span class="col-span-2"></span>
+          <span class="flex items-center col-span-3 justify-end"> Showing 0-10 of&nbsp;<span class="font-semibold dark:text-gray-200"><span x-text="transactionList.size()"></span> transactions</span> </span>
+        </div>
+
       </div>
 
       <!-- Mobile View (grid of cards) -->
