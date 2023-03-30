@@ -17,8 +17,8 @@
 <div class="px-1 py-6 space-y-3 max-w-xl text-gray-900 dark:text-white">
 
   {% with WIDGET_ERROR_CLASS='is-invalid' %}
-  <form class="w-full" hx-post="{% url 'wallet:add_planned_expense' %}" hx-headers='{"X-CSRFToken":"{{ csrf_token }}"}'
-    @show-message="successToast.fire({title: $event.detail.value})" @planned-expense-created="closeModal">
+  <form class="w-full" hx-post="{% url 'wallet:add_expense' %}" hx-headers='{"X-CSRFToken":"{{ csrf_token }}"}'
+    @show-message="successToast.fire({title: $event.detail.value})" @expense-created="closeModal">
 
     {% for hidden in form.hidden_fields %} {{ hidden }} {% endfor %}
 
