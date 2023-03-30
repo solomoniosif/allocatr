@@ -2,7 +2,7 @@
   <title>allocatr | Accounts</title>
 </head>
 
-<main hx-get="{% url 'wallet:accounts' %}"
+<section id="accounts" hx-get="{% url 'wallet:accounts' %}"
   hx-trigger="accounts-changed from:body, transactions-changed from:body, month-selected from:body"
   hx-target="#dashboard-main" hx-vals='js:{month: getSelectedMonth()}' class="h-full overflow-y-auto">
   <div class="container px-6 mx-auto">
@@ -130,4 +130,4 @@
     </div>
 
   </div>
-</main>
+</section>

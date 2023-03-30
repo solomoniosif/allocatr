@@ -103,7 +103,8 @@
     <!-- Budgets -->
     <li class="relative px-6 py-3 cursor-pointer">
       <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-        href="#" @click="closeSideMenu">
+        hx-get="{% url 'wallet:budgets' %}" hx-trigger="click" hx-target="#dashboard-main"
+        hx-vals='js:{month: getSelectedMonth()}' hx-replace-url="/budgets/" @click="closeSideMenu">
         <i class="bi bi-wallet-fill"></i>
         <span class="ml-4">Budgets</span>
       </a>

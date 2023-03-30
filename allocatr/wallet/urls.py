@@ -59,17 +59,17 @@ urlpatterns = [
     ),
     # Planned Transaction Views
     path(
-        "planned-transactions/",
+        "transactions/planned/",
         views.PlannedTransactionListView.as_view(),
         name="planned_transactions",
     ),
     path(
-        "transactions/expenses/planned/add/",
+        "transactions/planned/expenses/add/",
         views.PlannedExpenseCreateView.as_view(),
         name="add_planned_expense",
     ),
     path(
-        "transactions/income/planned/add/",
+        "transactions/planned/income/add/",
         views.PlannedIncomeCreateView.as_view(),
         name="add_planned_income",
     ),
@@ -114,4 +114,6 @@ urlpatterns = [
         views.CategoryDeleteView.as_view(),
         name="delete_category",
     ),
+    # Budget Views
+    path("budgets/", views.BudgetListView.as_view(), name="budgets"),
 ]

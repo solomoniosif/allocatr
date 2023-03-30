@@ -13,7 +13,7 @@ from django.views.generic import (
 
 from ..forms import PlannedExpenseForm, PlannedIncomeForm
 from ..mixins import RequirePostMixin
-from ..models import PlannedTransaction
+from ..models import PlannedTransaction, UserSettings
 from ..services import get_or_create_month
 
 
@@ -30,6 +30,12 @@ class PlannedTransactionListView(LoginRequiredMixin, ListView):
             date__gte=month.first_day,
             date__lte=month.last_day,
         )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_settings = UserSettings.objects.get(user=self.request.user)
+        context["user_settings"] = user_settings
+        return context
 
     def get_template_names(self):
         if self.request.headers.get("HX-Request"):
