@@ -3,7 +3,6 @@ from datetime import date
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
-from django.shortcuts import render
 from django.views.generic import (
     CreateView,
     DeleteView,
@@ -14,23 +13,34 @@ from django.views.generic import (
 
 from ..forms import ExpenseForm, IncomeForm, TransferForm
 from ..mixins import RequirePostMixin
-from ..models import Transaction
+from ..models import Transaction, UserSettings
 from ..services import get_or_create_month
 
 
-def transaction_list_view(request):
-    day_or_month = request.GET.get("month", date.today())
-    month = get_or_create_month(request.user, day_or_month)
-    transactions = Transaction.objects.filter(
-        account__user=request.user,
-        date__gte=month.first_day,
-        date__lte=month.last_day,
-    )
-    return render(
-        request,
-        "wallet/transactions/partials/list.html",
-        {"transactions": transactions},
-    )
+class TransactionListView(LoginRequiredMixin, ListView):
+    model = Transaction
+    context_object_name = "transactions"
+
+    def get_queryset(self, **kwargs):
+        qs = super().get_queryset(**kwargs)
+        day_or_month = self.request.GET.get("month", date.today())
+        month = get_or_create_month(self.request.user, day_or_month)
+        return qs.filter(
+            account__user=self.request.user,
+            date__gte=month.first_day,
+            date__lte=month.last_day,
+        )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_settings = UserSettings.objects.get(user=self.request.user)
+        context["user_settings"] = user_settings
+        return context
+
+    def get_template_names(self):
+        if self.request.headers.get("HX-Request"):
+            return "wallet/transactions/partials/list.html"
+        return "wallet/transactions/transaction_list.html"
 
 
 class TransactionPartialListView(LoginRequiredMixin, ListView):
@@ -197,4 +207,5 @@ class TransactionDeleteView(LoginRequiredMixin, RequirePostMixin, DeleteView):
                 }
             )
         }
+        return HttpResponse(status=204, headers=headers)
         return HttpResponse(status=204, headers=headers)

@@ -8,7 +8,6 @@
   x-data="allTransactionsList()" @htmx:after-settle.window="updateListDisplay()">
   <div class="container px-6 mx-auto">
 
-    <!-- New Implementation -->
     <div class=" mt-10 w-full overflow-hidden h-screen">
       <h1 class="text-2xl font-semibold mb-2 text-gray-800 dark:text-gray-200 ">Transactions</h1>
 
@@ -16,7 +15,6 @@
       <div id="transactions-table" class="w-full overflow-hidden rounded-lg shadow-xl hidden md:block">
         <table class="p-6 w-full dark:border dark:border-gray-800">
 
-          <!-- Table Header from Flowbite Blocks -->
           <caption class="relative bg-white dark:bg-gray-800 rounded-tr-lg rounded-tl-lg">
             <div class="flex flex-col items-center justify-between p-4 space-y-3 md:flex-row md:space-y-0 md:space-x-4">
 
@@ -45,7 +43,7 @@
 
                 <div class="flex items-center w-full space-x-3 md:w-auto">
 
-                  <!-- Sort Menu -->
+                  <!-- Sort Dropdown -->
                   <div class="relative">
                     <button id="sortDropdownButton" @click="sortMenuOpen = !sortMenuOpen"
                       class="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg md:w-auto focus:outline-none hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
@@ -98,7 +96,6 @@
                       </svg>
                     </button>
 
-                    <!-- Filter Dropdown Menu -->
                     <div x-show="filterMenuOpen" @click.away="filterMenuOpen = false"
                       class="absolute z-20  p-3 bg-white rounded-lg shadow dark:bg-gray-700">
 
@@ -166,7 +163,7 @@
             <tr hx-get="{% url 'wallet:transaction_detail' tr.pk %}" hx-target="#modal" hx-trigger="click"
               @click="openModal"
               class="py-1 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 bg-gray-100 dark:bg-gray-900">
-              <!-- {% if forloop.counter|divisibleby:2 %} bg-white dark:bg-gray-800 {% else %} bg-gray-100 dark:bg-gray-900 {% endif %} -->
+
               <!-- Transaction Type -->
               <td class="p-3 text-sm whitespace-nowrap tr__type">
                 {% if tr.get_transaction_type_display == 'Income' %}
@@ -197,7 +194,8 @@
               </td>
 
               <!-- Transaction Amount -->
-              <td class="p-3 text-sm whitespace-nowrap tr__amount">RON {{ tr.amount|floatformat:0 }}</td>
+              <td class="p-3 text-sm whitespace-nowrap tr__amount">{{ user_settings.currency }}
+                {{ tr.amount|floatformat:0 }}</td>
 
               <!-- Transaction Account -->
               <td class="p-3 text-sm whitespace-nowrap tr__account">
@@ -219,7 +217,7 @@
           class="hidden px-4 py-2.5 text-xs font-semibold tracking-wide text-gray-800 uppercase bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800 md:grid">
           <span class="flex col-span-4 mt-2 sm:mt-auto sm:justify-start">
             <nav aria-label="Table navigation">
-              <ul class="pagination inline-flex items-center space-x-1"></ul>
+              <ul class="pagination inline-flex items-center space-x-1" @click.debounce="updateListDisplay"></ul>
             </nav>
           </span>
           <span class="col-span-2"></span>

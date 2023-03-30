@@ -13,7 +13,7 @@ urlpatterns = [
     ),
     path("next-month/<str:month>/", views.get_next_month, name="next_month"),
     # Transaction Views
-    path("transactions/", views.transaction_list_view, name="transactions"),
+    path("transactions/", views.TransactionListView.as_view(), name="transactions"),
     path(
         "hx/transactions/",
         views.TransactionPartialListView.as_view(),

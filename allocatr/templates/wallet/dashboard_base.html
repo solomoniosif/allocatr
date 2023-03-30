@@ -11,18 +11,14 @@
     {% include 'wallet/partials/header/header.html' %}
 
     <div id="dashboard-main" hx-ext="head-support">
-      {% block dashboard_main %}
-
-      {% endblock dashboard_main %}
+      {% block dashboard_main %}{% endblock dashboard_main %}
     </div>
 
   </div>
 </div>
 
 {% include 'wallet/partials/modal.html' %}
-
 {% include 'wallet/partials/icons.html' %}
-
 {% include 'wallet/partials/mobile_add_menu.html' %}
 
 {% endblock content %}
