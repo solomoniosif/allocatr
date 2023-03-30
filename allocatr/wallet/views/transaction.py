@@ -79,7 +79,7 @@ class IncomeCreateView(LoginRequiredMixin, CreateView):
                     {
                         "transactions-changed": None,
                         "income-created": None,
-                        "show-message": f"Income {form.instance.title.upper()} added",
+                        "show-message": f"Income {form.instance.title} added",
                     }
                 )
             },
@@ -100,7 +100,7 @@ class ExpenseCreateView(LoginRequiredMixin, CreateView):
                     {
                         "transactions-changed": None,
                         "expense-created": None,
-                        "show-message": f"Expense {form.instance.title.upper()} added",
+                        "show-message": f"Expense {form.instance.title} added",
                     }
                 )
             },
@@ -121,7 +121,7 @@ class TransferCreateView(LoginRequiredMixin, CreateView):
                     {
                         "transactions-changed": None,
                         "transfer-created": None,
-                        "show-message": f"Transfer {form.instance.title.upper()} added",
+                        "show-message": f"Transfer {form.instance.title} added",
                     }
                 )
             },
@@ -142,7 +142,7 @@ class IncomeUpdateView(LoginRequiredMixin, UpdateView):
                 {
                     "transactions-changed": None,
                     "income-edited": None,
-                    "show-message": f"Income {form.instance.title.upper()} updated",
+                    "show-message": f"Income {form.instance.title} updated",
                 }
             )
         }
@@ -163,7 +163,7 @@ class ExpenseUpdateView(LoginRequiredMixin, UpdateView):
                 {
                     "transactions-changed": None,
                     "expense-edited": None,
-                    "show-message": f"Expense {form.instance.title.upper()} updated",
+                    "show-message": f"Expense {form.instance.title} updated",
                 }
             )
         }
@@ -184,7 +184,7 @@ class TransferUpdateView(LoginRequiredMixin, UpdateView):
                 {
                     "transactions-changed": None,
                     "transfer-edited": None,
-                    "show-message": f"Transfer {form.instance.title.upper()} updated",
+                    "show-message": f"Transfer {form.instance.title} updated",
                 }
             )
         }
@@ -203,9 +203,8 @@ class TransactionDeleteView(LoginRequiredMixin, RequirePostMixin, DeleteView):
                 {
                     "transactions-changed": None,
                     "transaction-deleted": None,
-                    "show-message": f"Transaction {title.upper()} deleted",
+                    "show-message": f"Transaction {title} deleted",
                 }
             )
         }
-        return HttpResponse(status=204, headers=headers)
         return HttpResponse(status=204, headers=headers)

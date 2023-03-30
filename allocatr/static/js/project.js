@@ -81,6 +81,7 @@ const successToast = Swal.mixin({
     didOpen: (toast) => {
         toast.addEventListener('mouseenter', Swal.stopTimer)
         toast.addEventListener('mouseleave', Swal.resumeTimer)
+        toast.addEventListener('click', Swal.close)
     }
 })
 window.successToast = successToast
@@ -188,7 +189,6 @@ window.allTransactionsList = function () {
         },
         listDisplay: "",
         updateListDisplay() {
-            console.log('List Display updated!')
             if (this.transactionList.searched || this.transactionList.filtered) {
                 let visible = this.transactionList.visibleItems.length;
                 let total = this.transactionList.matchingItems.length;

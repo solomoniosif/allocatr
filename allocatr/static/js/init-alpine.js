@@ -143,14 +143,14 @@ function data() {
     },
     getContext() {
       const current_page = window.location.pathname;
-      if (current_page === '/') {
-        return { transactionsContext: true, accountsContext: false, categoriesContext: false, budgetsContext: false }
-      } else if (current_page.startsWith('/accounts/')) {
+      if (current_page.startsWith('/accounts/')) {
         return { transactionsContext: false, accountsContext: true, categoriesContext: false, budgetsContext: false }
       } else if (current_page.startsWith('/categories/')) {
         return { transactionsContext: false, accountsContext: false, categoriesContext: true, budgetsContext: false }
       } else if (current_page.startsWith('/budgets/')) {
         return { transactionsContext: false, accountsContext: false, categoriesContext: false, budgetsContext: true }
+      } else {
+        return { transactionsContext: true, accountsContext: false, categoriesContext: false, budgetsContext: false }
       }
     },
     updateChart(chart, labels, data) {
