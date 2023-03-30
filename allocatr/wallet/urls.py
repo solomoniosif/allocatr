@@ -63,6 +63,16 @@ urlpatterns = [
         views.PlannedTransactionListView.as_view(),
         name="planned_transactions",
     ),
+    path(
+        "transactions/expenses/planned/add/",
+        views.PlannedExpenseCreateView.as_view(),
+        name="add_planned_expense",
+    ),
+    path(
+        "transactions/income/planned/add/",
+        views.PlannedIncomeCreateView.as_view(),
+        name="add_planned_income",
+    ),
     # Account Views
     path("accounts/", views.AccountListView.as_view(), name="accounts"),
     path(

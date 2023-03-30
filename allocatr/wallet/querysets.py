@@ -43,4 +43,4 @@ class TransactionQuerySet(models.QuerySet):
         return self.filter(transaction_type="AD")
 
     def recurrent(self):
-        return self.filter(is_recurrent=True)
+        return self.filter(is_recurring=True)

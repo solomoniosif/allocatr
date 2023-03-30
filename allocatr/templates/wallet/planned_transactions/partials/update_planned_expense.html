@@ -77,12 +77,12 @@
     </div>
 
     <div class="flex flex-wrap -mx-3 mb-6"
-      x-data="{showFrequencyOptions: {% if form.is_recurrent.value %}true{% else %}false{% endif %} }">
+      x-data="{showFrequencyOptions: {% if form.is_recurring.value %}true{% else %}false{% endif %} }">
       <!-- Is recurrent -->
       <div class="w-1/2 px-3">
-        <label for="{{ form.is_recurrent.id_for_label }}" class="input-label">{{ form.is_recurrent.label }}</label>
-        {% render_field form.is_recurrent class+="checkbox-input" x-model="showFrequencyOptions" %}
-        {% for error in form.is_recurrent.errors %}<p class="text-red-500 text-xs italic">{{ error }}</p>{% endfor %}
+        <label for="{{ form.is_recurring.id_for_label }}" class="input-label">{{ form.is_recurring.label }}</label>
+        {% render_field form.is_recurring class+="checkbox-input" x-model="showFrequencyOptions" %}
+        {% for error in form.is_recurring.errors %}<p class="text-red-500 text-xs italic">{{ error }}</p>{% endfor %}
       </div>
 
       <!-- Recurrence frequency -->
