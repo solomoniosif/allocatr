@@ -227,40 +227,71 @@
       </div>
 
       <!-- Mobile View (grid of cards) -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:hidden">
+      <div class="flex flex-col gap-4 md:hidden">
 
         {% for tr in transactions %}
 
         <!-- Transaction Card -->
-        <div class="bg-white space-y-3 p-4 rounded-lg shadow-lg dark:bg-gray-900 dark:text-white">
-          <div class="flex items-center space-x-2 text-sm">
-            <div>
-              {% if tr.get_transaction_type_display == 'Income' %}
-              <i class="bi bi-arrow-up-right text-green-600"></i>
-              {% elif tr.get_transaction_type_display == 'Expense' %}
-              <i class="bi bi-arrow-down-right text-red-600"></i>
-              {% elif tr.get_transaction_type_display == 'Transfer' %}
-              <i class="bi bi-arrow-left-right text-blue-500"></i>
-              {% endif %}
+        <div class="w-full bg-white p-3 rounded-lg shadow-lg dark:bg-gray-900 dark:text-white"
+          x-data="{showDetails: false}">
+          <div class="flex flex-col items-left justify-between space-y-4 text-sm">
+
+            <!-- Top Row -->
+            <div class="flex flex-row justify-between items-center min-h-14" @click="showDetails = !showDetails">
+              <!-- Transaction Type -->
+              <div>
+                {% if tr.get_transaction_type_display == 'Income' %}
+                <svg viewBox="0 0 22 22" class="svg-icon fill-green-500">
+                  <use xlink:href="#income-icon"></use>
+                </svg>
+                {% elif tr.get_transaction_type_display == 'Expense' %}
+                <svg viewBox="0 0 22 22" class="svg-icon fill-red-500">
+                  <use xlink:href="#expense-icon"></use>
+                </svg>
+                {% elif tr.get_transaction_type_display == 'Transfer' %}
+                <svg viewBox="0 0 22 22" class="svg-icon fill-blue-500">
+                  <use xlink:href="#transfer-icon"></use>
+                </svg>
+                {% endif %}
+                <!-- Transaction Title -->
+                <span class="ml-2 text-base text-gray-800 dark:text-white justify-self-start"
+                  hx-get="{% url 'wallet:transaction_detail' tr.pk %}" hx-target="#modal" hx-trigger="click"
+                  @click="openModal">{{ tr.title|capfirst }}</span>
+              </div>
+
+              <!-- Transaction Amount -->
+              <div class="text-sm font-medium text-white">
+                RON {{ tr.amount|floatformat:0 }}
+              </div>
             </div>
-            <div class="text-gray-500">{{ tr.date|date:"d M Y" }}</div>
-            <div>
-              <span class="px-2 py-1 text-xs font-medium uppercase tracking-wider rounded-lg"
-                style="background-color: {{ tr.category.color }}; color: {{ tr.category.text_color }}; opacity: 0.8;">{{ tr.category }}
-              </span>
+
+            <!-- Bottom Row -->
+            <div x-show="showDetails" class="flex flex-row justify-between items-center min-h-14">
+              <!-- Transaction Account -->
+              <div>
+                <span class="px-2 py-1 text-xs font-medium uppercase tracking-wider rounded-lg"
+                  style="background-color: {{ tr.account.color }}; color: {{ tr.account.text_color }}">
+                  {{ tr.account.name }}
+                </span>
+              </div>
+              <!-- Transaction Date -->
+              <div class="text-gray-500">{{ tr.date|date:"d M Y" }}</div>
+
+              <!-- Transaction Category -->
+              <div>
+                <span class="px-2 py-1 text-xs font-medium uppercase tracking-wider rounded-lg"
+                  style="background-color: {{ tr.category.color }}; color: {{ tr.category.text_color }}; opacity: 0.8;">{{ tr.category }}
+                </span>
+              </div>
+
             </div>
+
           </div>
-          <div class="text-sm text-gray-700">
-            {{ tr.title|title }}
-          </div>
-          <div class="text-sm font-medium text-black">
-            RON {{ tr.amount|floatformat:0 }}
-          </div>
+
+
         </div>
         {% endfor %}
-
       </div>
-    </div>
 
-  </div>
+    </div>
 </section>

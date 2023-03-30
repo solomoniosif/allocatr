@@ -72,11 +72,18 @@
           </li>
           <li
             class="px-2 py-1 cursor-pointer transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-            <a class="w-full" href="{% url 'wallet:planned_transactions' %}" @click="closeSideMenu"><i
-                class="bi bi-arrow-left-right"></i>
+            <a class="w-full" hx-get="{% url 'wallet:planned_transactions' %}" hx-trigger="click"
+              hx-target="#dashboard-main" hx-vals='js:{month: getSelectedMonth()}'
+              hx-replace-url="/transactions/planned/" @click="closeSideMenu"><i class="bi bi-arrow-left-right"></i>
               <span class="ml-2">Planned transactions</span></a>
           </li>
-
+          <li
+            class="px-2 py-1 cursor-pointer transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
+            <a class="w-full" hx-get="{% url 'wallet:planned_transactions' %}" hx-trigger="click"
+              hx-target="#dashboard-main" hx-vals='js:{month: getSelectedMonth()}'
+              hx-replace-url="/transactions/recurring/" @click="closeSideMenu"><i class="bi bi-arrow-left-right"></i>
+              <span class="ml-2">Recurring transactions</span></a>
+          </li>
         </ul>
       </div>
     </li>
