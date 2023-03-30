@@ -77,11 +77,11 @@
 }
 
 .pagination li {
-    @apply inline-block px-2 py-0.5 text-gray-400;
+    @apply inline-block px-2 py-1 text-gray-900 dark:text-white;
 }
 
 li.active {
-    @apply rounded-full bg-accent text-center font-bold text-white;
+    @apply rounded-full bg-accent text-center font-bold text-white dark:text-white;
 }
 
 .svg-icon {

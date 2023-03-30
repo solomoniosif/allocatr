@@ -4,7 +4,8 @@
 
 <section id="transactions" hx-get="{% url 'wallet:transactions' %}"
   hx-trigger="accounts-changed from:body, transactions-changed from:body, month-selected from:body"
-  hx-target="#dashboard-main" hx-vals='js:{month: getSelectedMonth()}' class="h-full overflow-y-auto">
+  hx-target="#dashboard-main" hx-vals='js:{month: getSelectedMonth()}' class="h-full overflow-y-auto"
+  x-data="allTransactionsList()" @htmx:after-settle.window="updateListDisplay()">
   <div class="container px-6 mx-auto">
 
     <!-- New Implementation -->
@@ -12,8 +13,7 @@
       <h1 class="text-2xl font-semibold mb-2 text-gray-800 dark:text-gray-200 ">Transactions</h1>
 
       <!-- Desktop View (table)-->
-      <div x-data="allTransactionsList()" id="transactions-table"
-        class="overflow-auto rounded-lg shadow-xl hidden md:block">
+      <div id="transactions-table" class="overflow-auto rounded-lg shadow-xl hidden md:block">
         <table class="p-6 w-full dark:border dark:border-gray-800">
 
           <!-- Table Header from Flowbite Blocks -->
@@ -35,7 +35,8 @@
                   </div>
                   <input
                     class="search block w-full p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                    :class="{'shadow-accentLightest': searched }" placeholder="Search" @change="updateSearched()">
+                    :class="{'shadow-accentLightest': searched }" placeholder="Search"
+                    @input.debounce.200ms="updateListDisplay(); updateSearched()">
                 </div>
               </div>
 
@@ -45,8 +46,8 @@
                 <div class="flex items-center w-full space-x-3 md:w-auto">
 
                   <!-- Sort Menu -->
-                  <div class="relative" x-data="{open: false}">
-                    <button id="sortDropdownButton" @click="open = !open"
+                  <div class="relative">
+                    <button id="sortDropdownButton" @click="sortMenuOpen = !sortMenuOpen"
                       class="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg md:w-auto focus:outline-none hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
                       type="button">
                       Sort
@@ -56,17 +57,20 @@
                           d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
                       </svg>
                     </button>
-                    <div x-show="open" x-on:click.away="open = false"
+                    <div x-show="sortMenuOpen" x-on:click.away="sortMenuOpen = false"
                       class="absolute z-10 bg-white divide-y divide-gray-100 rounded-lg px-1 shadow dark:bg-gray-700 dark:divide-gray-600">
                       <ul class="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="sortDropdownButton">
                         <li>
-                          <button class="sort dropdown-button text-sm" data-sort="tr__type">By Type</button>
+                          <button class="sort dropdown-button text-sm" data-sort="tr__type">By
+                            Type</button>
                         </li>
                         <li>
-                          <button class="sort dropdown-button text-sm" data-sort="tr__title">By Title</button>
+                          <button class="sort dropdown-button text-sm" data-sort="tr__title">By
+                            Title</button>
                         </li>
                         <li>
-                          <button class="sort dropdown-button text-sm" data-sort="tr__date">By Date</button>
+                          <button class="sort dropdown-button text-sm" data-sort="tr__date">By
+                            Date</button>
                         </li>
                         <li>
                           <button class="sort dropdown-button text-sm" data-sort="tr__amount">By Amount</button>
@@ -76,12 +80,12 @@
                   </div>
 
                   <!-- Filter Dropdown -->
-                  <div class="relative" x-data="{open: false, filterApplied: false}">
-                    <button id="filterDropdownButton" @click="open = !open"
+                  <div class="relative">
+                    <button id="filterDropdownButton" @click="filterMenuOpen = !filterMenuOpen"
                       class="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg md:w-auto focus:outline-none hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
-                      :class="{'shadow-accent shadow border-accent': filterApplied }" type="button">
+                      :class="{'shadow-accent shadow border-accent': activeFilter }" type="button">
                       <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="w-5 h-5 mr-2 text-gray-400"
-                        :class="{'fill-accent': filterApplied }" viewbox="0 0 20 20" fill="currentColor">
+                        :class="{'fill-accent': activeFilter }" viewbox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd"
                           d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z"
                           clip-rule="evenodd" />
@@ -95,52 +99,46 @@
                     </button>
 
                     <!-- Filter Dropdown Menu -->
-                    <div x-show="open" @click.away="open = false"
+                    <div x-show="filterMenuOpen" @click.away="filterMenuOpen = false"
                       class="absolute z-20  p-3 bg-white rounded-lg shadow dark:bg-gray-700">
 
                       <ul class="space-y-2 text-sm" aria-labelledby="dropdownDefault">
-
+                        <li class="flex items-center">
+                          <input id="remove-filters" type="radio" name="filter-radio"
+                            @click="removeFilters(); updateListDisplay()"
+                            class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500 dark:checked:bg-accent" />
+                          <label for="remove-filters"
+                            class="ml-2 text-sm font-medium whitespace-nowrap text-gray-900 dark:text-gray-100">
+                            All
+                          </label>
+                        </li>
                         <li class="flex items-center">
                           <input id="income-filter" type="radio" name="filter-radio"
-                            @click="filterIncome(); filterApplied = true"
+                            @click="filterIncome(); updateListDisplay()"
                             class=" filter w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500 dark:checked:bg-accent" />
                           <label for="income-filter" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">
                             Income
                           </label>
                         </li>
-
                         <li class="flex items-center">
                           <input id="expenses-filter" type="radio" name="filter-radio"
-                            @click="filterExpenses(); filterApplied = true"
+                            @click="filterExpenses(); updateListDisplay()"
                             class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500 dark:checked:bg-accent" />
                           <label for="expenses-filter"
                             class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">
                             Expense
                           </label>
                         </li>
-
                         <li class="flex items-center">
                           <input id="transfers-filter" type="radio" name="filter-radio"
-                            @click="filterTransfers(); filterApplied = true"
+                            @click="filterTransfers(); updateListDisplay()"
                             class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500 dark:checked:bg-accent" />
                           <label for="transfers-filter"
                             class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">
                             Transfer
                           </label>
                         </li>
-
-                        <li class="flex items-center">
-                          <input id="remove-filters" type="radio" name="filter-radio"
-                            @click="removeFilters(); filterApplied = false"
-                            class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500 dark:checked:bg-accent" />
-                          <label for="remove-filters"
-                            class="ml-2 text-sm font-medium whitespace-nowrap text-gray-900 dark:text-gray-100">
-                            Reset filters
-                          </label>
-                        </li>
-
                       </ul>
-
                     </div>
                   </div>
 
@@ -149,14 +147,14 @@
             </div>
           </caption>
 
-          <thead class=" bg-white dark:bg-gray-800 dark:text-gray-100">
+          <thead class=" bg-white font-semibold uppercase dark:bg-gray-800 dark:text-white">
             <tr>
-              <th class="w-6 p-3 text-sm font-semibold tracking-wide text-left">Type</th>
-              <th class="p-3 text-sm font-semibold tracking-wide text-left">Transaction</th>
-              <th class="w-24 p-3 text-sm font-semibold tracking-wide text-left">Category</th>
-              <th class="w-24 p-3 text-sm font-semibold tracking-wide text-left">Amount</th>
-              <th class="w-32 p-3 text-sm font-semibold tracking-wide text-left">Account</th>
-              <th class="w-32 p-3 text-sm font-semibold tracking-wide text-left">Date</th>
+              <th class="w-6 p-3 text-sm tracking-wide text-left">Type</th>
+              <th class="p-3 text-sm tracking-wide text-left">Transaction</th>
+              <th class="w-24 p-3 text-sm tracking-wide text-left">Category</th>
+              <th class="w-24 p-3 text-sm tracking-wide text-left">Amount</th>
+              <th class="w-32 p-3 text-sm tracking-wide text-left">Account</th>
+              <th class="w-32 p-3 text-sm tracking-wide text-left">Date</th>
             </tr>
           </thead>
 
@@ -216,15 +214,16 @@
           </tbody>
         </table>
 
+        <!-- Pagination -->
         <div
-          class="hidden px-4 py-2.5 text-xs font-semibold tracking-wide text-gray-800 uppercase  bg-gray-50 sm:grid-cols-9 dark:text-gray-200 dark:bg-gray-800 md:grid">
+          class="hidden px-4 py-2.5 text-xs font-semibold tracking-wide text-gray-800 uppercase bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800 md:grid">
           <span class="flex col-span-4 mt-2 sm:mt-auto sm:justify-start">
             <nav aria-label="Table navigation">
               <ul class="pagination inline-flex items-center space-x-1"></ul>
             </nav>
           </span>
           <span class="col-span-2"></span>
-          <span class="flex items-center col-span-3 justify-end"> Showing 0-10 of&nbsp;<span class="font-semibold dark:text-gray-200"><span x-text="transactionList.size()"></span> transactions</span> </span>
+          <span class="flex items-center col-span-3 justify-end font-semibold" x-html="listDisplay"></span>
         </div>
 
       </div>
@@ -235,7 +234,7 @@
         {% for tr in transactions %}
 
         <!-- Transaction Card -->
-        <div class="bg-white space-y-3 p-4 rounded-lg shadow">
+        <div class="bg-white space-y-3 p-4 rounded-lg shadow-lg dark:bg-gray-900 dark:text-white">
           <div class="flex items-center space-x-2 text-sm">
             <div>
               {% if tr.get_transaction_type_display == 'Income' %}

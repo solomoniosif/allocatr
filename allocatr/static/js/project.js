@@ -140,6 +140,8 @@ function getSelectedMonth() {
 
 window.allTransactionsList = function () {
     return {
+        sortMenuOpen: false,
+        filterMenuOpen: false,
         transactionList: new List('transactions-table', {
             valueNames: ['tr__type', 'tr__category', 'tr__title', 'tr__amount', 'tr__account', 'tr__date'],
             page: 10,
@@ -147,6 +149,7 @@ window.allTransactionsList = function () {
         }),
         activeFilter: false,
         filterIncome() {
+            this.activeFilter = true;
             this.transactionList.filter(function (tr) {
                 if (tr.values().tr__type.includes("#income-icon")) {
                     return true;
@@ -156,6 +159,7 @@ window.allTransactionsList = function () {
             });
         },
         filterExpenses() {
+            this.activeFilter = true;
             this.transactionList.filter(function (tr) {
                 if (tr.values().tr__type.includes("#expense-icon")) {
                     return true;
@@ -165,6 +169,7 @@ window.allTransactionsList = function () {
             });
         },
         filterTransfers() {
+            this.activeFilter = true;
             this.transactionList.filter(function (tr) {
                 if (tr.values().tr__type.includes("#transfer-icon")) {
                     return true;
@@ -174,11 +179,24 @@ window.allTransactionsList = function () {
             })
         },
         removeFilters() {
+            this.activeFilter = false;
             this.transactionList.filter();
         },
         searched: false,
         updateSearched() {
             this.searched = this.transactionList.searched;
-        }
+        },
+        listDisplay: "",
+        updateListDisplay() {
+            if (this.transactionList.searched || this.transactionList.filtered) {
+                let visible = this.transactionList.visibleItems.length;
+                let total = this.transactionList.matchingItems.length;
+                this.listDisplay = `Showing&nbsp;<span class="text-white font-bold">${visible}&nbsp;of&nbsp;${total}</span>&nbsp;filtered transactions`;
+            } else {
+                let visible = this.transactionList.visibleItems.length;
+                let total = this.transactionList.size();
+                this.listDisplay = `Showing&nbsp;<span class="text-white font-bold">${visible}&nbsp;of&nbsp;${total}</span>&nbsp;transactions`;
+            }
+        },
     }
 }
