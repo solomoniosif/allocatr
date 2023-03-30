@@ -81,9 +81,13 @@
 }
 
 li.active {
-    @apply rounded-full bg-accent text-center font-bold text-white dark:text-white;
+    @apply rounded-lg bg-accentLight text-center font-bold text-white dark:text-white;
 }
 
 .svg-icon {
     @apply inline-block h-6 w-6;
+}
+
+.pagination-pill {
+    @apply px-2 py-1 mx-1 rounded-lg bg-accentLight text-center font-bold text-white dark:text-white;
 }

@@ -24,7 +24,7 @@
               <div class="w-60">
                 <label for="simple-search" class="sr-only">Search</label>
                 <div class="relative w-full"
-                  :class="{'border-accent border rounded-lg shadow-accent shadow': searched }">
+                  :class="{'border-red-500 border rounded-lg shadow-red-500 shadow': searched }">
                   <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                     <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor"
                       viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -35,7 +35,7 @@
                   </div>
                   <input
                     class="search block w-full p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                    :class="{'shadow-accentLightest': searched }" placeholder="Search"
+                    :class="{'shadow-red-500': searched }" placeholder="Search"
                     @input.debounce.200ms="updateListDisplay(); updateSearched()">
                 </div>
               </div>
@@ -83,9 +83,9 @@
                   <div class="relative">
                     <button id="filterDropdownButton" @click="filterMenuOpen = !filterMenuOpen"
                       class="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg md:w-auto focus:outline-none hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
-                      :class="{'shadow-accent shadow border-accent': activeFilter }" type="button">
+                      :class="{'shadow-red-500 shadow border-red-500': activeFilter }" type="button">
                       <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="w-5 h-5 mr-2 text-gray-400"
-                        :class="{'fill-accent': activeFilter }" viewbox="0 0 20 20" fill="currentColor">
+                        :class="{'fill-red-500': activeFilter }" viewbox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd"
                           d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z"
                           clip-rule="evenodd" />

@@ -939,6 +939,11 @@ select {
   margin-right: -1.5rem;
 }
 
+.mx-1 {
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
+}
+
 .mx-auto {
   margin-left: auto;
   margin-right: auto;
@@ -1567,6 +1572,11 @@ select {
   border-color: rgb(209 213 219 / var(--tw-border-opacity));
 }
 
+.border-red-500 {
+  --tw-border-opacity: 1;
+  border-color: rgb(239 68 68 / var(--tw-border-opacity));
+}
+
 .border-transparent {
   border-color: transparent;
 }
@@ -1599,6 +1609,16 @@ select {
 .bg-gray-50 {
   --tw-bg-opacity: 1;
   background-color: rgb(249 250 251 / var(--tw-bg-opacity));
+}
+
+.bg-gray-600 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(75 85 99 / var(--tw-bg-opacity));
+}
+
+.bg-gray-700 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(55 65 81 / var(--tw-bg-opacity));
 }
 
 .bg-green-200 {
@@ -1641,10 +1661,6 @@ select {
 
 .bg-opacity-75 {
   --tw-bg-opacity: 0.75;
-}
-
-.fill-accent {
-  fill: #1c64f2;
 }
 
 .fill-blue-500 {
@@ -2077,18 +2093,13 @@ select {
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 
-.shadow-accent {
-  --tw-shadow-color: #1c64f2;
-  --tw-shadow: var(--tw-shadow-colored);
-}
-
-.shadow-accentLightest {
-  --tw-shadow-color: #76a9fa;
-  --tw-shadow: var(--tw-shadow-colored);
-}
-
 .shadow-gray-500 {
   --tw-shadow-color: #6b7280;
+  --tw-shadow: var(--tw-shadow-colored);
+}
+
+.shadow-red-500 {
+  --tw-shadow-color: #ef4444;
   --tw-shadow: var(--tw-shadow-colored);
 }
 
@@ -2517,9 +2528,9 @@ select {
 }
 
 li.active {
-  border-radius: 9999px;
+  border-radius: 0.5rem;
   --tw-bg-opacity: 1;
-  background-color: rgb(28 100 242 / var(--tw-bg-opacity));
+  background-color: rgb(63 131 248 / var(--tw-bg-opacity));
   text-align: center;
   font-weight: 700;
   --tw-text-opacity: 1;
@@ -2535,6 +2546,27 @@ li.active {
   display: inline-block;
   height: 1.5rem;
   width: 1.5rem;
+}
+
+.pagination-pill {
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
+  border-radius: 0.5rem;
+  --tw-bg-opacity: 1;
+  background-color: rgb(63 131 248 / var(--tw-bg-opacity));
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  text-align: center;
+  font-weight: 700;
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+:is(.dark .pagination-pill) {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
 .focus-within\:text-purple-500:focus-within {

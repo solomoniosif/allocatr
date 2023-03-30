@@ -191,11 +191,11 @@ window.allTransactionsList = function () {
             if (this.transactionList.searched || this.transactionList.filtered) {
                 let visible = this.transactionList.visibleItems.length;
                 let total = this.transactionList.matchingItems.length;
-                this.listDisplay = `Showing&nbsp;<span class="text-white font-bold">${visible}&nbsp;of&nbsp;${total}</span>&nbsp;filtered transactions`;
+                this.listDisplay = `Showing&nbsp;<span class="pagination-pill">${visible}&nbsp;of&nbsp;${total}</span>&nbsp;<span class="text-red-500">filtered</span>&nbsp;transactions`;
             } else {
                 let visible = this.transactionList.visibleItems.length;
                 let total = this.transactionList.size();
-                this.listDisplay = `Showing&nbsp;<span class="text-white font-bold">${visible}&nbsp;of&nbsp;${total}</span>&nbsp;transactions`;
+                this.listDisplay = `Showing&nbsp;<span class="pagination-pill">${visible}&nbsp;of&nbsp;${total}</span>&nbsp;transactions`;
             }
         },
     }
