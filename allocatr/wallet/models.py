@@ -185,7 +185,7 @@ class Category(TimeStampedUUIDModel):
         ordering = ["group", "name"]
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
     def save(self, *args, **kwargs):
         self.text_color = "white" if is_color_dark(self.color) else "black"
@@ -226,6 +226,9 @@ class Transaction(TimeStampedUUIDModel):
     notes = models.TextField(blank=True, null=True)
 
     objects = TransactionQuerySet.as_manager()
+
+    class Meta:
+        ordering = ["-date"]
 
     def get_absolute_url(self):
         return reverse("wallet:transaction-detail", kwargs={"pk": self.pk})
