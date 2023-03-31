@@ -4,7 +4,7 @@ from typing import Union
 from dateutil.relativedelta import relativedelta
 from django.contrib.auth import get_user_model
 
-from .models import Month
+from .models import Month, Transaction
 
 User = get_user_model()
 
@@ -41,3 +41,21 @@ def get_or_create_month(
         )
     current_month, _ = Month.objects.get_or_create(user=user, first_day=first_day)
     return current_month
+
+
+def set_transaction_complete(transaction):
+    """Saves a PlannedTransaction  object as a Transaction object,
+    than deletes the record from PlannedTransaction table"""
+    new_transaction = Transaction.objects.create(
+        title=transaction.title,
+        amount=transaction.amount,
+        date=transaction.date,
+        transaction_type=transaction.transaction_type,
+        category=transaction.category,
+        account=transaction.account,
+        notes=transaction.notes,
+    )
+    if new_transaction.pkid is not None:
+        transaction.is_completed = True
+        transaction.save()
+    return new_transaction
