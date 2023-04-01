@@ -141,7 +141,7 @@ class Account(TimeStampedUUIDModel):
         unique_together = (("name", "account_type"),)
 
     def __str__(self):
-        return f"{self.name.title()}"
+        return str(self.name)
 
     def save(self, *args, **kwargs):
         self.text_color = "white" if is_color_dark(self.color) else "black"
@@ -168,6 +168,13 @@ class Category(TimeStampedUUIDModel):
         max_length=2,
         choices=Group.choices,
         default=Group.EXPENSE,
+    )
+    parent = models.ForeignKey(
+        "self",
+        related_name="subcategories",
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
     )
     name = models.CharField(_("Name"), max_length=100)
     active = models.BooleanField(verbose_name=_("Active"), default=True)
