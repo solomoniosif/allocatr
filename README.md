@@ -21,7 +21,7 @@ License: MIT
 - Alpine JS 3.12
 - htmx 1.8.6
 - Charts.js 4.2.1
-- Tailwind CSS 3.2.7
+- Tailwind CSS 3.3.1
 - Sweetalert2 11.7.2
 - Coloris 0.18.0
 - PostgreSQL database
