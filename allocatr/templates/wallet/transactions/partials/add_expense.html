@@ -26,7 +26,8 @@
       <!-- Title -->
       <div class="w-full px-2">
         <label for="{{ form.title.id_for_label }}" class="input-label">{{ form.title.label }}</label>
-        {% render_field form.title class+="text-input" type="text" %}
+        {% render_field form.title class+="text-input" type="text" id="autoComplete" spellcheck=false autocorrect="off" autocomplete="off" autocapitalize="off" %}
+        <div id="title-autocomplete-container"></div>
         {% for error in form.title.errors %}<p class="text-red-500 text-xs italic">{{ error }}</p>{% endfor %}
       </div>
     </div>
@@ -72,6 +73,7 @@
       </div>
     </div>
 
+
     <footer class="flex items-center justify-end px-6 py-2 -mx-6 -mb-4 space-x-6 flex-row bg-white dark:bg-gray-800">
       <button @click="closeModal" class="secondaryBtn">Cancel</button>
       <button type="submit" class="primaryBtn">Add</button>
@@ -81,3 +83,46 @@
   {% endwith %}
 
 </div>
+
+<script>
+  if (typeof autoCompleteJS !== 'undefined') {
+    autoCompleteJS = new autoComplete({
+      placeHolder: "Expense title",
+      data: {
+        src: [{%for expense_title in expense_titles %} "{{ expense_title }}", {% endfor %}],
+        cache: true,
+      },
+      resultItem: {
+        highlight: true
+      },
+      events: {
+        input: {
+          selection: (event) => {
+            const selection = event.detail.selection.value;
+            autoCompleteJS.input.value = selection;
+          }
+        }
+      }
+    });
+  } else {
+    const autoCompleteJS = new autoComplete({
+      placeHolder: "Expense title",
+      data: {
+        src: [{%for expense_title in expense_titles %} "{{ expense_title }}", {% endfor %}],
+        cache: true,
+      },
+      resultItem: {
+        highlight: true
+      },
+      events: {
+        input: {
+          selection: (event) => {
+            const selection = event.detail.selection.value;
+            autoCompleteJS.input.value = selection;
+          }
+        }
+      }
+    });
+  }
+
+</script>

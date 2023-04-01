@@ -33,13 +33,13 @@ class TransactionQuerySet(models.QuerySet):
     def income(self):
         return self.filter(transaction_type="IN")
 
-    def expense(self):
+    def expenses(self):
         return self.filter(transaction_type="EX")
 
-    def transfer(self):
+    def transfers(self):
         return self.filter(transaction_type="TR")
 
-    def adjustment(self):
+    def adjustments(self):
         return self.filter(transaction_type="AD")
 
     def recurrent(self):

@@ -31,7 +31,8 @@ class CategoryListView(LoginRequiredMixin, ListView):
         day_or_month = self.request.GET.get("month", date.today())
         month = get_or_create_month(self.request.user, day_or_month)
         categories = {}
-        for category in context["category_list"]:
+        main_categories = self.get_queryset().filter(parent=None)
+        for category in main_categories:
             transactions = Transaction.objects.filter(
                 category=category,
                 date__gte=month.first_day,
@@ -41,6 +42,7 @@ class CategoryListView(LoginRequiredMixin, ListView):
                 categories[category.group].append(
                     {
                         "details": category,
+                        "subcategories": category.subcategories.all(),
                         "transactions": transactions,
                         "transactions_count": transactions.count(),
                         "total_amount": transactions.aggregate(Sum("amount")),

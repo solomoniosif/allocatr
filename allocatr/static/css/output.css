@@ -2559,6 +2559,82 @@ li.active {
   color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
+.autoComplete_wrapper {
+  position: relative;
+}
+
+.autoComplete_wrapper > ul {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: 2.75rem;
+  z-index: 50;
+  margin-top: 0.25rem;
+  width: 100%;
+  border-radius: 0.25rem;
+  --tw-bg-opacity: 1;
+  background-color: rgb(226 232 240 / var(--tw-bg-opacity));
+}
+
+:is(.dark .autoComplete_wrapper > ul) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(15 23 42 / var(--tw-bg-opacity));
+}
+
+.autoComplete_wrapper > ul > li {
+  margin: 0.125rem;
+  cursor: pointer;
+  overflow: hidden;
+  white-space: nowrap;
+  border-radius: 0.25rem;
+  padding: 0.5rem;
+  text-align: left;
+}
+
+.autoComplete_wrapper > ul > li mark {
+  background-color: transparent;
+  font-weight: 700;
+  --tw-text-opacity: 1;
+  color: rgb(28 100 242 / var(--tw-text-opacity));
+}
+
+.autoComplete_wrapper > ul[hidden],
+.autoComplete_wrapper > ul:empty {
+  display: block;
+  opacity: 0;
+  transform: scale(0);
+}
+
+.autoComplete_wrapper > ul > li mark::-moz-selection {
+  --tw-bg-opacity: 1;
+  background-color: rgb(241 245 249 / var(--tw-bg-opacity));
+}
+
+.autoComplete_wrapper > ul > li mark::selection {
+  --tw-bg-opacity: 1;
+  background-color: rgb(241 245 249 / var(--tw-bg-opacity));
+}
+
+:is(.dark .autoComplete_wrapper > ul > li mark::-moz-selection) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(51 65 85 / var(--tw-bg-opacity));
+}
+
+:is(.dark .autoComplete_wrapper > ul > li mark::selection) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(51 65 85 / var(--tw-bg-opacity));
+}
+
+.autoComplete_wrapper > ul > li[aria-selected='true'] {
+  --tw-bg-opacity: 1;
+  background-color: rgb(203 213 225 / var(--tw-bg-opacity));
+}
+
+:is(.dark .autoComplete_wrapper > ul > li[aria-selected='true']) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(30 41 59 / var(--tw-bg-opacity));
+}
+
 .focus-within\:text-purple-500:focus-within {
   --tw-text-opacity: 1;
   color: rgb(168 85 247 / var(--tw-text-opacity));

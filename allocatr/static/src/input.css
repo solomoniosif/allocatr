@@ -89,5 +89,36 @@ li.active {
 }
 
 .pagination-pill {
-    @apply px-2 py-1 mx-1 rounded-lg bg-accentLight text-center font-bold text-white dark:text-white;
+    @apply mx-1 rounded-lg bg-accentLight px-2 py-1 text-center font-bold text-white dark:text-white;
+}
+
+.autoComplete_wrapper {
+    @apply relative;
+}
+
+.autoComplete_wrapper > ul {
+    @apply absolute left-0 right-0 top-11 z-50 mt-1 w-full rounded bg-slate-200 dark:bg-slate-900;
+}
+
+.autoComplete_wrapper > ul > li {
+    @apply m-0.5 cursor-pointer overflow-hidden whitespace-nowrap rounded p-2 text-left;
+}
+
+.autoComplete_wrapper > ul > li mark {
+    @apply bg-transparent font-bold text-accent;
+}
+
+.autoComplete_wrapper > ul[hidden],
+.autoComplete_wrapper > ul:empty {
+    display: block;
+    opacity: 0;
+    transform: scale(0);
+}
+
+.autoComplete_wrapper > ul > li mark::selection {
+    @apply bg-slate-100  dark:bg-slate-700;
+}
+
+.autoComplete_wrapper > ul > li[aria-selected='true'] {
+    @apply bg-slate-300 dark:bg-slate-800;
 }

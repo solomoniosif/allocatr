@@ -91,6 +91,15 @@ class ExpenseCreateView(LoginRequiredMixin, CreateView):
     form_class = ExpenseForm
     template_name = "wallet/transactions/partials/add_expense.html"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        prvious_expenses = Transaction.objects.expenses()
+        expense_titles = [expense.title for expense in prvious_expenses]
+        print(expense_titles)
+        print(type(expense_titles))
+        context["expense_titles"] = expense_titles
+        return context
+
     def form_valid(self, form):
         self.object = form.save()  # noqa
         return HttpResponse(
