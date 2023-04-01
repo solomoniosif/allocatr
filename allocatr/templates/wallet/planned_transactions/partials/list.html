@@ -160,7 +160,7 @@
 
             <!-- Transaction Rows -->
             {% for tr in planned_transactions %}
-            <tr hx-get="{% url 'wallet:transaction_detail' tr.pk %}" hx-target="#modal" hx-trigger="click"
+            <tr hx-get="{% url 'wallet:planned_transaction_detail' tr.pk %}" hx-target="#modal" hx-trigger="click"
               @click="openModal"
               class="py-1 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 bg-gray-100 dark:bg-gray-900">
 

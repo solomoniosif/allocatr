@@ -1,0 +1,81 @@
+<!-- Modal Header -->
+<header class="flex justify-between mt-2">
+  <h1 class="text-2xl font-thin text-gray-700 dark:text-gray-200">{{ planned_transaction.title }}</h1>
+  <button
+    class="inline-flex items-center justify-center w-6 h-6 text-gray-400 transition-colors duration-150 rounded dark:hover:text-gray-200 hover: hover:text-gray-700 focus:outline-none"
+    aria-label="close" @click="closeModal">
+    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" role="img" aria-hidden="true">
+      <path
+        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+        clip-rule="evenodd" fill-rule="evenodd"></path>
+    </svg>
+  </button>
+</header>
+
+<!-- Modal body -->
+<div class="px-1 py-6 space-y-4 max-w-xl text-gray-900 dark:text-white">
+  <dl class="grid grid-cols-6 gap-6">
+
+    <div class="col-span-6 sm:col-span-3">
+      {% if planned_transaction.get_transaction_type_display == 'Income' %}
+      <dd class="text-xl font-semibold text-green-600">
+        <i class="bi bi-arrow-up-right"></i> lei {{ planned_transaction.amount|floatformat:0 }}
+      </dd>
+
+      {% elif planned_transaction.get_transaction_type_display == 'Expense' %}
+      <dd class="text-xl font-semibold text-red-600">
+        <i class="bi bi-arrow-down-right"></i> lei {{ planned_transaction.amount|floatformat:0 }}
+      </dd>
+      {% endif %}
+    </div>
+
+    <div class="col-span-6 sm:col-span-3">
+      <dd class="text-lg font-semibold">{{ planned_transaction.date|date:"d M Y" }}</dd>
+    </div>
+
+    <div class="col-span-6 sm:col-span-3">
+      <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Account</dt>
+      <dd class="text-lg font-semibold">
+        <span class="px-2 py-1 font-semibold leading-tight rounded-lg"
+          style="background-color: {{ planned_transaction.account.color }}; color: {{ planned_transaction.account.text_color }}">
+          {{ planned_transaction.account }}
+        </span>
+      </dd>
+    </div>
+
+    <div class="col-span-6 sm:col-span-3">
+      <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Category</dt>
+      <dd class="text-lg font-semibold">
+        <span class="px-2 py-1 rounded-lg"
+          style="background-color: {{ planned_transaction.category.color }}; color: {{ planned_transaction.category.text_color }}; opacity: 0.8;">
+          {{ planned_transaction.category }}
+        </span>
+      </dd>
+    </div>
+
+  </dl>
+</div>
+
+
+<!-- Modal Footer -->
+<footer class="flex items-center justify-end px-6 pt-2 pb-4 -mx-6 -mb-2 space-x-6 flex-row bg-white dark:bg-gray-800">
+  <button hx-post="{% url 'wallet:delete_planned_transaction' planned_transaction.pk %}" hx-trigger="isConfirmed"
+    @click="twSwal.fire({title: 'Are you sure?', text:'This transaction will be deleted! You will not be able to revert this!', icon: 'warning', showConfirmButton: true, showCancelButton: true, confirmButtonText: 'Yes, delete it!'}).then(result => {if (result.isConfirmed) {$dispatch('isConfirmed')}})"
+    @show-message="successToast.fire({title: $event.detail.value})" class="redBtn">
+    Delete
+  </button>
+
+  {% if planned_transaction.get_transaction_type_display == 'Income' %}
+  <button hx-get="{% url 'wallet:edit_income' pk=planned_transaction.pk %}" hx-trigger="click" hx-target="#modal"
+    class="primaryBtn">
+    Edit planned income
+  </button>
+
+  {% elif planned_transaction.get_transaction_type_display == 'Expense' %}
+  <button hx-get="{% url 'wallet:edit_expense' pk=planned_transaction.pk %}" hx-trigger="click" hx-target="#modal"
+    class="primaryBtn">
+    Edit planned expense
+  </button>
+  {% endif %}
+
+</footer>

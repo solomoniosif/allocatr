@@ -64,6 +64,11 @@ urlpatterns = [
         name="planned_transactions",
     ),
     path(
+        "transactions/planned/<int:pk>/",
+        views.PlannedTransactionDetailView.as_view(),
+        name="planned_transaction_detail",
+    ),
+    path(
         "transactions/planned/expenses/add/",
         views.PlannedExpenseCreateView.as_view(),
         name="add_planned_expense",
@@ -72,6 +77,11 @@ urlpatterns = [
         "transactions/planned/income/add/",
         views.PlannedIncomeCreateView.as_view(),
         name="add_planned_income",
+    ),
+    path(
+        "transactions/planned/<int:pk>/delete/",
+        views.PlannedTransactionDeleteView.as_view(),
+        name="delete_planned_transaction",
     ),
     # Account Views
     path("accounts/", views.AccountListView.as_view(), name="accounts"),
