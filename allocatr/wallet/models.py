@@ -192,7 +192,7 @@ class Category(TimeStampedUUIDModel):
         ordering = ["group", "name"]
 
     def __str__(self):
-        return str(self.name)
+        return str(self.name) if not self.parent else f"⤷ {self.name}"
 
     def save(self, *args, **kwargs):
         self.text_color = "white" if is_color_dark(self.color) else "black"
