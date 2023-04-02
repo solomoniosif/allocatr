@@ -41,6 +41,7 @@ class UserSettings(models.Model):
     currency = models.CharField(
         max_length=3, choices=Currency.choices, default=Currency.USD
     )
+    show_decimal_places = models.BooleanField(default=True)
     start_day_of_month = models.PositiveSmallIntegerField(
         default=1,
         validators=[
