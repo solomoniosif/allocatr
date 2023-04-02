@@ -4,7 +4,7 @@
 
 <section id="budgets" hx-get="{% url 'wallet:accounts' %}"
   hx-trigger="accounts-changed from:body, transactions-changed from:body, month-selected from:body"
-  hx-target="#dashboard-main" hx-vals='js:{month: getSelectedMonth()}' class="h-full overflow-y-auto">
+  hx-target="#dashboard-main" hx-vals='js:{month: getSelectedMonth()}' class="overflow-y-auto">
   <div class="container px-6 mx-auto">
     <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">Your budgets</h2>
 

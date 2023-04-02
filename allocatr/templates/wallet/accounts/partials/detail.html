@@ -3,16 +3,15 @@
 </head>
 
 <main hx-get="{% url 'wallet:account_detail' account.pk %}" hx-trigger="transactions-changed from:body"
-  hx-target="#dashboard-main" hx-vals='js:{month: getSelectedMonth()}' hx-replace-url="true"
-  class="h-full overflow-y-auto">
-  <div class="container px-6 mx-auto bg-gray-200 dark:bg-gray-900">
+  hx-target="#dashboard-main" hx-vals='js:{month: getSelectedMonth()}' hx-replace-url="true" class="overflow-y-auto">
+  <div class="container px-6 mx-auto bg-gray-200 dark:bg-gray-950">
     <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">{{ account.name|title }}</h2>
 
     <!-- Account Stats Card -->
     <div class="grid gap-6 mb-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
 
       <div
-        class="flex items-center p-4 bg-white rounded-lg shadow-lg shadow-gray-500 md:max-w-xs dark:bg-gray-800 dark:shadow-gray-700"
+        class="flex items-center p-4 bg-white rounded-lg shadow-lg shadow-gray-500 md:max-w-xs dark:bg-gray-900 dark:shadow-gray-700"
         style="background-color: {{ account.color }}; color: {{ account.text_color }}">
         <div>
           <p class="mb-2 text-xl text-center font-medium text-gray-600 dark:text-gray-400"
@@ -65,6 +64,7 @@
       </div>
 
     </div>
+
 
     <div class="flex flex-wrap flex-row">
       <!-- Transactions Table -->
@@ -125,49 +125,5 @@
         </table>
       </div>
 
-      <div class="w-1/2 p-5 mb-10">
-        <canvas id="expenses-pie-chart"></canvas>
-      </div>
-
-
     </div>
   </div>
-
-  <script>
-    const expenses = {
-      {
-        expenses | safe
-      }
-    };
-    const amounts = {
-      {
-        expenses_amounts | safe
-      }
-    };
-    const config = {
-      type: 'doughnut',
-      data: {
-        labels: expenses,
-        datasets: [{
-          label: 'Account Expenses',
-          data: amounts,
-          backgroundColor: {
-            {
-              expense_colors | safe
-            }
-          }
-        }],
-      },
-      options: {
-        plugins: {
-          legend: {
-            display: false
-          }
-        }
-      }
-    };
-
-    const ctx = document.getElementById('expenses-pie-chart').getContext('2d');
-    window.myPie = new Chart(ctx, config);
-
-  </script>
