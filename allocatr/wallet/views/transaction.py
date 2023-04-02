@@ -70,6 +70,13 @@ class IncomeCreateView(LoginRequiredMixin, CreateView):
     form_class = IncomeForm
     template_name = "wallet/transactions/partials/add_income.html"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        previous_income = Transaction.objects.income()
+        income_titles = list(set([income.title for income in previous_income]))
+        context["income_titles"] = income_titles
+        return context
+
     def form_valid(self, form):
         self.object = form.save()  # noqa
         return HttpResponse(
@@ -93,10 +100,8 @@ class ExpenseCreateView(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        prvious_expenses = Transaction.objects.expenses()
-        expense_titles = [expense.title for expense in prvious_expenses]
-        print(expense_titles)
-        print(type(expense_titles))
+        previous_expenses = Transaction.objects.expenses()
+        expense_titles = list(set([expense.title for expense in previous_expenses]))
         context["expense_titles"] = expense_titles
         return context
 
