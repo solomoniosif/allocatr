@@ -189,7 +189,10 @@ class Category(TimeStampedUUIDModel):
 
     class Meta:
         verbose_name_plural = _("Categories")
-        ordering = ["group", "name"]
+        ordering = ["group", "parent__id", "id"]
+
+    def get_subcategories(self):
+        return Category.objects.filter(parent=self).order_by("id")
 
     def __str__(self):
         return str(self.name) if not self.parent else f"⤷ {self.name}"

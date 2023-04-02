@@ -36,7 +36,23 @@ class AccountAdmin(admin.ModelAdmin):
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ("name", "user", "group")
+    list_display = ("__str__", "parent", "group", "get_hierarchy")
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.order_by("parent__id", "id")
+
+    def get_hierarchy(self, obj):
+        hierarchy = obj.name
+        level = 0
+        while obj.parent:
+            level += 1
+            obj = obj.parent
+            hierarchy = obj.name + " » " + hierarchy
+        return hierarchy
+
+    get_hierarchy.short_description = "Hierarchy"
+    get_hierarchy.admin_order_field = "parent__name"
 
 
 @admin.register(Transaction)
