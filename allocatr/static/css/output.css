@@ -3110,6 +3110,10 @@ li.active {
     margin-top: 0px;
   }
 
+  .md\:ml-64 {
+    margin-left: 16rem;
+  }
+
   .md\:block {
     display: block;
   }
