@@ -1,7 +1,7 @@
 from django import forms
 from django.utils import timezone
 
-from .models import Account, Category, PlannedTransaction, Transaction
+from .models import Account, Budget, Category, PlannedTransaction, Transaction
 
 
 class IncomeForm(forms.ModelForm):
@@ -169,3 +169,15 @@ class PlannedExpenseForm(forms.ModelForm):
         self.fields["transaction_type"].initial = "EX"
         self.fields["transaction_type"].widget = forms.HiddenInput()
         self.fields["date"].initial = timezone.now()
+
+
+class BudgetForm(forms.ModelForm):
+    class Meta:
+        model = Budget
+        fields = {
+            "name",
+            "budgeted_amount",
+            "category",
+            "month",
+            "is_master",
+        }

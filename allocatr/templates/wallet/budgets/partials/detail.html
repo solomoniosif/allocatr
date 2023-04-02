@@ -1,0 +1,10 @@
+<head>
+  <title>allocatr | {{ budget.name|title }}</title>
+</head>
+
+<section hx-get="{% url 'wallet:budget_detail' budget.pk %}"
+  hx-trigger="transactions-changed from:body budgets-changed from:body" hx-target="#dashboard-main"
+  hx-vals='js:{month: getSelectedMonth()}' hx-replace-url="true" class="overflow-y-auto">
+
+  <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">{{ budget.name|title }}</h2>
+</section>

@@ -1,0 +1,30 @@
+<head>
+  <title>allocatr | Budgets</title>
+</head>
+
+<section id="budgets" hx-get="{% url 'wallet:budgets' %}"
+  hx-trigger="accounts-changed from:body, transactions-changed from:body, month-selected from:body"
+  hx-target="#dashboard-main" hx-vals='js:{month: getSelectedMonth()}' class="overflow-y-auto">
+  <div class="container px-6 mx-auto">
+    <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">Your budgets</h2>
+
+    <div class="flex flex-wrap flex-row">
+
+      {% for budget in budgets %}
+      <div class="bg-gray-300 dark:bg-slate-800 p-6 m-3 text-gray-900 rounded-lg dark:text-white w-full cursor-pointer"
+        hx-get="{% url 'wallet:budget_detail' budget.pk %}" hx-trigger="click" hx-target="#dashboard-main"
+        hx-vals='js:{month: getSelectedMonth()}' hx-replace-url="/budgets/{{budget.pk}}/">
+
+        <p class="text-2xl font-bold uppercase"> {{ budget.name }} </p>
+
+        <p> {{ budget.category }} </p>
+        <p> {{ budget.budgeted_amount }} </p>
+        <p> {{ budget.month }} </p>
+
+      </div>
+      {% endfor %}
+
+    </div>
+
+  </div>
+</section>

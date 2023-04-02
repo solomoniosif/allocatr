@@ -121,6 +121,8 @@ class AccountCreateView(LoginRequiredMixin, CreateView):
     model = Account
     form_class = AccountForm
     template_name = "wallet/accounts/partials/add_account.html"
+    context_object_name = "account"
+    success_url = None
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -136,15 +138,6 @@ class AccountCreateView(LoginRequiredMixin, CreateView):
                     }
                 )
             },
-        )
-
-    def form_invalid(self, form):
-        print("Form invalid")
-        print(form.errors)
-        super().form_invalid(form)
-        return HttpResponse(
-            form.errors,
-            status=400,
         )
 
 
