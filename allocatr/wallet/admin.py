@@ -63,4 +63,4 @@ class PlannedTransactionAdmin(admin.ModelAdmin):
 @admin.register(Budget)
 class BudgetAdmin(admin.ModelAdmin):
     list_display = ("name", "user", "month", "budgeted_amount")
-    list_filter = ("user", "month", "categories")
+    list_filter = ("user", "month", "category")

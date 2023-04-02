@@ -438,11 +438,32 @@ class Budget(TimeStampedUUIDModel):
     budgeted_amount = models.DecimalField(
         verbose_name=_("Budgeted mount"), max_digits=10, decimal_places=2
     )
-    categories = models.ManyToManyField(Category, related_name="budgets")
+    # categories = models.ManyToManyField(Category, )
+    category = models.ForeignKey(
+        Category,
+        related_name="budgets",
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+    )
     month = models.ForeignKey(
         Month, verbose_name=_("Month"), related_name="budgets", on_delete=models.CASCADE
     )
     is_master = models.BooleanField(default=False)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["category", "month"],
+                condition=models.Q(is_master=False),
+                name="unique_category_month",
+            ),
+            models.UniqueConstraint(
+                fields=["month"],
+                condition=models.Q(is_master=True),
+                name="unique_master_month",
+            ),
+        ]
 
     def __str__(self):
         return self.name
