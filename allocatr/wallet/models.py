@@ -437,7 +437,9 @@ class Budget(TimeStampedUUIDModel):
     user = models.ForeignKey(
         User, verbose_name=_("User"), related_name="budgets", on_delete=models.CASCADE
     )
-    name = models.CharField(verbose_name=_("Name"), max_length=150)
+    name = models.CharField(
+        verbose_name=_("Name"), max_length=150, blank=True, null=True
+    )
     budgeted_amount = models.DecimalField(
         verbose_name=_("Budgeted mount"), max_digits=10, decimal_places=2
     )
@@ -470,3 +472,16 @@ class Budget(TimeStampedUUIDModel):
 
     def __str__(self):
         return self.name
+
+    def clean(self):
+        if self.category and self.is_master:
+            raise ValidationError(
+                "You cannot select both a category and set is_master to True."
+            )
+
+    def save(self, *args, **kwargs):
+        if not self.name:
+            if self.category:
+                self.name = f"{self.category.name} budget for {self.month}"
+            else:
+                self.name = f"Master budget for {self.month}"
