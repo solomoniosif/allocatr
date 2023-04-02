@@ -134,7 +134,7 @@ class AccountCreateView(LoginRequiredMixin, CreateView):
                     {
                         "account-created": None,
                         "accounts-changed": None,
-                        "show-message": f"{form.instance.name.upper()} created",
+                        "show-message": f"Account {form.instance.name} created",
                     }
                 )
             },
@@ -155,7 +155,7 @@ class AccountUpdateView(LoginRequiredMixin, UpdateView):
                 {
                     "account-edited": None,
                     "accounts-changed": None,
-                    "show-message": f"{form.instance.name.upper()} updated",
+                    "show-message": f"Account {form.instance.name} updated",
                 }
             )
         }
@@ -174,7 +174,7 @@ class AccountDeleteView(LoginRequiredMixin, RequirePostMixin, DeleteView):
                 {
                     "account-deleted": None,
                     "accounts-changed": None,
-                    "show-message": f"{name.upper()} deleted",
+                    "show-message": f"{name} deleted",
                 }
             )
         }

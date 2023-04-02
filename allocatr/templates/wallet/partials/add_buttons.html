@@ -99,7 +99,7 @@
 
 <!-- Add Budget -->
 <li x-show="ctx.budgetsContext" class="flex rounded-md bg-white text-gray-800 dark:bg-gray-800 dark:text-white">
-  <button hx-get="#" hx-trigger="click" hx-target="#modal" @click="openAddTransactionModal"
+  <button hx-get="{% url 'wallet:add_budget' %}" hx-trigger="click" hx-target="#modal" @click="openAddTransactionModal"
     class="inline-flex items-center w-full px-4 py-2 md:py-1 text-xl md:text-lg font-semibold transition-colors duration-150 rounded-md shadow-md group hover:bg-accent hover:text-white">
     <svg class="w-5 md:w-4 h-5 md:h-4 mr-4 text-purple-600 group-hover:text-purple-500" fill="none"
       stroke="currentColor" stroke-width="3.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"

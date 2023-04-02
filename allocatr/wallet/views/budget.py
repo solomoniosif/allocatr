@@ -5,6 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
 from django.views.generic import CreateView, DetailView, ListView
 
+from ..forms import BudgetForm
 from ..models import Budget, Transaction
 from ..services import get_or_create_month
 
@@ -57,8 +58,8 @@ class BudgetDetailView(LoginRequiredMixin, DetailView):
 
 class BudgetCreateView(LoginRequiredMixin, CreateView):
     model = Budget
-    # form_class = BudgetForm
-    template_name = "wallet/budgets/partials/add_form.html"
+    form_class = BudgetForm
+    template_name = "wallet/budgets/partials/add_budget.html"
     context_object_name = "budget"
     success_url = None
 
@@ -70,9 +71,9 @@ class BudgetCreateView(LoginRequiredMixin, CreateView):
             headers={
                 "HX-Trigger": json.dumps(
                     {
-                        "account-created": None,
-                        "accounts-changed": None,
-                        "show-message": f"{form.instance.name.upper()} created",
+                        "budget-created": None,
+                        "budgets-changed": None,
+                        "show-message": f"Budget {form.instance.name} created",
                     }
                 )
             },
