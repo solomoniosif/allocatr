@@ -8,23 +8,37 @@
   <div class="container px-6 mx-auto">
     <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">Your budgets</h2>
 
-    <div class="flex flex-wrap flex-row">
-
-      {% for budget in budgets %}
-      <div class="bg-gray-300 dark:bg-slate-800 p-6 m-3 text-gray-900 rounded-lg dark:text-white w-full cursor-pointer"
-        hx-get="{% url 'wallet:budget_detail' budget.pk %}" hx-trigger="click" hx-target="#dashboard-main"
-        hx-vals='js:{month: getSelectedMonth()}' hx-replace-url="/budgets/{{budget.pk}}/">
-
-        <p class="text-2xl font-bold uppercase"> {{ budget.name }} </p>
-
-        <p> {{ budget.category }} </p>
-        <p> {{ budget.budgeted_amount }} </p>
-        <p> {{ budget.month }} </p>
-
-      </div>
-      {% endfor %}
-
+    <div class="dark:bg-slate-700 p-3 rounded-lg">
+      <div hx-get="{% url 'wallet:master_budget_partial' %}"
+        hx-trigger="load, transactions-changed from:body, month-selected from:body" hx-target="this"
+        hx-vals="js:{month: getSelectedMonth()}"></div>
     </div>
 
-  </div>
+    <div class="flex flex-row space-x-4">
+
+      {% for budget in budgets  %}
+      {% if not budget.is_master %}
+      <div class="w-1/2 bg-transparent">
+        <div class="mt-4 bg-gray-300 dark:bg-slate-800 p-6 text-gray-900 rounded-lg dark:text-white cursor-pointer"
+          hx-get="{% url 'wallet:budget_detail' budget.pk %}" hx-trigger="click" hx-target="#dashboard-main"
+          hx-vals='js:{month: getSelectedMonth()}' hx-replace-url="/budgets/{{budget.pk}}/">
+
+          <p class="text-2xl font-bold uppercase"> {{ budget.name }} </p>
+
+          <p> {{ budget.category }} </p>
+          <p> {{ budget.budgeted_amount }} </p>
+          <p> {{ budget.month }} </p>
+          <div class="w-full bg-gray-200 rounded-full dark:bg-gray-700">
+            <div class="text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full"
+              style="width: 45%; background-color: {{ budget.category.color }}"> 45%</div>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+      {% endfor %}
+
+
+
+
+    </div>
 </section>

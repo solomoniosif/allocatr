@@ -3,7 +3,7 @@ from datetime import date
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
-from django.views.generic import CreateView, DetailView, ListView
+from django.views.generic import CreateView, DetailView, ListView, TemplateView
 
 from ..forms import BudgetForm
 from ..models import Budget, Transaction
@@ -16,7 +16,9 @@ class BudgetListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self, **kwargs):
         qs = super().get_queryset(**kwargs)
-        return qs.filter(user=self.request.user)
+        day_or_month = self.request.GET.get("month", date.today())
+        month = get_or_create_month(self.request.user, day_or_month)
+        return qs.filter(user=self.request.user, month=month)
 
     def get_template_names(self):
         if self.request.headers.get("HX-Request"):
@@ -54,6 +56,24 @@ class BudgetDetailView(LoginRequiredMixin, DetailView):
             )
         context["transactions"] = transactions
         return context
+
+
+class MasterBudgetPartialView(LoginRequiredMixin, TemplateView):
+    template_name = "wallet/budgets/partials/master_budget_partial.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        day_or_month = self.request.GET.get("month", date.today())
+        month = get_or_create_month(self.request.user, day_or_month)
+        master_budget, _ = Budget.objects.get_or_create(
+            user=self.request.user, is_master=True, month=month
+        )
+        context["master_budget"] = master_budget
+        return context
+
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        return self.render_to_response(context)
 
 
 class BudgetCreateView(LoginRequiredMixin, CreateView):
