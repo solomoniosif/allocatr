@@ -3,7 +3,7 @@
 <!-- Modal Header -->
 <header class="flex justify-between pt-2">
   <h1 class="text-2xl font-bold text-gray-700 dark:text-gray-200">Edit
-    <span class="font-thin">{{ expense.title }}</span></h1>
+    <span class="font-thin">{{ planned_expense.title }}</span></h1>
   <button
     class="inline-flex items-center justify-center w-6 h-6 text-gray-400 transition-colors duration-150 rounded dark:hover:text-gray-200 hover: hover:text-gray-700 focus:outline-none"
     aria-label="close" @click="closeModal">
@@ -18,9 +18,9 @@
 <div class="px-1 py-6 space-y-3 max-w-xl text-gray-900 dark:text-white">
 
   {% with WIDGET_ERROR_CLASS='is-invalid' %}
-  <form class="w-full" hx-post="{% url 'wallet:edit_expense' expense.pk %}"
+  <form class="w-full" hx-post="{% url 'wallet:edit_planned_expense' planned_expense.pk %}"
     hx-headers='{"X-CSRFToken":"{{ csrf_token }}"}' x-data="{ transactionIsPlanned: $refs.selectIsPlanned.checked }"
-    @show-message="successToast.fire({title: $event.detail.value})" @expense-edited="closeModal">
+    @show-message="successToast.fire({title: $event.detail.value})" @planned-expense-updated="closeModal">
     {% for hidden in form.hidden_fields %} {{ hidden }} {% endfor %}
 
     <div class="text-3xl font-bold text-white" x-text="transactionIsPlanned"></div>

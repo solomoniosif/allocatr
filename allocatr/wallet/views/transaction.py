@@ -3,23 +3,25 @@ from datetime import date
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
-from django.views.generic import (
-    CreateView,
-    DeleteView,
-    DetailView,
-    ListView,
-    UpdateView,
-)
 
 from ..forms import ExpenseForm, IncomeForm, TransferForm
-from ..mixins import RequirePostMixin
+from ..htmx_views import (
+    HtmxListView,
+    HtmxOnlyCreateView,
+    HtmxOnlyDeleteView,
+    HtmxOnlyDetailView,
+    HtmxOnlyListView,
+    HtmxOnlyUpdateView,
+)
 from ..models import Transaction, UserSettings
 from ..services import get_or_create_month
 
 
-class TransactionListView(LoginRequiredMixin, ListView):
+class TransactionListView(LoginRequiredMixin, HtmxListView):
     model = Transaction
     context_object_name = "transactions"
+    htmx_template_name = "wallet/transactions/partials/list.html"
+    template_name = "wallet/transactions/transaction_list.html"
 
     def get_queryset(self, **kwargs):
         qs = super().get_queryset(**kwargs)
@@ -37,13 +39,8 @@ class TransactionListView(LoginRequiredMixin, ListView):
         context["user_settings"] = user_settings
         return context
 
-    def get_template_names(self):
-        if self.request.headers.get("HX-Request"):
-            return "wallet/transactions/partials/list.html"
-        return "wallet/transactions/transaction_list.html"
 
-
-class TransactionPartialListView(LoginRequiredMixin, ListView):
+class TransactionPartialListView(LoginRequiredMixin, HtmxOnlyListView):
     model = Transaction
     context_object_name = "transactions"
     template_name = "wallet/transactions/partials/all_transactions_list_partial.html"
@@ -59,13 +56,13 @@ class TransactionPartialListView(LoginRequiredMixin, ListView):
         )
 
 
-class TransactionDetailView(LoginRequiredMixin, DetailView):
+class TransactionDetailView(LoginRequiredMixin, HtmxOnlyDetailView):
     model = Transaction
     context_object_name = "transaction"
     template_name = "wallet/transactions/partials/detail.html"
 
 
-class IncomeCreateView(LoginRequiredMixin, CreateView):
+class IncomeCreateView(LoginRequiredMixin, HtmxOnlyCreateView):
     model = Transaction
     form_class = IncomeForm
     template_name = "wallet/transactions/partials/add_income.html"
@@ -93,7 +90,7 @@ class IncomeCreateView(LoginRequiredMixin, CreateView):
         )
 
 
-class ExpenseCreateView(LoginRequiredMixin, CreateView):
+class ExpenseCreateView(LoginRequiredMixin, HtmxOnlyCreateView):
     model = Transaction
     form_class = ExpenseForm
     template_name = "wallet/transactions/partials/add_expense.html"
@@ -121,7 +118,7 @@ class ExpenseCreateView(LoginRequiredMixin, CreateView):
         )
 
 
-class TransferCreateView(LoginRequiredMixin, CreateView):
+class TransferCreateView(LoginRequiredMixin, HtmxOnlyCreateView):
     model = Transaction
     form_class = TransferForm
     template_name = "wallet/transactions/partials/add_transfer.html"
@@ -142,12 +139,11 @@ class TransferCreateView(LoginRequiredMixin, CreateView):
         )
 
 
-class IncomeUpdateView(LoginRequiredMixin, UpdateView):
+class IncomeUpdateView(LoginRequiredMixin, HtmxOnlyUpdateView):
     model = Transaction
     form_class = IncomeForm
     context_object_name = "income"
     template_name = "wallet/transactions/partials/update_income.html"
-    success_url = None
 
     def form_valid(self, form):
         self.object = form.save()  # noqa
@@ -163,12 +159,11 @@ class IncomeUpdateView(LoginRequiredMixin, UpdateView):
         return HttpResponse(status=204, headers=headers)
 
 
-class ExpenseUpdateView(LoginRequiredMixin, UpdateView):
+class ExpenseUpdateView(LoginRequiredMixin, HtmxOnlyUpdateView):
     model = Transaction
     form_class = ExpenseForm
     context_object_name = "expense"
     template_name = "wallet/transactions/partials/update_expense.html"
-    success_url = None
 
     def form_valid(self, form):
         self.object = form.save()  # noqa
@@ -184,12 +179,11 @@ class ExpenseUpdateView(LoginRequiredMixin, UpdateView):
         return HttpResponse(status=204, headers=headers)
 
 
-class TransferUpdateView(LoginRequiredMixin, UpdateView):
+class TransferUpdateView(LoginRequiredMixin, HtmxOnlyUpdateView):
     model = Transaction
     form_class = TransferForm
     context_object_name = "transfer"
     template_name = "wallet/transactions/partials/update_transfer.html"
-    success_url = None
 
     def form_valid(self, form):
         self.object = form.save()  # noqa
@@ -205,9 +199,8 @@ class TransferUpdateView(LoginRequiredMixin, UpdateView):
         return HttpResponse(status=204, headers=headers)
 
 
-class TransactionDeleteView(LoginRequiredMixin, RequirePostMixin, DeleteView):
+class TransactionDeleteView(LoginRequiredMixin, HtmxOnlyDeleteView):
     model = Transaction
-    success_url = None
 
     def form_valid(self, form):
         title = self.object.title

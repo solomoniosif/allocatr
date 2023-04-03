@@ -3,23 +3,24 @@ from datetime import date
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
-from django.views.generic import (
-    CreateView,
-    DeleteView,
-    DetailView,
-    ListView,
-    UpdateView,
-)
 
 from ..forms import PlannedExpenseForm, PlannedIncomeForm
-from ..mixins import RequirePostMixin
+from ..htmx_views import (
+    HtmxListView,
+    HtmxOnlyCreateView,
+    HtmxOnlyDeleteView,
+    HtmxOnlyDetailView,
+    HtmxOnlyUpdateView,
+)
 from ..models import PlannedTransaction, UserSettings
 from ..services import get_or_create_month
 
 
-class PlannedTransactionListView(LoginRequiredMixin, ListView):
+class PlannedTransactionListView(LoginRequiredMixin, HtmxListView):
     model = PlannedTransaction
     context_object_name = "planned_transactions"
+    htmx_template_name = "wallet/planned_transactions/partials/list.html"
+    template_name = "wallet/planned_transactions/plannedtransaction_list.html"
 
     def get_queryset(self):
         qs = super().get_queryset()
@@ -37,19 +38,14 @@ class PlannedTransactionListView(LoginRequiredMixin, ListView):
         context["user_settings"] = user_settings
         return context
 
-    def get_template_names(self):
-        if self.request.headers.get("HX-Request"):
-            return "wallet/planned_transactions/partials/list.html"
-        return "wallet/planned_transactions/plannedtransaction_list.html"
 
-
-class PlannedTransactionDetailView(LoginRequiredMixin, DetailView):
+class PlannedTransactionDetailView(LoginRequiredMixin, HtmxOnlyDetailView):
     model = PlannedTransaction
     context_object_name = "planned_transaction"
     template_name = "wallet/planned_transactions/partials/detail.html"
 
 
-class PlannedIncomeCreateView(LoginRequiredMixin, CreateView):
+class PlannedIncomeCreateView(LoginRequiredMixin, HtmxOnlyCreateView):
     model = PlannedTransaction
     form_class = PlannedIncomeForm
     template_name = "wallet/planned_transactions/partials/add_planned_income.html"
@@ -69,7 +65,7 @@ class PlannedIncomeCreateView(LoginRequiredMixin, CreateView):
         return HttpResponse(status=201, headers=headers)
 
 
-class PlannedExpenseCreateView(LoginRequiredMixin, CreateView):
+class PlannedExpenseCreateView(LoginRequiredMixin, HtmxOnlyCreateView):
     model = PlannedTransaction
     form_class = PlannedExpenseForm
     template_name = "wallet/planned_transactions/partials/add_planned_expense.html"
@@ -88,12 +84,11 @@ class PlannedExpenseCreateView(LoginRequiredMixin, CreateView):
         return HttpResponse(status=201, headers=headers)
 
 
-class PlannedIncomeUpdateView(LoginRequiredMixin, UpdateView):
+class PlannedIncomeUpdateView(LoginRequiredMixin, HtmxOnlyUpdateView):
     model = PlannedTransaction
     form_class = PlannedIncomeForm
     context_object_name = "planned_income"
     template_name = "wallet/planned_transactions/partials/update_planned_income.html"
-    success_url = None
 
     def form_valid(self, form):
         self.object = form.save()  # noqa
@@ -109,12 +104,11 @@ class PlannedIncomeUpdateView(LoginRequiredMixin, UpdateView):
         return HttpResponse(status=204, headers=headers)
 
 
-class PlannedExpenseUpdateView(LoginRequiredMixin, UpdateView):
+class PlannedExpenseUpdateView(LoginRequiredMixin, HtmxOnlyUpdateView):
     model = PlannedTransaction
     form_class = PlannedExpenseForm
     context_object_name = "planned_expense"
     template_name = "wallet/planned_transactions/partials/update_planned_expense.html"
-    success_url = None
 
     def form_valid(self, form):
         self.object = form.save()  # noqa
@@ -130,7 +124,7 @@ class PlannedExpenseUpdateView(LoginRequiredMixin, UpdateView):
         return HttpResponse(status=204, headers=headers)
 
 
-class PlannedTransactionDeleteView(LoginRequiredMixin, RequirePostMixin, DeleteView):
+class PlannedTransactionDeleteView(LoginRequiredMixin, HtmxOnlyDeleteView):
     model = PlannedTransaction
     success_url = None
 

@@ -66,14 +66,14 @@
   </button>
 
   {% if planned_transaction.get_transaction_type_display == 'Income' %}
-  <button hx-get="{% url 'wallet:edit_income' pk=planned_transaction.pk %}" hx-trigger="click" hx-target="#modal"
-    class="primaryBtn">
+  <button hx-get="{% url 'wallet:edit_planned_income' pk=planned_transaction.pk %}" hx-trigger="click"
+    hx-target="#modal" class="primaryBtn">
     Edit planned income
   </button>
 
   {% elif planned_transaction.get_transaction_type_display == 'Expense' %}
-  <button hx-get="{% url 'wallet:edit_expense' pk=planned_transaction.pk %}" hx-trigger="click" hx-target="#modal"
-    class="primaryBtn">
+  <button hx-get="{% url 'wallet:edit_planned_expense' pk=planned_transaction.pk %}" hx-trigger="click"
+    hx-target="#modal" class="primaryBtn">
     Edit planned expense
   </button>
   {% endif %}

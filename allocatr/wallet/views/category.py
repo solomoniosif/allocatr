@@ -4,22 +4,23 @@ from datetime import date
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Sum
 from django.http import HttpResponse
-from django.views.generic import (
-    CreateView,
-    DeleteView,
-    DetailView,
-    ListView,
-    UpdateView,
-)
 
 from ..forms import CategoryForm
-from ..mixins import RequirePostMixin
+from ..htmx_views import (
+    HtmxListView,
+    HtmxOnlyCreateView,
+    HtmxOnlyDeleteView,
+    HtmxOnlyDetailView,
+    HtmxOnlyUpdateView,
+)
 from ..models import Category, Transaction, UserSettings
 from ..services import get_or_create_month
 
 
-class CategoryListView(LoginRequiredMixin, ListView):
+class CategoryListView(LoginRequiredMixin, HtmxListView):
     model = Category
+    htmx_template_name = "wallet/categories/partials/list.html"
+    template_name = "wallet/categories/category_list.html"
 
     def get_queryset(self, **kwargs):
         qs = super().get_queryset(**kwargs)
@@ -52,20 +53,15 @@ class CategoryListView(LoginRequiredMixin, ListView):
                 categories[category.group] = [
                     {"details": category, "transactions": transactions}
                 ]
-
         context["categories"] = categories
         context["user_settings"] = user_settings
         return context
 
-    def get_template_names(self):
-        if self.request.headers.get("HX-Request"):
-            return "wallet/categories/partials/list.html"
-        return "wallet/categories/category_list.html"
 
-
-class CategoryDetailView(LoginRequiredMixin, DetailView):
+class CategoryDetailView(LoginRequiredMixin, HtmxOnlyDetailView):
     model = Category
     context_object_name = "category"
+    template_name = "wallet/categories/partials/detail.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -84,13 +80,8 @@ class CategoryDetailView(LoginRequiredMixin, DetailView):
         context["user_settings"] = user_settings
         return context
 
-    def get_template_names(self):
-        if self.request.headers.get("HX-Request"):
-            return "wallet/categories/partials/detail.html"
-        return "wallet/categories/category_detail.html"
 
-
-class CategoryCreateView(LoginRequiredMixin, CreateView):
+class CategoryCreateView(LoginRequiredMixin, HtmxOnlyCreateView):
     model = Category
     form_class = CategoryForm
     template_name = "wallet/categories/partials/add_category.html"
@@ -111,22 +102,11 @@ class CategoryCreateView(LoginRequiredMixin, CreateView):
             },
         )
 
-    def form_invalid(self, form):
-        print("Form invalid")
-        print(form.errors)
-        super().form_invalid(form)
-        return HttpResponse(
-            form.errors,
-            status=400,
-        )
 
-
-class CategoryUpdateView(LoginRequiredMixin, UpdateView):
+class CategoryUpdateView(LoginRequiredMixin, HtmxOnlyUpdateView):
     model = Category
     form_class = CategoryForm
-    context_object_name = "category"
     template_name = "wallet/categories/partials/update_category.html"
-    success_url = None
 
     def form_valid(self, form):
         self.object = form.save()  # noqa
@@ -142,7 +122,7 @@ class CategoryUpdateView(LoginRequiredMixin, UpdateView):
         return HttpResponse(status=204, headers=headers)
 
 
-class CategoryDeleteView(LoginRequiredMixin, RequirePostMixin, DeleteView):
+class CategoryDeleteView(LoginRequiredMixin, HtmxOnlyDeleteView):
     model = Category
     success_url = None
 
@@ -154,7 +134,7 @@ class CategoryDeleteView(LoginRequiredMixin, RequirePostMixin, DeleteView):
                 {
                     "category-deleted": None,
                     "categories-changed": None,
-                    "show-message": f"Category {name}  deleted",
+                    "show-message": f"Category {name} deleted",
                 }
             )
         }

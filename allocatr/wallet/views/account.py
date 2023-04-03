@@ -112,10 +112,9 @@ class AccountDetailView(LoginRequiredMixin, HtmxDetailView):
 
 
 class AccountCreateView(LoginRequiredMixin, HtmxOnlyCreateView):
+    model = Account
     form_class = AccountForm
     template_name = "wallet/accounts/partials/add_account.html"
-    context_object_name = "account"
-    success_url = None
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -133,10 +132,10 @@ class AccountCreateView(LoginRequiredMixin, HtmxOnlyCreateView):
 
 
 class AccountUpdateView(LoginRequiredMixin, HtmxOnlyUpdateView):
+    model = Account
     form_class = AccountForm
     context_object_name = "account"
     template_name = "wallet/accounts/partials/update_account.html"
-    success_url = None
 
     def form_valid(self, form):
         self.object = form.save()  # noqa
@@ -154,7 +153,6 @@ class AccountUpdateView(LoginRequiredMixin, HtmxOnlyUpdateView):
 
 class AccountDeleteView(LoginRequiredMixin, HtmxOnlyDeleteView):
     model = Account
-    success_url = None
 
     def form_valid(self, form):
         name = self.object.name

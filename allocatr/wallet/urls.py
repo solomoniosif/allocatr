@@ -28,7 +28,7 @@ urlpatterns = [
         "transactions/add-income/", views.IncomeCreateView.as_view(), name="add_income"
     ),
     path(
-        "transactions/<int:pk>/edit-income/",
+        "transactions/<int:pk>/update-income/",
         views.IncomeUpdateView.as_view(),
         name="edit_income",
     ),
@@ -38,7 +38,7 @@ urlpatterns = [
         name="add_expense",
     ),
     path(
-        "transactions/<int:pk>/edit-expense/",
+        "transactions/<int:pk>/update-expense/",
         views.ExpenseUpdateView.as_view(),
         name="edit_expense",
     ),
@@ -48,7 +48,7 @@ urlpatterns = [
         name="add_transfer",
     ),
     path(
-        "transactions/<int:pk>/edit-transfer/",
+        "transactions/<int:pk>/update-transfer/",
         views.TransferUpdateView.as_view(),
         name="edit_transfer",
     ),
@@ -79,6 +79,16 @@ urlpatterns = [
         name="add_planned_income",
     ),
     path(
+        "transactions/planned/income/<int:pk>/update/",
+        views.PlannedExpenseUpdateView.as_view(),
+        name="edit_planned_income",
+    ),
+    path(
+        "transactions/planned/expenses/<int:pk>/update/",
+        views.PlannedExpenseUpdateView.as_view(),
+        name="edit_planned_expense",
+    ),
+    path(
         "transactions/planned/<int:pk>/delete/",
         views.PlannedTransactionDeleteView.as_view(),
         name="delete_planned_transaction",
@@ -97,7 +107,7 @@ urlpatterns = [
     ),
     path("accounts/add/", views.AccountCreateView.as_view(), name="add_account"),
     path(
-        "accounts/<int:pk>/edit/",
+        "accounts/<int:pk>/update/",
         views.AccountUpdateView.as_view(),
         name="edit_account",
     ),
@@ -115,7 +125,7 @@ urlpatterns = [
     ),
     path("categories/add/", views.CategoryCreateView.as_view(), name="add_category"),
     path(
-        "categories/<int:pk>/edit/",
+        "categories/<int:pk>/update/",
         views.CategoryUpdateView.as_view(),
         name="edit_category",
     ),
