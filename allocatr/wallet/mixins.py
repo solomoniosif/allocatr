@@ -23,13 +23,15 @@ class HtmxTemplateResponseMixin(TemplateResponseMixin):
     htmx_template_name = None
 
     def get_template_names(self):
-        super().get_template_names()
-
+        """
+        Return a list of template names to be used for the request. Must return
+        a list. May not be called if render_to_response() is overridden.
+        """
         if self.template_name is None or self.htmx_template_name is None:
             raise ImproperlyConfigured(
                 "HtmxTemplateResponseMixin requires either a definition of both "
-                "'template_name' and 'htmx_template_name' or an override of "
-                "'get_template_names()'"
+                "'template_name' and 'htmx_template_name' "
+                "or an implementation of 'get_template_names()'"
             )
 
         if self.request.headers.get("HX-Request"):
