@@ -4,22 +4,23 @@ from datetime import date
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.http import HttpResponse
-from django.views.generic import (
-    CreateView,
-    DeleteView,
-    DetailView,
-    ListView,
-    UpdateView,
-)
 
 from ..forms import AccountForm
-from ..mixins import RequirePostMixin
+from ..htmx_views import (
+    HtmxDetailView,
+    HtmxListView,
+    HtmxOnlyCreateView,
+    HtmxOnlyDeleteView,
+    HtmxOnlyListView,
+    HtmxOnlyUpdateView,
+)
 from ..models import Account, Transaction, UserSettings
 from ..services import get_or_create_month
 
 
-class AccountPartialListView(LoginRequiredMixin, ListView):
+class AccountPartialListView(LoginRequiredMixin, HtmxOnlyListView):
     model = Account
+    context_object_name = "accounts"
     template_name = "wallet/accounts/partials/account_cards.html"
 
     def get_queryset(self, **kwargs):
@@ -31,14 +32,15 @@ class AccountPartialListView(LoginRequiredMixin, ListView):
         user_accounts = Account.objects.filter(user=self.request.user)
         user_settings = UserSettings.objects.get(user=self.request.user)
         wallet_balance = sum([account.current_balance for account in user_accounts])
-        context["accounts"] = user_accounts
         context["currency"] = user_settings.currency
         context["wallet_balance"] = wallet_balance
         return context
 
 
-class AccountListView(LoginRequiredMixin, ListView):
+class AccountListView(LoginRequiredMixin, HtmxListView):
     model = Account
+    htmx_template_name = "wallet/accounts/partials/list.html"
+    template_name = "wallet/accounts/account_list.html"
 
     def get_queryset(self, **kwargs):
         qs = super().get_queryset(**kwargs)
@@ -61,15 +63,12 @@ class AccountListView(LoginRequiredMixin, ListView):
         context["user_settings"] = user_settings
         return context
 
-    def get_template_names(self):
-        if self.request.headers.get("HX-Request"):
-            return "wallet/accounts/partials/list.html"
-        return "wallet/accounts/account_list.html"
 
-
-class AccountDetailView(LoginRequiredMixin, DetailView):
+class AccountDetailView(LoginRequiredMixin, HtmxDetailView):
     model = Account
     context_object_name = "account"
+    htmx_template_name = "wallet/accounts/partials/detail.html"
+    template_name = "wallet/accounts/account_detail.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -111,14 +110,8 @@ class AccountDetailView(LoginRequiredMixin, DetailView):
         context["user_settings"] = user_settings
         return context
 
-    def get_template_names(self):
-        if self.request.headers.get("HX-Request"):
-            return "wallet/accounts/partials/detail.html"
-        return "wallet/accounts/account_detail.html"
 
-
-class AccountCreateView(LoginRequiredMixin, CreateView):
-    model = Account
+class AccountCreateView(LoginRequiredMixin, HtmxOnlyCreateView):
     form_class = AccountForm
     template_name = "wallet/accounts/partials/add_account.html"
     context_object_name = "account"
@@ -127,22 +120,19 @@ class AccountCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.user = self.request.user
         self.object = form.save()
-        return HttpResponse(
-            status=204,
-            headers={
-                "HX-Trigger": json.dumps(
-                    {
-                        "account-created": None,
-                        "accounts-changed": None,
-                        "show-message": f"Account {form.instance.name} created",
-                    }
-                )
-            },
-        )
+        headers = {
+            "HX-Trigger": json.dumps(
+                {
+                    "account-created": None,
+                    "accounts-changed": None,
+                    "show-message": f"Account {form.instance.name} created",
+                }
+            )
+        }
+        return HttpResponse(status=204, headers=headers)
 
 
-class AccountUpdateView(LoginRequiredMixin, UpdateView):
-    model = Account
+class AccountUpdateView(LoginRequiredMixin, HtmxOnlyUpdateView):
     form_class = AccountForm
     context_object_name = "account"
     template_name = "wallet/accounts/partials/update_account.html"
@@ -162,7 +152,7 @@ class AccountUpdateView(LoginRequiredMixin, UpdateView):
         return HttpResponse(status=204, headers=headers)
 
 
-class AccountDeleteView(LoginRequiredMixin, RequirePostMixin, DeleteView):
+class AccountDeleteView(LoginRequiredMixin, HtmxOnlyDeleteView):
     model = Account
     success_url = None
 
@@ -174,7 +164,7 @@ class AccountDeleteView(LoginRequiredMixin, RequirePostMixin, DeleteView):
                 {
                     "account-deleted": None,
                     "accounts-changed": None,
-                    "show-message": f"{name} deleted",
+                    "show-message": f"Account {name} deleted",
                 }
             )
         }

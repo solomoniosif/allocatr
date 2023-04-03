@@ -3,16 +3,23 @@ from datetime import date
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
-from django.views.generic import CreateView, DetailView, ListView, TemplateView
 
 from ..forms import BudgetForm
+from ..htmx_views import (
+    HtmxDetailView,
+    HtmxListView,
+    HtmxOnlyCreateView,
+    HtmxOnlyTemplateView,
+)
 from ..models import Budget, Transaction
 from ..services import get_or_create_month
 
 
-class BudgetListView(LoginRequiredMixin, ListView):
+class BudgetListView(LoginRequiredMixin, HtmxListView):
     model = Budget
     context_object_name = "budgets"
+    htmx_template_name = "wallet/budgets/partials/list.html"
+    template_name = "wallet/budgets/budget_list.html"
 
     def get_queryset(self, **kwargs):
         qs = super().get_queryset(**kwargs)
@@ -20,24 +27,12 @@ class BudgetListView(LoginRequiredMixin, ListView):
         month = get_or_create_month(self.request.user, day_or_month)
         return qs.filter(user=self.request.user, month=month)
 
-    def get_template_names(self):
-        if self.request.headers.get("HX-Request"):
-            return "wallet/budgets/partials/list.html"
-        return "wallet/budgets/budget_list.html"
 
-
-class BudgetDetailView(LoginRequiredMixin, DetailView):
+class BudgetDetailView(LoginRequiredMixin, HtmxDetailView):
     model = Budget
     context_object_name = "budget"
-
-    def get_queryset(self, **kwargs):
-        qs = super().get_queryset(**kwargs)
-        return qs.filter(user=self.request.user)
-
-    def get_template_names(self):
-        if self.request.headers.get("HX-Request"):
-            return "wallet/budgets/partials/detail.html"
-        return "wallet/budgets/budget_detail.html"
+    htmx_template_name = "wallet/budgets/partials/detail.html"
+    template_name = "wallet/budgets/budget_detail.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -45,12 +40,14 @@ class BudgetDetailView(LoginRequiredMixin, DetailView):
         month = get_or_create_month(self.request.user, day_or_month)
         if not self.object.is_master:
             transactions = Transaction.objects.filter(
+                account__user=self.request.user,
                 category=self.object.category,
                 date__gte=month.first_day,
                 date__lte=month.last_day,
             )
         else:
             transactions = Transaction.objects.filter(
+                account__user=self.request.user,
                 date__gte=month.first_day,
                 date__lte=month.last_day,
             )
@@ -58,7 +55,7 @@ class BudgetDetailView(LoginRequiredMixin, DetailView):
         return context
 
 
-class MasterBudgetPartialView(LoginRequiredMixin, TemplateView):
+class MasterBudgetPartialView(LoginRequiredMixin, HtmxOnlyTemplateView):
     template_name = "wallet/budgets/partials/master_budget_partial.html"
 
     def get_context_data(self, **kwargs):
@@ -71,30 +68,23 @@ class MasterBudgetPartialView(LoginRequiredMixin, TemplateView):
         context["master_budget"] = master_budget
         return context
 
-    def get(self, request, *args, **kwargs):
-        context = self.get_context_data(**kwargs)
-        return self.render_to_response(context)
 
-
-class BudgetCreateView(LoginRequiredMixin, CreateView):
-    model = Budget
+class BudgetCreateView(LoginRequiredMixin, HtmxOnlyCreateView):
     form_class = BudgetForm
     template_name = "wallet/budgets/partials/add_budget.html"
-    context_object_name = "budget"
     success_url = None
 
     def form_valid(self, form):
         form.instance.user = self.request.user
         self.object = form.save()
-        return HttpResponse(
-            status=204,
-            headers={
-                "HX-Trigger": json.dumps(
-                    {
-                        "budget-created": None,
-                        "budgets-changed": None,
-                        "show-message": f"Budget {form.instance.name} created",
-                    }
-                )
-            },
-        )
+        headers = {
+            "HX-Trigger": json.dumps(
+                {
+                    "budget-created": None,
+                    "budgets-changed": None,
+                    "show-message": f"Budget {form.instance.name} created",
+                }
+            )
+        }
+
+        return HttpResponse(status=204, headers=headers)
