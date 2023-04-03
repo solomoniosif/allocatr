@@ -442,9 +442,12 @@ class Budget(TimeStampedUUIDModel):
         verbose_name=_("Name"), max_length=150, blank=True, null=True
     )
     budgeted_amount = models.DecimalField(
-        verbose_name=_("Budgeted mount"), max_digits=10, decimal_places=2
+        verbose_name=_("Budgeted mount"),
+        max_digits=10,
+        decimal_places=2,
+        blank=True,
+        null=True,
     )
-    # categories = models.ManyToManyField(Category, )
     category = models.ForeignKey(
         Category,
         related_name="budgets",
@@ -486,3 +489,12 @@ class Budget(TimeStampedUUIDModel):
                 self.name = f"{self.category.name} budget for {self.month}"
             else:
                 self.name = f"Master budget for {self.month}"
+        if not self.budgeted_amount and self.is_master:
+            last_master_budget = Budget.objects.filter(
+                user=self.user, is_master=True
+            ).last()
+            if last_master_budget:
+                self.budgeted_amount = last_master_budget.budgeted_amount
+            else:
+                self.budgeted_amount = 0
+        super().save(*args, **kwargs)
