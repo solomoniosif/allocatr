@@ -1,15 +1,6 @@
-from django.contrib.auth.mixins import PermissionRequiredMixin
-from django.core.exceptions import BadRequest, ImproperlyConfigured, PermissionDenied
+from django.core.exceptions import BadRequest, ImproperlyConfigured
 from django.views.decorators.http import require_POST
 from django.views.generic.base import TemplateResponseMixin
-
-
-class OwnerOnlyPermission(PermissionRequiredMixin):
-    def dispatch(self, request, *args, **kwargs):
-        obj = self.get_object()  # noqa
-        if not obj.user == request.user:
-            raise PermissionDenied
-        return super().dispatch(request, *args, **kwargs)
 
 
 class RequirePostMixin:
@@ -24,6 +15,11 @@ class RequirePostMixin:
 
 
 class HtmxTemplateResponseMixin(TemplateResponseMixin):
+    """
+    Mixin that overrides the get_template_names() method to return a different
+    template depending on whether the request is an HX-Request or not.
+    """
+
     htmx_template_name = None
 
     def get_template_names(self):
