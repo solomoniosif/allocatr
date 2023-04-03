@@ -70,9 +70,5 @@ class HtmxOnlyUpdateView(HtmxOnlyMixin, UpdateView):
     inserted by HTMX into an already loaded page."""
 
 
-class HtmxDeleteView(RequirePostMixin, DeleteView):
-    pass
-
-
 class HtmxOnlyDeleteView(HtmxOnlyMixin, RequirePostMixin, DeleteView):
     pass
