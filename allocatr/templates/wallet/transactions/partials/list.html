@@ -12,7 +12,7 @@
       <h1 class="text-2xl font-semibold mb-2 text-gray-800 dark:text-gray-200 ">Transactions</h1>
 
       <!-- Desktop View (table)-->
-      <div id="transactions-table" class="w-full overflow-hidden rounded-lg shadow-xl hidden md:block">
+      {% comment %} <div id="transactions-table" class="w-full overflow-hidden rounded-lg shadow-xl hidden md:block">
         <table class="p-6 w-full dark:border dark:border-gray-800">
 
           <caption class="relative bg-white dark:bg-gray-800 rounded-tr-lg rounded-tl-lg">
@@ -224,7 +224,48 @@
           <span class="flex items-center col-span-3 justify-end font-semibold" x-html="listDisplay"></span>
         </div>
 
-      </div>
+      </div> {% endcomment %}
+
+      <!-- Grid.js Version -->
+      <div id="wrapper"></div>
+      {{ trsansactions_json|json_script:"transactions-json" }}
+
+      <script>
+        new gridjs.Grid({
+          columns: ["Type", "Transaction", "Category", "Amount", "Account", "Date"],
+          data: {{ trsansactions_json|safe }},
+          fixedHeader: true,
+          search: true,
+          sort: true,
+          width: "100%",
+          pagination: {
+            limit: 10,
+            summary: false
+          },
+          className: {
+            container: "g-container",
+            table: "g-table",
+            td: "g-td",
+            th: "g-th",
+            tr: "g-tr",
+            header: "g-header",
+            footer: "g-footer",
+            thead: "g-thead",
+            tbody: "g-tbody",
+            search: "g-search",
+            sort: "g-sort",
+            pagination: "g-pagination",
+            paginationSummary: "g-pagination-summary",
+            paginationButton: "g-pagination-button",
+            paginationButtonNext: "g-pagination-next",
+            paginationButtonPrevious: "g-pagination-previous",
+            paginationButtonCurrent: "g-pagination-current",
+            }
+        }).render(document.getElementById("wrapper"));
+
+      </script>
+
+
 
       <!-- Mobile View (grid of cards) -->
       <div class="flex flex-col gap-4 md:hidden">

@@ -122,3 +122,183 @@ li.active {
 .autoComplete_wrapper > ul > li[aria-selected='true'] {
     @apply bg-slate-300 dark:bg-slate-800;
 }
+
+/*  Grid.js styles */
+.gridjs-wrapper {
+    @apply relative z-10 block w-full overflow-auto rounded-t-lg antialiased;
+}
+.gridjs-container {
+    @apply relative z-0 inline-block overflow-hidden rounded-lg bg-white p-1 dark:bg-gray-900;
+}
+
+.gridjs-search {
+    @apply float-left;
+}
+.gridjs-search-input {
+    width: 250px;
+}
+
+input.gridjs-input {
+    @apply appearance-none rounded-lg border border-gray-300 bg-gray-100 px-3 py-2 text-sm leading-5 text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-800 dark:bg-gray-900 dark:text-white dark:placeholder-gray-200 dark:focus:border-blue-500 dark:focus:ring-blue-500;
+}
+
+table.gridjs-table {
+    @apply m-0 table w-full max-w-full table-auto border-collapse overflow-auto p-0 text-left;
+}
+
+th.gridjs-th {
+    @apply relative box-border select-none whitespace-nowrap bg-gray-200 px-4 py-3 align-middle text-gray-900 outline-none dark:bg-gray-800 dark:text-white;
+}
+
+th.gridjs-th-sort {
+    @apply hover:bg-white focus:bg-white dark:hover:bg-gray-900 dark:focus:bg-gray-900;
+}
+
+.gridjs-footer button,
+.gridjs-head button {
+    @apply m-0 cursor-pointer border-none bg-transparent bg-none p-0 outline-none;
+}
+
+.gridjs-footer {
+    @apply relative z-10 block w-full rounded-b-lg bg-transparent px-4 py-3 text-gray-900 dark:text-white;
+}
+
+.gridjs-tbody,
+td.gridjs-td {
+    @apply bg-gray-200 dark:bg-gray-800;
+}
+
+td.gridjs-td {
+    @apply box-content border-none px-4 py-3;
+}
+
+.gridjs-tr {
+    @apply rounded text-gray-900 dark:text-white;
+}
+
+.gridjs-tr:nth-child(odd) td {
+    @apply bg-white dark:bg-gray-900;
+}
+
+.gridjs-tr td:first-child {
+    @apply rounded-s-lg;
+}
+
+.gridjs-tr td:last-child {
+    @apply rounded-e-lg;
+}
+
+/* Gridjs sort button */
+button.gridjs-sort {
+    @apply float-right m-0 h-6 w-3 cursor-pointer bg-transparent bg-contain bg-no-repeat p-0 focus:outline-none;
+}
+button.gridjs-sort-neutral {
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDEuOTk4IiBoZWlnaHQ9IjQwMS45OTgiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDQwMS45OTggNDAxLjk5OCIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+PHBhdGggZD0iTTczLjA5MiAxNjQuNDUyaDI1NS44MTNjNC45NDkgMCA5LjIzMy0xLjgwNyAxMi44NDgtNS40MjQgMy42MTMtMy42MTYgNS40MjctNy44OTggNS40MjctMTIuODQ3cy0xLjgxMy05LjIyOS01LjQyNy0xMi44NUwyMTMuODQ2IDUuNDI0QzIxMC4yMzIgMS44MTIgMjA1Ljk1MSAwIDIwMC45OTkgMHMtOS4yMzMgMS44MTItMTIuODUgNS40MjRMNjAuMjQyIDEzMy4zMzFjLTMuNjE3IDMuNjE3LTUuNDI0IDcuOTAxLTUuNDI0IDEyLjg1IDAgNC45NDggMS44MDcgOS4yMzEgNS40MjQgMTIuODQ3IDMuNjIxIDMuNjE3IDcuOTAyIDUuNDI0IDEyLjg1IDUuNDI0ek0zMjguOTA1IDIzNy41NDlINzMuMDkyYy00Ljk1MiAwLTkuMjMzIDEuODA4LTEyLjg1IDUuNDIxLTMuNjE3IDMuNjE3LTUuNDI0IDcuODk4LTUuNDI0IDEyLjg0N3MxLjgwNyA5LjIzMyA1LjQyNCAxMi44NDhMMTg4LjE0OSAzOTYuNTdjMy42MjEgMy42MTcgNy45MDIgNS40MjggMTIuODUgNS40MjhzOS4yMzMtMS44MTEgMTIuODQ3LTUuNDI4bDEyNy45MDctMTI3LjkwNmMzLjYxMy0zLjYxNCA1LjQyNy03Ljg5OCA1LjQyNy0xMi44NDggMC00Ljk0OC0xLjgxMy05LjIyOS01LjQyNy0xMi44NDctMy42MTQtMy42MTYtNy44OTktNS40Mi0xMi44NDgtNS40MnoiLz48L3N2Zz4=');
+    background-position-y: center;
+    filter: invert(1) saturate(5) brightness(2);
+}
+button.gridjs-sort-asc {
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyOTIuMzYyIiBoZWlnaHQ9IjI5Mi4zNjEiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDI5Mi4zNjIgMjkyLjM2MSIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+PHBhdGggZD0iTTI4Ni45MzUgMTk3LjI4NyAxNTkuMDI4IDY5LjM4MWMtMy42MTMtMy42MTctNy44OTUtNS40MjQtMTIuODQ3LTUuNDI0cy05LjIzMyAxLjgwNy0xMi44NSA1LjQyNEw1LjQyNCAxOTcuMjg3QzEuODA3IDIwMC45MDQgMCAyMDUuMTg2IDAgMjEwLjEzNHMxLjgwNyA5LjIzMyA1LjQyNCAxMi44NDdjMy42MjEgMy42MTcgNy45MDIgNS40MjUgMTIuODUgNS40MjVoMjU1LjgxM2M0Ljk0OSAwIDkuMjMzLTEuODA4IDEyLjg0OC01LjQyNSAzLjYxMy0zLjYxMyA1LjQyNy03Ljg5OCA1LjQyNy0xMi44NDdzLTEuODE0LTkuMjMtNS40MjctMTIuODQ3eiIvPjwvc3ZnPg==');
+    background-position-y: 35%;
+    background-size: 10px;
+    filter: invert(0.5) sepia(1) saturate(5) hue-rotate(175deg) brightness(2);
+}
+button.gridjs-sort-desc {
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyOTIuMzYyIiBoZWlnaHQ9IjI5Mi4zNjIiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDI5Mi4zNjIgMjkyLjM2MiIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+PHBhdGggZD0iTTI4Ni45MzUgNjkuMzc3Yy0zLjYxNC0zLjYxNy03Ljg5OC01LjQyNC0xMi44NDgtNS40MjRIMTguMjc0Yy00Ljk1MiAwLTkuMjMzIDEuODA3LTEyLjg1IDUuNDI0QzEuODA3IDcyLjk5OCAwIDc3LjI3OSAwIDgyLjIyOGMwIDQuOTQ4IDEuODA3IDkuMjI5IDUuNDI0IDEyLjg0N2wxMjcuOTA3IDEyNy45MDdjMy42MjEgMy42MTcgNy45MDIgNS40MjggMTIuODUgNS40MjhzOS4yMzMtMS44MTEgMTIuODQ3LTUuNDI4TDI4Ni45MzUgOTUuMDc0YzMuNjEzLTMuNjE3IDUuNDI3LTcuODk4IDUuNDI3LTEyLjg0NyAwLTQuOTQ4LTEuODE0LTkuMjI5LTUuNDI3LTEyLjg1eiIvPjwvc3ZnPg==');
+    background-position-y: 65%;
+    background-size: 10px;
+    filter: invert(0.5) sepia(1) saturate(5) hue-rotate(175deg) brightness(2);
+}
+
+.gridjs-temp {
+    @apply relative;
+}
+.gridjs-head {
+    @apply mb-[5px] w-full px-px py-[5px] after:clear-both after:block after:content-[''] empty:border-[none] empty:p-0;
+}
+.gridjs-footer:empty {
+    @apply border-[none] p-0;
+}
+
+/* Gridjs Pagination */
+.gridjs-pagination {
+    @apply text-[#3d4044] after:clear-both after:block after:content-[''];
+}
+.gridjs-pagination .gridjs-summary {
+    @apply float-left mt-[5px];
+}
+.gridjs-pagination .gridjs-pages {
+    @apply float-right;
+}
+.gridjs-pagination .gridjs-pages button {
+    @apply select-none border border-solid border-[#d2d6dc] border-r-[none] bg-white px-3.5 py-[5px] first:rounded-bl-md first:rounded-tl-md last:rounded-br-md last:rounded-tr-md last:border-r last:border-solid last:border-r-[#d2d6dc] hover:bg-[#f7f7f7] hover:text-[#3c4257] focus:relative focus:-mr-px focus:border-r focus:border-solid focus:border-r-[#d2d6dc] focus:shadow-[0_0_0_2px_rgba(149,189,243,0.5)] last:focus:mr-0;
+    outline: none;
+}
+.gridjs-pagination .gridjs-pages button:hover {
+    outline: none;
+}
+.gridjs-pagination .gridjs-pages button:disabled,
+.gridjs-pagination .gridjs-pages button:hover:disabled,
+.gridjs-pagination .gridjs-pages button[disabled] {
+    @apply cursor-default bg-white text-gray-500;
+}
+.gridjs-pagination .gridjs-pages button.gridjs-spread {
+    @apply cursor-default bg-white shadow-none;
+}
+.gridjs-pagination .gridjs-pages button.gridjs-currentPage {
+    @apply bg-[#f7f7f7] font-bold;
+}
+
+td.gridjs-message {
+    @apply text-center;
+}
+th.gridjs-th .gridjs-th-content {
+    @apply float-left w-full overflow-hidden text-ellipsis;
+}
+th.gridjs-th-sort {
+    @apply cursor-pointer;
+}
+th.gridjs-th-sort .gridjs-th-content {
+    @apply w-[calc(100%_-_15px)];
+}
+th.gridjs-th-fixed {
+    @apply sticky shadow-[0_1px_0_0_#e5e7eb];
+}
+th.gridjs-th:first-child {
+    @apply border-l-[none];
+}
+th.gridjs-th:last-child {
+    @apply border-r-[none];
+}
+.gridjs-tr-selected td {
+    @apply bg-[#ebf5ff];
+}
+.gridjs-tr:last-child td {
+    @apply border-b-0;
+}
+.gridjs *,
+.gridjs :after,
+.gridjs :before {
+    @apply box-border;
+}
+.gridjs-wrapper:nth-last-of-type(2) {
+    @apply rounded-lg border-b;
+}
+.gridjs-loading-bar {
+    @apply z-10 bg-white opacity-50 after:-translate-x-full after:animate-[shimmer_2s_infinite] after:bg-[linear-gradient(_90deg,hsla(0,0%,80%,0),hsla(0,0%,80%,0.2)_20%,hsla(0,0%,80%,0.5)_60%,hsla(0,0%,80%,0)_)] after:content-[''];
+}
+.gridjs-loading-bar,
+.gridjs-loading-bar:after {
+    @apply absolute inset-0;
+}
+@keyframes shimmer {
+    to {
+        @apply translate-x-full;
+    }
+}
+.gridjs-td .gridjs-checkbox {
+    @apply m-auto block cursor-pointer;
+}
+.gridjs-resizable {
+    @apply absolute inset-y-0 right-0 w-[5px] hover:cursor-ew-resize hover:bg-[#9bc2f7];
+}
