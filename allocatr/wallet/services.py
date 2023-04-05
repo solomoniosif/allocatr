@@ -4,7 +4,7 @@ from typing import Union
 from dateutil.relativedelta import relativedelta
 from django.contrib.auth import get_user_model
 
-from .models import Month, PlannedTransaction, Transaction
+from .models import Budget, Category, Month, PlannedTransaction, Transaction
 
 User = get_user_model()
 
@@ -66,3 +66,131 @@ def set_transaction_complete(planned_transaction: PlannedTransaction) -> Transac
         planned_transaction.is_completed = True
         planned_transaction.save()
     return new_transaction
+
+
+def get_budget_stats(budget: Budget) -> dict:
+    """A helper function to get the stats for a budget.
+    The function collects all transactions and planned transactions
+    for the given budget and returns a dictionary with the stats."""
+    transactions = Transaction.objects.filter(
+        account__user=budget.user,
+        category=budget.category,
+        date__gte=budget.month.first_day,
+        date__lte=budget.month.last_day,
+    )
+    planned_transactions = PlannedTransaction.objects.filter(
+        account__user=budget.user,
+        category=budget.category,
+        date__gte=budget.month.first_day,
+        date__lte=budget.month.last_day,
+    )
+    subcategories = budget.category.get_all_subcategories()
+    for subcategory in subcategories:
+        subcategory_transactions = Transaction.objects.filter(
+            account__user=budget.user,
+            category=subcategory,
+            date__gte=budget.month.first_day,
+            date__lte=budget.month.last_day,
+        )
+        transactions = transactions | subcategory_transactions
+        subcategory_planned_transactions = PlannedTransaction.objects.filter(
+            account__user=budget.user,
+            category=subcategory,
+            date__gte=budget.month.first_day,
+            date__lte=budget.month.last_day,
+        )
+        planned_transactions = planned_transactions | subcategory_planned_transactions
+    amount_completed = sum(t.amount for t in transactions)
+    amount_planned = sum(t.amount for t in planned_transactions)
+    amount_budgeted = budget.budgeted_amount
+    return {
+        "category": budget.category.name,
+        "category_id": budget.category.pkid,
+        "completed": float(amount_completed),
+        "planned": float(amount_planned),
+        "budgeted": float(amount_budgeted),
+        "remaining": float(amount_budgeted - amount_completed - amount_planned),
+        "category_total": float(
+            max(amount_budgeted, amount_completed + amount_planned)
+        ),
+    }
+
+
+def get_category_stats(category: Category, month: Month) -> dict:
+    transactions = Transaction.objects.filter(
+        account__user=category.user,
+        category=category,
+        date__gte=month.first_day,
+        date__lte=month.last_day,
+    )
+    planned_transactions = PlannedTransaction.objects.filter(
+        account__user=category.user,
+        category=category,
+        date__gte=month.first_day,
+        date__lte=month.last_day,
+    )
+    subcategories = category.get_all_subcategories()
+    for subcategory in subcategories:
+        subcategory_transactions = Transaction.objects.filter(
+            account__user=category.user,
+            category=subcategory,
+            date__gte=month.first_day,
+            date__lte=month.last_day,
+        )
+        transactions = transactions | subcategory_transactions
+        subcategory_planned_transactions = PlannedTransaction.objects.filter(
+            account__user=category.user,
+            category=subcategory,
+            date__gte=month.first_day,
+            date__lte=month.last_day,
+        )
+        planned_transactions = planned_transactions | subcategory_planned_transactions
+    amount_completed = sum(t.amount for t in transactions)
+    amount_planned = sum(t.amount for t in planned_transactions)
+    return {
+        "category": category.name,
+        "category_id": category.pkid,
+        "completed": float(amount_completed),
+        "planned": float(amount_planned),
+        "budgeted": 0,
+        "category_total": float(amount_completed + amount_planned),
+    }
+
+
+def get_master_budget_stats(month: Month) -> dict:
+    master_budget, _ = Budget.objects.get_or_create(
+        user=month.user, month=month, is_master=True
+    )
+    expense_categories = []
+    root_expense_categories = Category.objects.filter(
+        user=month.user, group="EX", parent=None
+    )
+    for category in root_expense_categories:
+        try:
+            budget = Budget.objects.get(user=month.user, month=month, category=category)
+            expense_categories.append(get_budget_stats(budget))
+        except Budget.DoesNotExist:
+            expense_categories.append(get_category_stats(category, month))
+    income_categories = []
+    root_income_categories = Category.objects.filter(
+        user=month.user, group="IN", parent=None
+    )
+    for category in root_income_categories:
+        try:
+            budget = Budget.objects.get(user=month.user, month=month, category=category)
+            income_categories.append(get_budget_stats(budget))
+        except Budget.DoesNotExist:
+            income_categories.append(get_category_stats(category, month))
+    total_spent = sum(c["completed"] for c in expense_categories)
+    total_income = sum(c["completed"] for c in income_categories)
+    total_budget_expense = sum(c["category_total"] for c in expense_categories)
+    total_budget_income = sum(c["category_total"] for c in income_categories)
+    return {
+        "budgeted_amount": float(master_budget.budgeted_amount),
+        "total_spent": total_spent,
+        "total_income": total_income,
+        "total_budget_expense": total_budget_expense,
+        "total_budget_income": total_budget_income,
+        "expense_categories": expense_categories,
+        "income_categories": income_categories,
+    }
