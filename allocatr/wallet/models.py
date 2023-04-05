@@ -177,6 +177,14 @@ class Category(TimeStampedUUIDModel):
         blank=True,
         null=True,
     )
+    root_category = models.ForeignKey(
+        "self",
+        related_name="all_subcategories",
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        editable=False,
+    )
     name = models.CharField(_("Name"), max_length=100)
     active = models.BooleanField(verbose_name=_("Active"), default=True)
     color = ColorField(
@@ -192,14 +200,30 @@ class Category(TimeStampedUUIDModel):
         verbose_name_plural = _("Categories")
         ordering = ["group", "parent__id", "id"]
 
-    def get_subcategories(self):
-        return Category.objects.filter(parent=self).order_by("id")
+    def get_all_subcategories(self):
+        """Returns a queryset of all descendent categories (subcategories)"""
+        descendents = []
+        subcategories = self.subcategories.all()
+        for subcategory in subcategories:
+            descendents.append(subcategory)
+            descendents.extend(subcategory.get_subcategories())
+        return descendents
 
     def __str__(self):
         return str(self.name) if not self.parent else f"⤷ {self.name}"
 
     def save(self, *args, **kwargs):
         self.text_color = "white" if is_color_dark(self.color) else "black"
+        if (
+            self._state.adding
+            or self.parent != self.__class__.objects.get(pk=self.pk).parent
+        ):
+            if self.parent:
+                self.root_category = self.parent.root_category
+            else:
+                self.root_category = self
+            for child in self.subcategories.all():
+                child.save()
         super().save(*args, **kwargs)
 
 
