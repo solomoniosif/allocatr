@@ -206,7 +206,7 @@ class Category(TimeStampedUUIDModel):
         subcategories = self.subcategories.all()
         for subcategory in subcategories:
             descendents.append(subcategory)
-            descendents.extend(subcategory.get_subcategories())
+            descendents.extend(subcategory.get_all_subcategories())
         return descendents
 
     def __str__(self):
