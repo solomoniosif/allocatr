@@ -102,6 +102,15 @@ class CategoryCreateView(LoginRequiredMixin, HtmxOnlyCreateView):
             },
         )
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_categories = [
+            {"id": c.pkid, "name": c.name, "group": c.group.upper()}
+            for c in Category.objects.filter(user=self.request.user)
+        ]
+        context["categories"] = json.dumps(user_categories)
+        return context
+
 
 class CategoryUpdateView(LoginRequiredMixin, HtmxOnlyUpdateView):
     model = Category
@@ -120,6 +129,15 @@ class CategoryUpdateView(LoginRequiredMixin, HtmxOnlyUpdateView):
             )
         }
         return HttpResponse(status=204, headers=headers)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_categories = [
+            {"id": c.pkid, "name": c.name, "group": c.group.upper()}
+            for c in Category.objects.filter(user=self.request.user)
+        ]
+        context["categories"] = json.dumps(user_categories)
+        return context
 
 
 class CategoryDeleteView(LoginRequiredMixin, HtmxOnlyDeleteView):

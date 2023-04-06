@@ -18,24 +18,16 @@
 
 
   <form class="w-full" hx-post="{% url 'wallet:add_category' %}"
-    @show-message="successToast.fire({title: $event.detail.value})" @category-created="closeModal">
+    @show-message="successToast.fire({title: $event.detail.value})" @category-created="closeModal"
+    x-data="{group: 'EX', categories: {{ categories }} }">
     {% for hidden in form.hidden_fields %} {{ hidden }} {% endfor %}
 
     <div class="flex flex-wrap -mx-3 mb-6">
       <!-- Name -->
-      <div class="w-full px-2">
+      <div class="w-1/2 xs:w-2/3 px-2">
         <label for="{{ form.name.id_for_label }}" class="input-label">{{ form.name.label }}</label>
         {% render_field form.name class="text-input" type="text" %}
         {% for error in form.name.errors %}<p class="text-red-500 text-xs italic">{{ error }}</p>{% endfor %}
-      </div>
-    </div>
-
-    <div class="flex flex-wrap -mx-3 mb-6">
-      <!-- Category Group -->
-      <div class="w-1/2 xs:w-2/3 px-2">
-        <label for="{{ form.group.id_for_label }}" class="input-label">{{ form.group.label }}</label>
-        {% render_field form.group class+="text-input" %}
-        {% for error in form.group.errors %}<p class="text-red-500 text-xs italic">{{ error }}</p>{% endfor %}
       </div>
 
       <!-- Color -->
@@ -43,6 +35,26 @@
         <label for="{{ form.color.id_for_label }}" class="input-label">Color</label>
         {% render_field form.color|append_attr:"x-model:selectedColor" class+="coloris text-input" %}
         {% for error in form.color.errors %}<p class="text-red-500 text-xs italic">{{ error }}</p>{% endfor %}
+      </div>
+    </div>
+
+    <div class="flex flex-wrap -mx-3 mb-6">
+      <!-- Category Group -->
+      <div class="w-1/2 px-2">
+        <label for="{{ form.group.id_for_label }}" class="input-label">{{ form.group.label }}</label>
+        {% render_field form.group class+="text-input" x-model="group" %}
+        {% for error in form.group.errors %}<p class="text-red-500 text-xs italic">{{ error }}</p>{% endfor %}
+      </div>
+      <!-- Parent Category -->
+      <div class="w-1/2 px-2">
+        <label for="{{ form.parent.id_for_label }}" class="input-label">Parent Category</label>
+        <select name="parent" id="id_parent" class="text-input">
+          <option value selected>---------</option>
+          <template x-for="category in categories" :key="category.id">
+            <option :value="category.id" x-show="!group || category.group === group" x-text="category.name"></option>
+          </template>
+        </select>
+        {% for error in form.parent.errors %}<p class="text-red-500 text-xs italic">{{ error }}</p>{% endfor %}
       </div>
     </div>
 

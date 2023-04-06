@@ -114,7 +114,7 @@ class AccountForm(forms.ModelForm):
 class CategoryForm(forms.ModelForm):
     class Meta:
         model = Category
-        fields = ("group", "name", "color", "active")
+        fields = ("group", "name", "color", "active", "parent")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
