@@ -12,7 +12,7 @@
       <h1 class="text-2xl font-semibold mb-2 text-gray-800 dark:text-gray-200 ">Transactions</h1>
 
       <!-- Desktop View (table)-->
-      {% comment %} <div id="transactions-table" class="w-full overflow-hidden rounded-lg shadow-xl hidden md:block">
+      <div id="transactions-table" class="w-full overflow-hidden rounded-lg shadow-xl hidden md:block">
         <table class="p-6 w-full dark:border dark:border-gray-800">
 
           <caption class="relative bg-white dark:bg-gray-800 rounded-tr-lg rounded-tl-lg">
@@ -224,15 +224,40 @@
           <span class="flex items-center col-span-3 justify-end font-semibold" x-html="listDisplay"></span>
         </div>
 
-      </div> {% endcomment %}
+      </div>
 
       <!-- Grid.js Version -->
-      <div id="wrapper"></div>
-      {{ trsansactions_json|json_script:"transactions-json" }}
+      <div id="wrapper" class="mt-5"></div>
 
       <script>
         new gridjs.Grid({
-          columns: ["Type", "Transaction", "Category", "Amount", "Account", "Date"],
+          columns: [
+            {name: "Type",
+            formatter: (cell) => {
+              if (cell == "Income") {
+                return gridjs.html(`<svg viewBox="0 0 22 22" class="svg-icon fill-green-500">
+                  <use xlink:href="#income-icon"></use>
+                </svg>`)
+              } else if (cell == "Expense") {
+                return gridjs.html(`<svg viewBox="0 0 22 22" class="svg-icon fill-red-500">
+                  <use xlink:href="#expense-icon"></use>
+                </svg>`)
+              } else if (cell == "Transfer") {
+                return gridjs.html(`<svg viewBox="0 0 22 22" class="svg-icon fill-blue-500">
+                  <use xlink:href="#transfer-icon"></use>
+                </svg>`)
+              }
+            },
+            },
+            "Transaction",
+            "Category",
+            {
+              name: "Amount",
+              formatter: (cell) => `${cell} {{ user_settings.currency }}`
+            },
+            "Account",
+            "Date"
+          ],
           data: {{ trsansactions_json|safe }},
           fixedHeader: true,
           search: true,
@@ -242,25 +267,21 @@
             limit: 10,
             summary: false
           },
-          className: {
-            container: "g-container",
-            table: "g-table",
-            td: "g-td",
-            th: "g-th",
-            tr: "g-tr",
-            header: "g-header",
-            footer: "g-footer",
-            thead: "g-thead",
-            tbody: "g-tbody",
-            search: "g-search",
-            sort: "g-sort",
-            pagination: "g-pagination",
-            paginationSummary: "g-pagination-summary",
-            paginationButton: "g-pagination-button",
-            paginationButtonNext: "g-pagination-next",
-            paginationButtonPrevious: "g-pagination-previous",
-            paginationButtonCurrent: "g-pagination-current",
-            }
+          language: {
+            search: {
+              placeholder: 'Search transactions',
+            },
+            pagination: {
+              previous: 'Previous',
+              next: 'Next',
+              showing: 'Showing',
+              results: () => 'Results',
+            },
+            sort: {
+              sortAsc: 'Sort in ascending order',
+              sortDesc: 'Sort in descending order',
+            },
+          },
         }).render(document.getElementById("wrapper"));
 
       </script>
