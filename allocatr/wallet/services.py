@@ -45,7 +45,7 @@ def get_or_create_month(
 
 def set_transaction_complete(planned_transaction: PlannedTransaction) -> Transaction:
     """Saves a PlannedTransaction  object as a Transaction object,
-    than marks the PlannedTransaction as completed
+    than deletes the PlannedTransaction
 
     Args:
         planned_transaction: The PlannedTransaction object to be saved as a Transaction.
@@ -63,8 +63,7 @@ def set_transaction_complete(planned_transaction: PlannedTransaction) -> Transac
         notes=planned_transaction.notes,
     )
     if new_transaction.pkid is not None:
-        planned_transaction.is_completed = True
-        planned_transaction.save()
+        planned_transaction.delete()
     return new_transaction
 
 
@@ -105,14 +104,13 @@ def get_budget_stats(budget: Budget) -> dict:
     amount_budgeted = budget.budgeted_amount
     return {
         "category": budget.category.name,
-        "category_id": budget.category.pkid,
+        "categoryId": budget.category.pkid,
+        "categoryColor": budget.category.color,
         "completed": float(amount_completed),
         "planned": float(amount_planned),
         "budgeted": float(amount_budgeted),
         "remaining": float(amount_budgeted - amount_completed - amount_planned),
-        "category_total": float(
-            max(amount_budgeted, amount_completed + amount_planned)
-        ),
+        "categoryTotal": float(max(amount_budgeted, amount_completed + amount_planned)),
     }
 
 
@@ -149,11 +147,12 @@ def get_category_stats(category: Category, month: Month) -> dict:
     amount_planned = sum(t.amount for t in planned_transactions)
     return {
         "category": category.name,
-        "category_id": category.pkid,
+        "categoryId": category.pkid,
+        "categoryColor": category.color,
         "completed": float(amount_completed),
         "planned": float(amount_planned),
         "budgeted": 0,
-        "category_total": float(amount_completed + amount_planned),
+        "categoryTotal": float(amount_completed + amount_planned),
     }
 
 
@@ -183,14 +182,17 @@ def get_master_budget_stats(month: Month) -> dict:
             income_categories.append(get_category_stats(category, month))
     total_spent = sum(c["completed"] for c in expense_categories)
     total_income = sum(c["completed"] for c in income_categories)
-    total_budget_expense = sum(c["category_total"] for c in expense_categories)
-    total_budget_income = sum(c["category_total"] for c in income_categories)
+    total_budget_expense = sum(c["categoryTotal"] for c in expense_categories)
+    total_budget_income = sum(c["categoryTotal"] for c in income_categories)
+    unallocated = float(master_budget.budgeted_amount) - total_budget_expense
     return {
-        "budgeted_amount": float(master_budget.budgeted_amount),
-        "total_spent": total_spent,
-        "total_income": total_income,
-        "total_budget_expense": total_budget_expense,
-        "total_budget_income": total_budget_income,
-        "expense_categories": expense_categories,
-        "income_categories": income_categories,
+        "budgetedAmount": float(master_budget.budgeted_amount),
+        "totalSpent": total_spent,
+        "totalIncome": total_income,
+        "totalBudgetExpense": total_budget_expense,
+        "totalBudgetIncome": total_budget_income,
+        "expenseCategories": expense_categories,
+        "incomeCategories": income_categories,
+        "unallocatedAmount": unallocated,
+        "monthName": month.__str__(),
     }

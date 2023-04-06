@@ -944,6 +944,11 @@ select {
   margin-right: auto;
 }
 
+.my-2 {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
 .my-6 {
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
@@ -1107,6 +1112,10 @@ select {
 
 .hidden {
   display: none;
+}
+
+.h-0 {
+  height: 0px;
 }
 
 .h-3 {
@@ -1292,6 +1301,10 @@ select {
 
 .cursor-pointer {
   cursor: pointer;
+}
+
+.resize {
+  resize: both;
 }
 
 .appearance-none {
@@ -1790,6 +1803,10 @@ select {
 
 .pb-4 {
   padding-bottom: 1rem;
+}
+
+.pb-\[60\%\] {
+  padding-bottom: 60%;
 }
 
 .pl-10 {
@@ -2651,6 +2668,21 @@ li.active {
   background-color: rgb(30 41 59 / var(--tw-bg-opacity));
 }
 
+tbody.list tr:nth-child(even) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+}
+
+:is(.dark tbody.list tr:nth-child(even)) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(3 7 18 / var(--tw-bg-opacity));
+}
+
+:is(.dark tbody.list tr:nth-child(even):hover) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(31 41 55 / var(--tw-bg-opacity));
+}
+
 /*  Grid.js styles */
 
 .gridjs-wrapper {
@@ -2686,7 +2718,7 @@ li.active {
 }
 
 .gridjs-search-input {
-  width: 250px;
+  width: 16rem;
 }
 
 input.gridjs-input {
@@ -2699,8 +2731,8 @@ input.gridjs-input {
   border-color: rgb(209 213 219 / var(--tw-border-opacity));
   --tw-bg-opacity: 1;
   background-color: rgb(243 244 246 / var(--tw-bg-opacity));
-  padding-left: 0.75rem;
-  padding-right: 0.75rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
   font-size: 0.875rem;
@@ -2738,6 +2770,8 @@ input.gridjs-input:focus {
 :is(.dark input.gridjs-input:focus) {
   --tw-border-opacity: 1;
   border-color: rgb(59 130 246 / var(--tw-border-opacity));
+  --tw-bg-opacity: 1;
+  background-color: rgb(31 41 55 / var(--tw-bg-opacity));
   --tw-ring-opacity: 1;
   --tw-ring-color: rgb(59 130 246 / var(--tw-ring-opacity));
 }
@@ -2783,22 +2817,22 @@ th.gridjs-th {
 
 th.gridjs-th-sort:hover {
   --tw-bg-opacity: 1;
-  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+  background-color: rgb(209 213 219 / var(--tw-bg-opacity));
 }
 
 th.gridjs-th-sort:focus {
   --tw-bg-opacity: 1;
-  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+  background-color: rgb(209 213 219 / var(--tw-bg-opacity));
 }
 
 :is(.dark th.gridjs-th-sort:hover) {
   --tw-bg-opacity: 1;
-  background-color: rgb(17 24 39 / var(--tw-bg-opacity));
+  background-color: rgb(55 65 81 / var(--tw-bg-opacity));
 }
 
 :is(.dark th.gridjs-th-sort:focus) {
   --tw-bg-opacity: 1;
-  background-color: rgb(17 24 39 / var(--tw-bg-opacity));
+  background-color: rgb(55 65 81 / var(--tw-bg-opacity));
 }
 
 .gridjs-footer button,
@@ -2823,8 +2857,8 @@ th.gridjs-th-sort:focus {
   background-color: transparent;
   padding-left: 1rem;
   padding-right: 1rem;
-  padding-top: 0.75rem;
-  padding-bottom: 0.75rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
   --tw-text-opacity: 1;
   color: rgb(17 24 39 / var(--tw-text-opacity));
 }
@@ -2851,8 +2885,8 @@ td.gridjs-td {
   border-style: none;
   padding-left: 1rem;
   padding-right: 1rem;
-  padding-top: 0.75rem;
-  padding-bottom: 0.75rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
 }
 
 .gridjs-tr {
@@ -2885,8 +2919,6 @@ td.gridjs-td {
   border-start-end-radius: 0.5rem;
   border-end-end-radius: 0.5rem;
 }
-
-/* Gridjs sort button */
 
 button.gridjs-sort {
   float: right;
@@ -2955,8 +2987,6 @@ button.gridjs-sort-desc {
   padding: 0px;
 }
 
-/* Gridjs Pagination */
-
 .gridjs-pagination {
   --tw-text-opacity: 1;
   color: rgb(61 64 68 / var(--tw-text-opacity));
@@ -2982,54 +3012,33 @@ button.gridjs-sort-desc {
   -webkit-user-select: none;
      -moz-user-select: none;
           user-select: none;
-  border-width: 1px;
-  border-style: solid;
-  --tw-border-opacity: 1;
-  border-color: rgb(210 214 220 / var(--tw-border-opacity));
-  border-right-color: none;
-  --tw-bg-opacity: 1;
-  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
-  padding-left: 0.875rem;
-  padding-right: 0.875rem;
-  padding-top: 5px;
-  padding-bottom: 5px;
-}
-
-.gridjs-pagination .gridjs-pages button:first-child {
-  border-bottom-left-radius: 0.375rem;
-  border-top-left-radius: 0.375rem;
-}
-
-.gridjs-pagination .gridjs-pages button:last-child {
-  border-bottom-right-radius: 0.375rem;
-  border-top-right-radius: 0.375rem;
-  border-right-width: 1px;
-  border-style: solid;
-  --tw-border-opacity: 1;
-  border-right-color: rgb(210 214 220 / var(--tw-border-opacity));
+  border-radius: 1rem;
+  background-color: transparent;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
 }
 
 .gridjs-pagination .gridjs-pages button:hover {
   --tw-bg-opacity: 1;
-  background-color: rgb(247 247 247 / var(--tw-bg-opacity));
+  background-color: rgb(107 114 128 / var(--tw-bg-opacity));
   --tw-text-opacity: 1;
-  color: rgb(60 66 87 / var(--tw-text-opacity));
+  color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
 .gridjs-pagination .gridjs-pages button:focus {
   position: relative;
   margin-right: -1px;
-  border-right-width: 1px;
-  border-style: solid;
-  --tw-border-opacity: 1;
-  border-right-color: rgb(210 214 220 / var(--tw-border-opacity));
-  --tw-shadow: 0 0 0 2px rgba(149,189,243,0.5);
-  --tw-shadow-colored: 0 0 0 2px var(--tw-shadow-color);
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 
 .gridjs-pagination .gridjs-pages button:focus:last-child {
   margin-right: 0px;
+}
+
+:is(.dark .gridjs-pagination .gridjs-pages button:hover) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(3 7 18 / var(--tw-bg-opacity));
 }
 
 .gridjs-pagination .gridjs-pages button {
@@ -3043,26 +3052,27 @@ button.gridjs-sort-desc {
 .gridjs-pagination .gridjs-pages button:disabled,
 .gridjs-pagination .gridjs-pages button:hover:disabled,
 .gridjs-pagination .gridjs-pages button[disabled] {
-  cursor: default;
-  --tw-bg-opacity: 1;
-  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
-  --tw-text-opacity: 1;
-  color: rgb(107 114 128 / var(--tw-text-opacity));
+  display: none;
 }
 
 .gridjs-pagination .gridjs-pages button.gridjs-spread {
   cursor: default;
-  --tw-bg-opacity: 1;
-  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+  background-color: transparent;
   --tw-shadow: 0 0 #0000;
   --tw-shadow-colored: 0 0 #0000;
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 
 .gridjs-pagination .gridjs-pages button.gridjs-currentPage {
-  --tw-bg-opacity: 1;
-  background-color: rgb(247 247 247 / var(--tw-bg-opacity));
+  background-color: transparent;
   font-weight: 700;
+  --tw-text-opacity: 1;
+  color: rgb(0 0 0 / var(--tw-text-opacity));
+}
+
+:is(.dark .gridjs-pagination .gridjs-pages button.gridjs-currentPage) {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
 td.gridjs-message {
@@ -3086,17 +3096,16 @@ th.gridjs-th-sort .gridjs-th-content {
 
 th.gridjs-th-fixed {
   position: sticky;
-  --tw-shadow: 0 1px 0 0 #e5e7eb;
-  --tw-shadow-colored: 0 1px 0 0 var(--tw-shadow-color);
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 
 th.gridjs-th:first-child {
-  border-left-color: none;
+  border-top-left-radius: 0.5rem;
+  border-bottom-left-radius: 0.5rem;
 }
 
 th.gridjs-th:last-child {
-  border-right-color: none;
+  border-top-right-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
 }
 
 .gridjs-tr-selected td {
@@ -3130,7 +3139,8 @@ th.gridjs-th:last-child {
   --tw-translate-x: -100%;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
   animation: shimmer 2s infinite;
-  background-image: linear-gradient( 90deg,hsla(0,0%,80%,0),hsla(0,0%,80%,0.2) 20%,hsla(0,0%,80%,0.5) 60%,hsla(0,0%,80%,0) );
+  --tw-bg-opacity: 1;
+  background-color: rgb(75 85 99 / var(--tw-bg-opacity));
   --tw-content: '';
   content: var(--tw-content);
 }

@@ -1,5 +1,6 @@
 import json
 from datetime import date
+from itertools import chain
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
@@ -11,8 +12,8 @@ from ..htmx_views import (
     HtmxOnlyCreateView,
     HtmxOnlyTemplateView,
 )
-from ..models import Budget, Transaction
-from ..services import get_or_create_month
+from ..models import Budget, PlannedTransaction, Transaction
+from ..services import get_master_budget_stats, get_or_create_month
 
 
 class BudgetListView(LoginRequiredMixin, HtmxListView):
@@ -62,10 +63,34 @@ class MasterBudgetPartialView(LoginRequiredMixin, HtmxOnlyTemplateView):
         context = super().get_context_data(**kwargs)
         day_or_month = self.request.GET.get("month", date.today())
         month = get_or_create_month(self.request.user, day_or_month)
+        master_budget_stats = get_master_budget_stats(month)
         master_budget, _ = Budget.objects.get_or_create(
             user=self.request.user, is_master=True, month=month
         )
+        transactions = Transaction.objects.filter(
+            account__user=self.request.user,
+            date__gte=month.first_day,
+            date__lte=month.last_day,
+        )
+        planned_transactions = PlannedTransaction.objects.filter(
+            account__user=self.request.user,
+            date__gte=month.first_day,
+            date__lte=month.last_day,
+        )
+        all_transactions = list(chain(transactions, planned_transactions))
+        ex_list = [
+            {"value": int(tr.amount), "name": tr.title}
+            for tr in all_transactions
+            if tr.transaction_type == "EX"
+        ]
+        allocated_amount = sum([ex["value"] for ex in ex_list])
+        unallocated_amount = int(master_budget.budgeted_amount) - allocated_amount
+        budget = ex_list + [{"value": unallocated_amount, "name": "Unallocated"}]
+
         context["master_budget"] = master_budget
+        context["transactions"] = all_transactions
+        context["budget"] = json.dumps(budget)
+        context["budget_stats"] = master_budget_stats
         return context
 
 

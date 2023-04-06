@@ -1,8 +1,188 @@
 <div class="text-white text-2xl font-semibold">
-  {{ master_budget.name }}
 
-  <div class="w-full bg-gray-200 rounded-full dark:bg-gray-700">
-    <div class="bg-accent text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full" style="width: 45%"> 45%</div>
+  <div class="w-full my-2 bg-gray-200 rounded-full dark:bg-gray-700">
+    <div class="bg-accent text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full"
+      style="width: 45%"> 45%</div>
   </div>
-
+  <div class="w-full h-0 relative pb-[60%]">
+    <div id="master-budget-pie-chart" class="absolute w-full h-full left-0 top-0"></div>
+  </div>
+  <div class="w-full h-0 relative pb-[60%]">
+    <div id="master-budget-bar-chart" class="absolute w-full h-full left-0 top-0"></div>
+  </div>
 </div>
+
+
+<script>
+  var html = document.querySelector('html');
+  var isDarkMode = html.classList.contains('dark');
+  var budgetStats = {{ budget_stats|safe }};
+  var pieData = budgetStats.expenseCategories.map(category => {
+    return {
+      name: category.category,
+      value: category.categoryTotal,
+      color: category.categoryColor
+    }
+  })
+  pieData.push({
+    name: 'Unallocated',
+    value: budgetStats.unallocatedAmount,
+    color: '#979797'})
+  var pieChartDom = document.getElementById('master-budget-pie-chart');
+  var pieChart = echarts.init(pieChartDom);
+  var pieChartOption;
+
+  pieChartOption = {
+    title: {
+      text: `Master Budget for ${budgetStats.monthName}`,
+      textAlign: 'auto',
+      textStyle: {
+        color: isDarkMode ? 'white' : 'black',
+        fontWeight: 'normal',
+        fontSize: 20,
+        fontFamily: 'Inter',
+      }
+    },
+    tooltip: {
+      trigger: 'item'
+    },
+    darkMode: isDarkMode,
+    series: [
+      {
+        type: 'pie',
+        radius: ['40%', '70%'],
+        avoidLabelOverlap: false,
+        itemStyle: {
+          borderRadius: 10,
+          borderColor: 'black',
+          borderWidth: 2
+        },
+        itemStyle: {
+          emphasis: {
+            shadowBlur: 10,
+            shadowOffsetX: 0,
+            shadowColor: 'rgba(0, 0, 0, 0.5)'
+          }
+        },
+        label: {
+          show: false,
+          formatter: '{b}: ${c} ({d}%)',
+          position: 'outside'
+        },
+        emphasis: {
+          label: {
+            show: false,
+            fontSize: 25,
+            fontWeight: 'bold'
+          }
+        },
+        labelLine: {
+          show: true
+        },
+        data: pieData,
+        color: pieData.map(category => category.color)
+      }
+    ]
+  };
+
+  pieChartOption && pieChart.setOption(pieChartOption);
+
+  var barChartDom = document.getElementById('master-budget-bar-chart');
+  var barChart = echarts.init(barChartDom);
+  var barChartOption;
+
+  barChartOption = {
+    darkMode: isDarkMode,
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: {
+        type: 'shadow'
+      }
+    },
+
+    xAxis: {
+      type: 'category',
+      nameTextStyle: {
+        color: isDarkMode ? 'white' : 'black',
+        fontWeight: 'normal',
+        fontSize: 22,
+        fontFamily: 'Inter',
+      },
+      data: budgetStats.expenseCategories.map(function(category) {
+        return category.category;
+      })
+    },
+    yAxis: {
+      type: 'value'
+    },
+    series: [
+      {
+        name: 'Completed',
+        type: 'bar',
+        stack: 'transactions',
+        emphasis: {
+          focus: 'series',
+          label: {
+            show: true,
+            position: 'inside',
+            color: isDarkMode ? 'white' : 'black',
+            fontSize: 12,
+            fontWeight: 'bold'
+          }
+        },
+        data: budgetStats.expenseCategories.map(function(category) {
+          return category.completed;
+        })
+      },
+      {
+        name: 'Planned',
+        type: 'bar',
+        stack: 'transactions',
+        emphasis: {
+          focus: 'series',
+        },
+        data: budgetStats.expenseCategories.map(function(category) {
+          return category.planned;
+        })
+      },
+      {
+        name: 'Budgeted',
+        type: 'bar',
+        stack: 'amounts',
+        emphasis: {
+          focus: 'series',
+          label: {
+            show: true,
+            position: 'inside',
+            color: isDarkMode ? 'white' : 'black',
+            fontSize: 12,
+            fontWeight: 'bold'
+          }
+        },
+        data: budgetStats.expenseCategories.map(function(category) {
+          return category.budgeted;
+        })
+      }
+    ]
+  };
+  barChartOption && barChart.setOption(barChartOption);
+
+  // Listen for changes to the "dark" class and update the chart accordingly
+  var observer = new MutationObserver(mutations => {
+    mutations.forEach(mutation => {
+      if (mutation.attributeName === 'class') {
+        const isDarkMode = html.classList.contains('dark');
+        const option = pieChart.getOption();
+        option.darkMode = isDarkMode;
+        pieChart.setOption(option);
+      }
+    });
+  });
+
+  observer.observe(html, { attributes: true });
+
+  window.addEventListener('resize', () => {
+    pieChart.resize();
+    barChart.resize();
+  });
+</script>

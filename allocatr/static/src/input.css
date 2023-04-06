@@ -123,6 +123,10 @@ li.active {
     @apply bg-slate-300 dark:bg-slate-800;
 }
 
+tbody.list tr:nth-child(even) {
+    @apply bg-white dark:bg-gray-950 dark:hover:bg-gray-800;
+}
+
 /*  Grid.js styles */
 .gridjs-wrapper {
     @apply relative z-10 block w-full overflow-auto rounded-t-lg antialiased;
@@ -135,11 +139,11 @@ li.active {
     @apply float-left;
 }
 .gridjs-search-input {
-    width: 250px;
+    @apply w-64;
 }
 
 input.gridjs-input {
-    @apply appearance-none rounded-lg border border-gray-300 bg-gray-100 px-3 py-2 text-sm leading-5 text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-800 dark:bg-gray-900 dark:text-white dark:placeholder-gray-200 dark:focus:border-blue-500 dark:focus:ring-blue-500;
+    @apply appearance-none rounded-lg border border-gray-300 bg-gray-100 px-2 py-2 text-sm leading-5 text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-800 dark:bg-gray-900 dark:text-white dark:placeholder-gray-200 dark:focus:border-blue-500 dark:focus:bg-gray-800 dark:focus:ring-blue-500;
 }
 
 table.gridjs-table {
@@ -151,7 +155,7 @@ th.gridjs-th {
 }
 
 th.gridjs-th-sort {
-    @apply hover:bg-white focus:bg-white dark:hover:bg-gray-900 dark:focus:bg-gray-900;
+    @apply hover:bg-gray-300 focus:bg-gray-300 dark:hover:bg-gray-700 dark:focus:bg-gray-700;
 }
 
 .gridjs-footer button,
@@ -160,7 +164,7 @@ th.gridjs-th-sort {
 }
 
 .gridjs-footer {
-    @apply relative z-10 block w-full rounded-b-lg bg-transparent px-4 py-3 text-gray-900 dark:text-white;
+    @apply relative z-10 block w-full rounded-b-lg bg-transparent px-4 py-2 text-gray-900 dark:text-white;
 }
 
 .gridjs-tbody,
@@ -169,7 +173,7 @@ td.gridjs-td {
 }
 
 td.gridjs-td {
-    @apply box-content border-none px-4 py-3;
+    @apply box-content border-none px-4 py-2;
 }
 
 .gridjs-tr {
@@ -188,7 +192,6 @@ td.gridjs-td {
     @apply rounded-e-lg;
 }
 
-/* Gridjs sort button */
 button.gridjs-sort {
     @apply float-right m-0 h-6 w-3 cursor-pointer bg-transparent bg-contain bg-no-repeat p-0 focus:outline-none;
 }
@@ -220,7 +223,6 @@ button.gridjs-sort-desc {
     @apply border-[none] p-0;
 }
 
-/* Gridjs Pagination */
 .gridjs-pagination {
     @apply text-[#3d4044] after:clear-both after:block after:content-[''];
 }
@@ -231,7 +233,7 @@ button.gridjs-sort-desc {
     @apply float-right;
 }
 .gridjs-pagination .gridjs-pages button {
-    @apply select-none border border-solid border-[#d2d6dc] border-r-[none] bg-white px-3.5 py-[5px] first:rounded-bl-md first:rounded-tl-md last:rounded-br-md last:rounded-tr-md last:border-r last:border-solid last:border-r-[#d2d6dc] hover:bg-[#f7f7f7] hover:text-[#3c4257] focus:relative focus:-mr-px focus:border-r focus:border-solid focus:border-r-[#d2d6dc] focus:shadow-[0_0_0_2px_rgba(149,189,243,0.5)] last:focus:mr-0;
+    @apply select-none  rounded-2xl bg-transparent px-3 py-1  hover:bg-gray-500 hover:text-white focus:relative focus:-mr-px last:focus:mr-0 dark:hover:bg-gray-950;
     outline: none;
 }
 .gridjs-pagination .gridjs-pages button:hover {
@@ -240,13 +242,13 @@ button.gridjs-sort-desc {
 .gridjs-pagination .gridjs-pages button:disabled,
 .gridjs-pagination .gridjs-pages button:hover:disabled,
 .gridjs-pagination .gridjs-pages button[disabled] {
-    @apply cursor-default bg-white text-gray-500;
+    @apply hidden;
 }
 .gridjs-pagination .gridjs-pages button.gridjs-spread {
-    @apply cursor-default bg-white shadow-none;
+    @apply cursor-default bg-transparent shadow-none;
 }
 .gridjs-pagination .gridjs-pages button.gridjs-currentPage {
-    @apply bg-[#f7f7f7] font-bold;
+    @apply bg-transparent font-bold text-black dark:text-white;
 }
 
 td.gridjs-message {
@@ -262,13 +264,13 @@ th.gridjs-th-sort .gridjs-th-content {
     @apply w-[calc(100%_-_15px)];
 }
 th.gridjs-th-fixed {
-    @apply sticky shadow-[0_1px_0_0_#e5e7eb];
+    @apply sticky;
 }
 th.gridjs-th:first-child {
-    @apply border-l-[none];
+    @apply rounded-l-lg;
 }
 th.gridjs-th:last-child {
-    @apply border-r-[none];
+    @apply rounded-r-lg;
 }
 .gridjs-tr-selected td {
     @apply bg-[#ebf5ff];
@@ -285,7 +287,7 @@ th.gridjs-th:last-child {
     @apply rounded-lg border-b;
 }
 .gridjs-loading-bar {
-    @apply z-10 bg-white opacity-50 after:-translate-x-full after:animate-[shimmer_2s_infinite] after:bg-[linear-gradient(_90deg,hsla(0,0%,80%,0),hsla(0,0%,80%,0.2)_20%,hsla(0,0%,80%,0.5)_60%,hsla(0,0%,80%,0)_)] after:content-[''];
+    @apply z-10 bg-white opacity-50 after:-translate-x-full after:animate-[shimmer_2s_infinite] after:bg-gray-600 after:content-[''];
 }
 .gridjs-loading-bar,
 .gridjs-loading-bar:after {
