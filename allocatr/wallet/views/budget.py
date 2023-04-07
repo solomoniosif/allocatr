@@ -140,17 +140,19 @@ class CategoryBudgetCreateView(LoginRequiredMixin, HtmxOnlyCreateView):
         return context
 
     def form_valid(self, form):
+        print(form.cleaned_data)
         form.instance.user = self.request.user
         category_id = self.kwargs["category_id"]
         category = Category.objects.get(pkid=category_id)
         form.instance.category = category
         self.object = form.save()
+        message = f"{form.instance.month} budget for {category.name} created"
         headers = {
             "HX-Trigger": json.dumps(
                 {
                     "budget-created": None,
                     "budgets-changed": None,
-                    "show-message": f"Budget {form.instance.name} created",
+                    "show-message": message,
                 }
             )
         }

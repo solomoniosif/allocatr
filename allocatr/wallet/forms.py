@@ -1,4 +1,5 @@
 from django import forms
+from django.core.exceptions import ValidationError
 from django.utils import timezone
 
 from .models import Account, Budget, Category, PlannedTransaction, Transaction
@@ -175,9 +176,19 @@ class BudgetForm(forms.ModelForm):
     class Meta:
         model = Budget
         fields = {
-            "name",
             "budgeted_amount",
             "category",
             "month",
-            "is_master",
         }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        category = cleaned_data.get("category")
+        month = cleaned_data.get("month")
+
+        if not category or not month:
+            self.add_error(
+                None,
+                ValidationError("A budget for this category and month already exists."),
+            )
+        return cleaned_data

@@ -17,7 +17,7 @@
 <div class="px-1 py-6 space-y-3 max-w-xl text-gray-900 dark:text-white">
 
 
-  <form class="w-full" hx-post="{% url 'wallet:add_category_budget' category_id=category.pk %}"
+  <form class="w-full" hx-post="{% url 'wallet:add_category_budget' category_id=category.pk %}" hx-target="#modal"
     @show-message="successToast.fire({title: $event.detail.value})" @budget-created="closeModal()"
     x-data="{months: {{ month_list }} }">
     {% for hidden in form.hidden_fields %} {{ hidden }} {% endfor %}
@@ -44,11 +44,12 @@
     </div>
 
     {% if form.errors %}
-    <div class="alert alert-danger">
+    <div>
       <ul>
-        {% for error in form.errors %}
-        <li class="text-red-600 italic">{{ error }}</li>
+        {% for error in form.non_field_errors %}
+        <li class="text-red-600 italic p-3">{{ error }}</li>
         {% endfor %}
+
       </ul>
     </div>
     {% endif %}
