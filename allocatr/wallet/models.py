@@ -1,5 +1,5 @@
 import uuid
-from datetime import date, datetime, timedelta
+from datetime import date, datetime
 
 from colorfield.fields import ColorField
 from dateutil.relativedelta import relativedelta
@@ -25,6 +25,52 @@ class TimeStampedUUIDModel(models.Model):
     class Meta:
         abstract = True
         ordering = ["-created_at", "-updated_at"]
+
+
+class Month(models.Model):
+    user = models.ForeignKey(
+        User, verbose_name=_("User"), related_name="months", on_delete=models.CASCADE
+    )
+    first_day = models.DateField()
+    last_day = models.DateField(blank=True)
+    month_code = models.PositiveSmallIntegerField(blank=True, editable=False)
+    override_last_day = models.BooleanField(default=True)
+
+    def get_or_create_next_month(self):
+        next_month = (
+            Month.objects.filter(user=self.user, first_day__gt=self.first_day)
+            .order_by("first_day")
+            .first()
+        )
+        if not next_month:
+            next_month = Month.objects.create(
+                user=self.user, first_day=self.first_day + relativedelta(months=1)
+            )
+        return next_month
+
+    def get_or_create_previous_month(self):
+        previous_month = (
+            Month.objects.filter(user=self.user, first_day__lt=self.first_day)
+            .order_by("-first_day")
+            .first()
+        )
+        if not previous_month:
+            previous_month = Month.objects.create(
+                user=self.user, first_day=self.first_day - relativedelta(months=1)
+            )
+        return previous_month
+
+    class Meta:
+        unique_together = (("user", "month_code"),)
+
+    def save(self, *args, **kwargs):
+        self.month_code = datetime.strftime(self.first_day, "%y%m")
+        if self.override_last_day:
+            _, self.last_day = get_month_range(self.first_day.day, self.first_day)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.first_day.strftime('%B')} {self.first_day.year}"
 
 
 class UserSettings(models.Model):
@@ -53,38 +99,25 @@ class UserSettings(models.Model):
     class Meta:
         verbose_name_plural = "User Settings"
 
-    def get_current_period(self, day: date):
-        return get_month_range(self.start_day_of_month, day)
-
-    def get_previous_period(self, day: date):
-        day_minus_five = day - timedelta(days=5)
-        return get_month_range(self.start_day_of_month, day_minus_five)
-
-    def get_next_period(self, day: date):
-        day_plus_five = day + timedelta(days=5)
-        return get_month_range(self.start_day_of_month, day_plus_five)
-
-
-class Month(models.Model):
-    user = models.ForeignKey(
-        User, verbose_name=_("User"), related_name="months", on_delete=models.CASCADE
-    )
-    first_day = models.DateField()
-    last_day = models.DateField(blank=True)
-    month_code = models.PositiveSmallIntegerField(blank=True, editable=False)
-    override_last_day = models.BooleanField(default=True)
-
-    class Meta:
-        unique_together = (("user", "month_code"),)
-
     def save(self, *args, **kwargs):
-        self.month_code = datetime.strftime(self.first_day, "%y%m")
-        if self.override_last_day:
-            _, self.last_day = get_month_range(self.first_day.day, self.first_day)
+        # Check if object is being updated and if start_day_of_month has changed
+        if (
+            not self._state.adding
+            and self.start_day_of_month
+            != self.__class__.objects.get(pk=self.pk).start_day_of_month
+        ):
+            # If start_day_of_month has changed, update all months
+            self.update_all_following_months(self.start_day_of_month)
         super().save(*args, **kwargs)
 
-    def __str__(self):
-        return f"{self.first_day.strftime('%B')} {self.first_day.year}"
+    def update_all_following_months(self, new_start_day_of_month: int):
+        # Get all following months and update them
+        following_months = Month.objects.filter(
+            first_day__gte=date.today(), user=self.user
+        )
+        for month in following_months:
+            month.first_day = month.first_day.replace(day=new_start_day_of_month)
+            month.save()
 
 
 class Account(TimeStampedUUIDModel):
