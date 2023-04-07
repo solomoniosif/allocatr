@@ -62,6 +62,7 @@ class Month(models.Model):
 
     class Meta:
         unique_together = (("user", "month_code"),)
+        ordering = ("-first_day",)
 
     def save(self, *args, **kwargs):
         self.month_code = datetime.strftime(self.first_day, "%y%m")
