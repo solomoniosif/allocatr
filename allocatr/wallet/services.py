@@ -17,7 +17,8 @@ def get_or_create_month(
 
     Args:
         user: The user whose month is returned.
-        date_or_str: The date or string to be converted to a date.
+        date_or_str: The datetime date or a date in string format to be converted
+        to a date.
         days_delta: The number of days before or after the given day
 
     Returns:
@@ -41,6 +42,16 @@ def get_or_create_month(
         )
     current_month, _ = Month.objects.get_or_create(user=user, first_day=first_day)
     return current_month
+
+
+def get_or_create_next_13_months(user: User) -> list[Month]:
+    """Returns a list of the next 12 months for the given user."""
+    next_12_months = []
+    for i in range(13):
+        next_12_months.append(
+            get_or_create_month(user, date.today() + relativedelta(months=i))
+        )
+    return next_12_months
 
 
 def set_transaction_complete(planned_transaction: PlannedTransaction) -> Transaction:

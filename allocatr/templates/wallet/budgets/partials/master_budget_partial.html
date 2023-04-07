@@ -185,4 +185,21 @@
     pieChart.resize();
     barChart.resize();
   });
+
+  var themeToggleBtn = document.getElementById('theme-toggle');
+  themeToggleBtn.addEventListener('click', () => {
+
+    if (document.documentElement.classList.contains('dark')) {
+      pieChart = echarts.init(pieChartDom, 'dark');
+      pieChart.setOption({...pieChartOption});
+      barChart = echarts.init(barChartDom, 'dark');
+      barChart.setOption({...barChartOption});
+    } else {
+      pieChart = echarts.init(pieChartDom);
+      pieChart.setOption({...pieChartOption});
+      barChart = echarts.init(barChartDom);
+      barChart.setOption({...barChartOption});
+    }
+
+  });
 </script>

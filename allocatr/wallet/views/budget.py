@@ -13,7 +13,11 @@ from ..htmx_views import (
     HtmxOnlyTemplateView,
 )
 from ..models import Budget, PlannedTransaction, Transaction
-from ..services import get_master_budget_stats, get_or_create_month
+from ..services import (
+    get_master_budget_stats,
+    get_or_create_month,
+    get_or_create_next_13_months,
+)
 
 
 class BudgetListView(LoginRequiredMixin, HtmxListView):
@@ -97,7 +101,13 @@ class MasterBudgetPartialView(LoginRequiredMixin, HtmxOnlyTemplateView):
 class BudgetCreateView(LoginRequiredMixin, HtmxOnlyCreateView):
     form_class = BudgetForm
     template_name = "wallet/budgets/partials/add_budget.html"
-    success_url = None
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        next_13_months = get_or_create_next_13_months(self.request.user)
+        months_list = [{"id": m.id, "name": m.__str__()} for m in next_13_months]
+        context["month_list"] = json.dumps(months_list)
+        return context
 
     def form_valid(self, form):
         form.instance.user = self.request.user
