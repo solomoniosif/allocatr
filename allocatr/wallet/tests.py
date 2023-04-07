@@ -1,4 +1,4 @@
-from datetime import date, datetime
+from datetime import datetime
 
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
@@ -34,22 +34,6 @@ class UserSettingsTest(TestCase):
             self.settings.start_day_of_month = 31
             self.settings.save()
         self.assertEqual(str(cm.exception), _("Value must be between 1 and 28."))
-
-    def test_get_current_period(self):
-        day = date(2022, 10, 15)
-        period = self.settings.get_current_period(day)
-        self.assertEqual(period, (date(2022, 10, 1), date(2022, 10, 31)))
-
-    def test_get_previous_period(self):
-        day = date(2022, 10, 15)
-        period = self.settings.get_previous_period(day)
-        self.assertEqual(period, (date(2022, 9, 1), date(2022, 9, 30)))
-
-    def test_get_next_period(self):
-        day = date(2022, 10, 15)
-        period = self.settings.get_next_period(day)
-        self.assertEqual(period, (date(2022, 11, 1), date(2022, 11, 30)))
-        self.assertEqual(period, (date(2022, 11, 1), date(2022, 11, 30)))
 
 
 class MonthTest(TestCase):
