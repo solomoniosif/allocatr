@@ -519,18 +519,10 @@ class Budget(TimeStampedUUIDModel):
     is_master = models.BooleanField(default=False)
 
     class Meta:
-        constraints = [
-            models.UniqueConstraint(
-                fields=["category", "month"],
-                condition=models.Q(is_master=False),
-                name="unique_category_month",
-            ),
-            models.UniqueConstraint(
-                fields=["month"],
-                condition=models.Q(is_master=True),
-                name="unique_master_month",
-            ),
-        ]
+        unique_together = (
+            ("user", "category", "month"),
+            ("user", "is_master", "month"),
+        )
 
     def __str__(self):
         return self.name
