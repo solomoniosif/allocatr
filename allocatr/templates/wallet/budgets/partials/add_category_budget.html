@@ -2,7 +2,7 @@
 
 <!-- Modal Header -->
 <header class="flex justify-between pt-2">
-  <h1 class="text-2xl font-bold text-gray-700 dark:text-gray-200">Add New Budget</h1>
+  <h1 class="text-2xl font-bold text-gray-700 dark:text-gray-200">Create Budget for {{ category.name }}</h1>
   <button
     class="inline-flex items-center justify-center w-6 h-6 text-gray-400 transition-colors duration-150 rounded dark:hover:text-gray-200 hover: hover:text-gray-700 focus:outline-none"
     aria-label="close" @click="closeModal">
@@ -16,19 +16,13 @@
 
 <div class="px-1 py-6 space-y-3 max-w-xl text-gray-900 dark:text-white">
 
-  <form class="w-full" hx-post="{% url 'wallet:add_budget' %}"
+
+  <form class="w-full" hx-post="{% url 'wallet:add_category_budget' category_id=category.pk %}"
     @show-message="successToast.fire({title: $event.detail.value})" @budget-created="closeModal()"
     x-data="{months: {{ month_list }} }">
     {% for hidden in form.hidden_fields %} {{ hidden }} {% endfor %}
 
     <div class="flex flex-wrap -mx-3 mb-6">
-      <!-- Category -->
-      <div class="w-1/2 px-2">
-        <label for="{{ form.category.id_for_label }}" class="input-label">{{ form.category.label }}</label>
-        {% render_field form.category class+="text-input" type="date" placeholder="Date" %}
-        {% for error in form.category.errors %}<p class="text-red-500 text-xs italic">{{ error }}</p>
-        {% endfor %}
-      </div>
       <!-- Month -->
       <div class="w-1/2 px-2">
         <label for="{{ form.month.id_for_label }}" class="input-label">{{ form.month.label }}</label>
@@ -40,11 +34,6 @@
         </select>
         {% for error in form.month.errors %}<p class="text-red-500 text-xs italic">{{ error }}</p>{% endfor %}
       </div>
-    </div>
-
-    <div class="flex flex-wrap -mx-3 mb-6">
-
-
       <!-- Budgeted Amount -->
       <div class="w-1/2 px-3">
         <label for="{{ form.budgeted_amount.id_for_label }}"
@@ -53,6 +42,16 @@
         {% for error in form.budgeted_amount.errors %}<p class="text-red-500 text-xs italic">{{ error }}</p>{% endfor %}
       </div>
     </div>
+
+    {% if form.errors %}
+    <div class="alert alert-danger">
+      <ul>
+        {% for error in form.errors %}
+        <li class="text-red-600 italic">{{ error }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
 
     <footer class="flex items-center justify-end px-6 py-2 -mx-6 -mb-4 space-x-6 flex-row bg-white dark:bg-gray-800">
       <button @click="closeModal" class="secondaryBtn">Cancel</button>

@@ -12,7 +12,7 @@ from ..htmx_views import (
     HtmxOnlyCreateView,
     HtmxOnlyTemplateView,
 )
-from ..models import Budget, PlannedTransaction, Transaction
+from ..models import Budget, Category, PlannedTransaction, Transaction
 from ..services import (
     get_master_budget_stats,
     get_or_create_month,
@@ -111,6 +111,39 @@ class BudgetCreateView(LoginRequiredMixin, HtmxOnlyCreateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
+        self.object = form.save()
+        headers = {
+            "HX-Trigger": json.dumps(
+                {
+                    "budget-created": None,
+                    "budgets-changed": None,
+                    "show-message": f"Budget {form.instance.name} created",
+                }
+            )
+        }
+
+        return HttpResponse(status=204, headers=headers)
+
+
+class CategoryBudgetCreateView(LoginRequiredMixin, HtmxOnlyCreateView):
+    form_class = BudgetForm
+    template_name = "wallet/budgets/partials/add_category_budget.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        category_id = self.kwargs["category_id"]
+        category = Category.objects.get(pkid=category_id)
+        next_13_months = get_or_create_next_13_months(self.request.user)
+        months_list = [{"id": m.id, "name": m.__str__()} for m in next_13_months]
+        context["category"] = category
+        context["month_list"] = json.dumps(months_list)
+        return context
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        category_id = self.kwargs["category_id"]
+        category = Category.objects.get(pkid=category_id)
+        form.instance.category = category
         self.object = form.save()
         headers = {
             "HX-Trigger": json.dumps(

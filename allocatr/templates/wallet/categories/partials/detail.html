@@ -104,6 +104,13 @@
 
 <!-- Modal Footer -->
 <footer class="flex items-center justify-end px-6 pt-2 pb-4 -mx-2 -mb-1 space-x-6 flex-row bg-white dark:bg-gray-800">
+  <button
+    class="secondaryBtn"
+    hx-get="{% url 'wallet:add_category_budget' category_id=category.pk %}"
+    hx-trigger="click" hx-target="#modal" @click="openModal"
+    >
+    Create budget
+  </button>
   <button hx-post="{% url 'wallet:delete_category' category.pk %}" hx-trigger="isConfirmed"
     @click="twSwal.fire({title: 'Are you sure?', text:'This category will be deleted! You will not be able to revert this!', icon: 'warning', showConfirmButton: true, showCancelButton: true, confirmButtonText: 'Yes, delete it!'}).then(result => {if (result.isConfirmed) {$dispatch('isConfirmed')}})"
     @show-message="successToast.fire({title: $event.detail.value})" class="redBtn">

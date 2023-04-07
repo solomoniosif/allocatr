@@ -139,6 +139,11 @@ urlpatterns = [
     path("budgets/<int:pk>/", views.BudgetDetailView.as_view(), name="budget_detail"),
     path("budgets/add/", views.BudgetCreateView.as_view(), name="add_budget"),
     path(
+        "budgets/category/<int:category_id>/add/",
+        views.CategoryBudgetCreateView.as_view(),
+        name="add_category_budget",
+    ),
+    path(
         "budgets/master-budget/",
         views.MasterBudgetPartialView.as_view(),
         name="master_budget_partial",
