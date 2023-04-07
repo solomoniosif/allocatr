@@ -11,6 +11,7 @@ from ..htmx_views import (
     HtmxListView,
     HtmxOnlyCreateView,
     HtmxOnlyTemplateView,
+    HtmxOnlyUpdateView,
 )
 from ..models import Budget, Category, PlannedTransaction, Transaction
 from ..services import (
@@ -140,7 +141,6 @@ class CategoryBudgetCreateView(LoginRequiredMixin, HtmxOnlyCreateView):
         return context
 
     def form_valid(self, form):
-        print(form.cleaned_data)
         form.instance.user = self.request.user
         category_id = self.kwargs["category_id"]
         category = Category.objects.get(pkid=category_id)
@@ -157,4 +157,31 @@ class CategoryBudgetCreateView(LoginRequiredMixin, HtmxOnlyCreateView):
             )
         }
 
+        return HttpResponse(status=204, headers=headers)
+
+
+class BudgetUpdateView(LoginRequiredMixin, HtmxOnlyUpdateView):
+    model = Budget
+    form_class = BudgetForm
+    template_name = "wallet/budgets/partials/update_budget.html"
+    context_object_name = "budget"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        next_13_months = get_or_create_next_13_months(self.request.user)
+        month_list = [{"id": m.id, "name": m.__str__()} for m in next_13_months]
+        context["month_list"] = json.dumps(month_list)
+        return context
+
+    def form_valid(self, form):
+        self.object = form.save()
+        headers = {
+            "HX-Trigger": json.dumps(
+                {
+                    "budget-updated": None,
+                    "budgets-changed": None,
+                    "show-message": f"Budget {form.instance.name} updated",
+                }
+            )
+        }
         return HttpResponse(status=204, headers=headers)

@@ -144,6 +144,9 @@ urlpatterns = [
         name="add_category_budget",
     ),
     path(
+        "budgets/<int:pk>/update/", views.BudgetUpdateView.as_view(), name="edit_budget"
+    ),
+    path(
         "budgets/master-budget/",
         views.MasterBudgetPartialView.as_view(),
         name="master_budget_partial",

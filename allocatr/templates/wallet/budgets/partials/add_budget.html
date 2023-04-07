@@ -43,8 +43,6 @@
     </div>
 
     <div class="flex flex-wrap -mx-3 mb-6">
-
-
       <!-- Budgeted Amount -->
       <div class="w-1/2 px-3">
         <label for="{{ form.budgeted_amount.id_for_label }}"
@@ -53,6 +51,16 @@
         {% for error in form.budgeted_amount.errors %}<p class="text-red-500 text-xs italic">{{ error }}</p>{% endfor %}
       </div>
     </div>
+
+    {% if form.errors %}
+    <div>
+      <ul>
+        {% for error in form.non_field_errors %}
+        <li class="text-red-500 italic p-3">{{ error }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
 
     <footer class="flex items-center justify-end px-6 py-2 -mx-6 -mb-4 space-x-6 flex-row bg-white dark:bg-gray-800">
       <button @click="closeModal" class="secondaryBtn">Cancel</button>
