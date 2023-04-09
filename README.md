@@ -28,19 +28,19 @@ License: MIT
 - Graphs and charts to visualize financial data
 
 ## Technologies Used
-- Python 3.10.8
-- Django 4.0.10
-- Alpine JS 3.12
-- htmx 1.8.6
-- Tailwind CSS 3.3.1
+- [Python 3.10.8](https://www.python.org/)
+- [Django 4.0.10](https://www.djangoproject.com/)
+- [Alpine.js 3.12](https://alpinejs.dev/)
+- [htmx 1.8.6](https://htmx.org/)
+- [Tailwind CSS 3.3.1](https://tailwindcss.com/)
 - Charts.js 4.2.1 | to be replaced
-- Apache Echarts 5.4.2
-- List.js 2.3.1
-- Sweetalert2 11.7.2
-- Coloris Color Picker 0.18.0
-- PostgreSQL database
-- Docker
-- CapRover 1.10.1
+- [Apache Echarts 5.4.2](https://echarts.apache.org/)
+- [List.js 2.3.1](https://listjs.com/)
+- [Sweetalert2 11.7.2](https://sweetalert2.github.io/)
+- [Coloris Color Picker 0.18.0](https://coloris.js.org/)
+- [PostgreSQL](https://www.postgresql.org/)
+- [Docker](https://www.docker.com/)
+- [CapRover 1.10.1](https://caprover.com/)
 
 ## Basic Commands
 
