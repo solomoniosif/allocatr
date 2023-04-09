@@ -29,7 +29,7 @@ License: MIT
 
 ## Technologies Used
 - Python 3.10.8
-- Django 4.0,10
+- Django 4.0.10
 - Alpine JS 3.12
 - htmx 1.8.6
 - Charts.js 4.2.1 | to be replaced
