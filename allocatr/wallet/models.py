@@ -5,7 +5,7 @@ from colorfield.fields import ColorField
 from dateutil.relativedelta import relativedelta
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
-from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.validators import MaxValueValidator, MinValueValidator, RegexValidator
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext as _
@@ -33,7 +33,25 @@ class Month(models.Model):
     )
     first_day = models.DateField()
     last_day = models.DateField(blank=True)
-    month_code = models.PositiveSmallIntegerField(blank=True, editable=False)
+    month_code = models.PositiveSmallIntegerField(
+        blank=True,
+        editable=False,
+        validators=[
+            RegexValidator(
+                regex=r"^\d{4}$", message="Month code must be 4 digits long"
+            ),
+            RegexValidator(
+                regex=r"^\d{2}$",
+                message="Last 2 digits of month code must be between 01 and 12",
+                code="invalid_month_code",
+            ),
+            RegexValidator(
+                regex=r"^(0[1-9]|1[0-2])$",
+                message="Last 2 digits of month code must be between 01 and 12",
+                code="invalid_month_code",
+            ),
+        ],
+    )
     override_last_day = models.BooleanField(default=True)
 
     def get_or_create_next_month(self):
