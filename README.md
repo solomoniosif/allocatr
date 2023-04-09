@@ -32,9 +32,10 @@ License: MIT
 - Django 4.0.10
 - Alpine JS 3.12
 - htmx 1.8.6
+- Tailwind CSS 3.3.1
 - Charts.js 4.2.1 | to be replaced
 - Apache Echarts 5.4.2
-- Tailwind CSS 3.3.1
+- List.js 2.3.1
 - Sweetalert2 11.7.2
 - Coloris Color Picker 0.18.0
 - PostgreSQL database
