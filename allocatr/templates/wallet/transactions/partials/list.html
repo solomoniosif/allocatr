@@ -13,7 +13,7 @@
 
       <!-- Desktop View (table)-->
       <div id="transactions-table" class="w-full overflow-hidden rounded-lg shadow-xl hidden md:block">
-        <table class="p-6 w-full dark:border dark:border-gray-800">
+        <table class="table p-6 w-full dark:border dark:border-gray-800">
 
           <caption class="relative bg-white dark:bg-gray-800 rounded-tr-lg rounded-tl-lg">
             <div class="flex flex-col items-center justify-between p-4 space-y-3 md:flex-row md:space-y-0 md:space-x-4">
@@ -110,13 +110,22 @@
             </div>
           </caption>
 
+          <colgroup>
+            <col class="w-1/16">
+            <col class="w-7/12">
+            <col class="w-2/12">
+            <col class="w-2/12">
+            <col class="w-2/12">
+            <col class="w-2/12">
+          </colgroup>
+
           <thead class=" bg-white font-semibold uppercase dark:bg-gray-800 dark:text-white">
             <tr>
               <!-- Transaction Type -->
-              <th class="w-4 text-sm tracking-wide text-left">
+              <th class="text-sm tracking-wide text-left">
                 <div class="flex flex-row justify-start items-center">
-                  <span class="text-sm p-3 text-left">Type</span>
-                  <span class="text-sm px-2 cursor-pointer">
+                  <span class="p-2">Type</span>
+                  <span class="cursor-pointer">
                     <button class="sort" data-sort="tr__type" @click="sortByColumn('trType')">
                       <span x-show="sortingState.trType === 'unsorted'"><svg viewBox="0 0 20 20"
                           class="svg-icon fill-gray-800 dark:fill-white opacity-10">
@@ -136,10 +145,10 @@
               </th>
 
               <!-- Transaction Title -->
-              <th class="w-24 text-sm tracking-wide text-left">
+              <th class="text-sm tracking-wide text-left">
                 <div class="flex justify-start items-center">
-                  <span class="text-sm p-3 tracking-wide text-left">Transaction</span>
-                  <span class="text-sm px-2 cursor-pointer">
+                  <span class="p-2">Transaction</span>
+                  <span class="cursor-pointer">
                     <button class="sort" data-sort="tr__title" @click="sortByColumn('trTitle')">
                       <span x-show="sortingState.trTitle === 'unsorted'"><svg viewBox="0 0 20 20"
                           class="svg-icon fill-gray-800 dark:fill-white opacity-10">
@@ -159,10 +168,10 @@
               </th>
 
               <!-- Transaction Category -->
-              <th class="w-8 text-sm tracking-wide text-left">
+              <th class="text-sm tracking-wide text-left">
                 <div class="flex justify-start items-center">
-                  <span class="text-sm p-3 tracking-wide text-left">Category</span>
-                  <span class="text-sm px-2 cursor-pointer">
+                  <span class="p-2">Category</span>
+                  <span class="cursor-pointer">
                     <button class="sort" data-sort="tr__category" @click="sortByColumn('trCategory')">
                       <span x-show="sortingState.trCategory === 'unsorted'"><svg viewBox="0 0 20 20"
                           class="svg-icon fill-gray-800 dark:fill-white opacity-10">
@@ -182,10 +191,10 @@
               </th>
 
               <!-- Transaction Amount -->
-              <th class="w-6 text-sm tracking-wide text-left">
+              <th class="text-sm tracking-wide text-left">
                 <div class="flex justify-start items-center">
-                  <span class="text-sm p-3 tracking-wide text-left">Amount</span>
-                  <span class="text-sm px-2 cursor-pointer">
+                  <span class="p-2">Amount</span>
+                  <span class="tcursor-pointer">
                     <button class="sort" data-sort="tr__amount" @click="sortByColumn('trAmount')">
                       <span x-show="sortingState.trAmount === 'unsorted'"><svg viewBox="0 0 20 20"
                           class="svg-icon fill-gray-800 dark:fill-white opacity-10">
@@ -205,10 +214,10 @@
               </th>
 
               <!-- Transaction Account -->
-              <th class="w-6 text-sm tracking-wide text-left">
+              <th class="text-sm tracking-wide text-left">
                 <div class="flex justify-start items-center">
-                  <span class="text-sm p-3 tracking-wide text-left">Account</span>
-                  <span class="text-sm px-2 cursor-pointer">
+                  <span class="p-2">Account</span>
+                  <span class="cursor-pointer">
                     <button class="sort" data-sort="tr__account" @click="sortByColumn('trAccount')">
                       <span x-show="sortingState.trAccount === 'unsorted'"><svg viewBox="0 0 20 20"
                           class="svg-icon fill-gray-800 dark:fill-white opacity-10">
@@ -228,10 +237,10 @@
               </th>
 
               <!-- Transaction Date -->
-              <th class="w-6 text-sm tracking-wide text-left">
+              <th class="text-sm tracking-wide text-left">
                 <div class="flex justify-start items-center">
-                  <span class="text-sm p-3 tracking-wide text-left">Date</span>
-                  <span class="text-sm px-2 cursor-pointer">
+                  <span class="p-2">Date</span>
+                  <span class="cursor-pointer">
                     <button class="sort" data-sort="tr__date" @click="sortByColumn('trDate')">
                       <span x-show="sortingState.trDate === 'unsorted'"><svg viewBox="0 0 20 20"
                           class="svg-icon fill-gray-800 dark:fill-white opacity-10">
