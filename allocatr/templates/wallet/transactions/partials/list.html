@@ -43,40 +43,6 @@
 
                 <div class="flex items-center w-full space-x-3 md:w-auto">
 
-                  <!-- Sort Dropdown -->
-                  <div class="relative">
-                    <button id="sortDropdownButton" @click="sortMenuOpen = !sortMenuOpen"
-                      class="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg md:w-auto focus:outline-none hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
-                      type="button">
-                      Sort
-                      <svg class="ml-1 w-5 h-5" fill="currentColor" viewbox="0 0 20 20"
-                        xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                        <path clip-rule="evenodd" fill-rule="evenodd"
-                          d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
-                      </svg>
-                    </button>
-                    <div x-show="sortMenuOpen" x-on:click.away="sortMenuOpen = false"
-                      class="absolute z-10 bg-white divide-y divide-gray-100 rounded-lg px-1 shadow dark:bg-gray-700 dark:divide-gray-600">
-                      <ul class="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="sortDropdownButton">
-                        <li>
-                          <button class="sort dropdown-button text-sm" data-sort="tr__type">By
-                            Type</button>
-                        </li>
-                        <li>
-                          <button class="sort dropdown-button text-sm" data-sort="tr__title">By
-                            Title</button>
-                        </li>
-                        <li>
-                          <button class="sort dropdown-button text-sm" data-sort="tr__date">By
-                            Date</button>
-                        </li>
-                        <li>
-                          <button class="sort dropdown-button text-sm" data-sort="tr__amount">By Amount</button>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-
                   <!-- Filter Dropdown -->
                   <div class="relative">
                     <button id="filterDropdownButton" @click="filterMenuOpen = !filterMenuOpen"
@@ -146,12 +112,143 @@
 
           <thead class=" bg-white font-semibold uppercase dark:bg-gray-800 dark:text-white">
             <tr>
-              <th class="w-6 p-3 text-sm tracking-wide text-left">Type</th>
-              <th class="p-3 text-sm tracking-wide text-left">Transaction</th>
-              <th class="w-24 p-3 text-sm tracking-wide text-left">Category</th>
-              <th class="w-24 p-3 text-sm tracking-wide text-left">Amount</th>
-              <th class="w-32 p-3 text-sm tracking-wide text-left">Account</th>
-              <th class="w-32 p-3 text-sm tracking-wide text-left">Date</th>
+              <!-- Transaction Type -->
+              <th class="w-4 text-sm tracking-wide text-left">
+                <div class="flex flex-row justify-start items-center">
+                  <span class="text-sm p-3 text-left">Type</span>
+                  <span class="text-sm px-2 cursor-pointer">
+                    <button class="sort" data-sort="tr__type" @click="sortByColumn('trType')">
+                      <span x-show="sortingState.trType === 'unsorted'"><svg viewBox="0 0 20 20"
+                          class="svg-icon fill-gray-800 dark:fill-white opacity-10">
+                          <use xlink:href="#chevron-up-down"></use>
+                        </svg></span>
+                      <span x-show="sortingState.trType === 'asc'"><svg viewBox="0 0 20 20"
+                          class="svg-icon fill-red-500">
+                          <use xlink:href="#chevron-up"></use>
+                        </svg></span>
+                      <span x-show="sortingState.trType === 'desc'"><svg viewBox="0 0 20 20"
+                          class="svg-icon fill-red-500">
+                          <use xlink:href="#chevron-down"></use>
+                        </svg></span>
+                    </button>
+                  </span>
+                </div>
+              </th>
+
+              <!-- Transaction Title -->
+              <th class="w-24 text-sm tracking-wide text-left">
+                <div class="flex justify-start items-center">
+                  <span class="text-sm p-3 tracking-wide text-left">Transaction</span>
+                  <span class="text-sm px-2 cursor-pointer">
+                    <button class="sort" data-sort="tr__title" @click="sortByColumn('trTitle')">
+                      <span x-show="sortingState.trTitle === 'unsorted'"><svg viewBox="0 0 20 20"
+                          class="svg-icon fill-gray-800 dark:fill-white opacity-10">
+                          <use xlink:href="#chevron-up-down"></use>
+                        </svg></span>
+                      <span x-show="sortingState.trTitle === 'asc'"><svg viewBox="0 0 20 20"
+                          class="svg-icon fill-red-500">
+                          <use xlink:href="#chevron-up"></use>
+                        </svg></span>
+                      <span x-show="sortingState.trTitle === 'desc'"><svg viewBox="0 0 20 20"
+                          class="svg-icon fill-red-500">
+                          <use xlink:href="#chevron-down"></use>
+                        </svg></span>
+                    </button>
+                  </span>
+                </div>
+              </th>
+
+              <!-- Transaction Category -->
+              <th class="w-8 text-sm tracking-wide text-left">
+                <div class="flex justify-start items-center">
+                  <span class="text-sm p-3 tracking-wide text-left">Category</span>
+                  <span class="text-sm px-2 cursor-pointer">
+                    <button class="sort" data-sort="tr__category" @click="sortByColumn('trCategory')">
+                      <span x-show="sortingState.trCategory === 'unsorted'"><svg viewBox="0 0 20 20"
+                          class="svg-icon fill-gray-800 dark:fill-white opacity-10">
+                          <use xlink:href="#chevron-up-down"></use>
+                        </svg></span>
+                      <span x-show="sortingState.trCategory === 'asc'"><svg viewBox="0 0 20 20"
+                          class="svg-icon fill-red-500">
+                          <use xlink:href="#chevron-up"></use>
+                        </svg></span>
+                      <span x-show="sortingState.trCategory === 'desc'"><svg viewBox="0 0 20 20"
+                          class="svg-icon fill-red-500">
+                          <use xlink:href="#chevron-down"></use>
+                        </svg></span>
+                    </button>
+                  </span>
+                </div>
+              </th>
+
+              <!-- Transaction Amount -->
+              <th class="w-6 text-sm tracking-wide text-left">
+                <div class="flex justify-start items-center">
+                  <span class="text-sm p-3 tracking-wide text-left">Amount</span>
+                  <span class="text-sm px-2 cursor-pointer">
+                    <button class="sort" data-sort="tr__amount" @click="sortByColumn('trAmount')">
+                      <span x-show="sortingState.trAmount === 'unsorted'"><svg viewBox="0 0 20 20"
+                          class="svg-icon fill-gray-800 dark:fill-white opacity-10">
+                          <use xlink:href="#chevron-up-down"></use>
+                        </svg></span>
+                      <span x-show="sortingState.trAmount === 'asc'"><svg viewBox="0 0 20 20"
+                          class="svg-icon fill-red-500">
+                          <use xlink:href="#chevron-up"></use>
+                        </svg></span>
+                      <span x-show="sortingState.trAmount === 'desc'"><svg viewBox="0 0 20 20"
+                          class="svg-icon fill-red-500">
+                          <use xlink:href="#chevron-down"></use>
+                        </svg></span>
+                    </button>
+                  </span>
+                </div>
+              </th>
+
+              <!-- Transaction Account -->
+              <th class="w-6 text-sm tracking-wide text-left">
+                <div class="flex justify-start items-center">
+                  <span class="text-sm p-3 tracking-wide text-left">Account</span>
+                  <span class="text-sm px-2 cursor-pointer">
+                    <button class="sort" data-sort="tr__account" @click="sortByColumn('trAccount')">
+                      <span x-show="sortingState.trAccount === 'unsorted'"><svg viewBox="0 0 20 20"
+                          class="svg-icon fill-gray-800 dark:fill-white opacity-10">
+                          <use xlink:href="#chevron-up-down"></use>
+                        </svg></span>
+                      <span x-show="sortingState.trAccount === 'asc'"><svg viewBox="0 0 20 20"
+                          class="svg-icon fill-red-500">
+                          <use xlink:href="#chevron-up"></use>
+                        </svg></span>
+                      <span x-show="sortingState.trAccount === 'desc'"><svg viewBox="0 0 20 20"
+                          class="svg-icon fill-red-500">
+                          <use xlink:href="#chevron-down"></use>
+                        </svg></span>
+                    </button>
+                  </span>
+                </div>
+              </th>
+
+              <!-- Transaction Date -->
+              <th class="w-6 text-sm tracking-wide text-left">
+                <div class="flex justify-start items-center">
+                  <span class="text-sm p-3 tracking-wide text-left">Date</span>
+                  <span class="text-sm px-2 cursor-pointer">
+                    <button class="sort" data-sort="tr__date" @click="sortByColumn('trDate')">
+                      <span x-show="sortingState.trDate === 'unsorted'"><svg viewBox="0 0 20 20"
+                          class="svg-icon fill-gray-800 dark:fill-white opacity-10">
+                          <use xlink:href="#chevron-up-down"></use>
+                        </svg></span>
+                      <span x-show="sortingState.trDate === 'asc'"><svg viewBox="0 0 20 20"
+                          class="svg-icon fill-red-500">
+                          <use xlink:href="#chevron-up"></use>
+                        </svg></span>
+                      <span x-show="sortingState.trDate === 'desc'"><svg viewBox="0 0 20 20"
+                          class="svg-icon fill-red-500">
+                          <use xlink:href="#chevron-down"></use>
+                        </svg></span>
+                    </button>
+                  </span>
+                </div>
+              </th>
             </tr>
           </thead>
 
@@ -225,68 +322,6 @@
         </div>
 
       </div>
-
-      <!-- Grid.js Version -->
-      <div id="wrapper" class="mt-5"></div>
-
-      <script>
-        new gridjs.Grid({
-          columns: [
-            {name: "Type",
-            formatter: (cell) => {
-              if (cell == "Income") {
-                return gridjs.html(`<svg viewBox="0 0 22 22" class="svg-icon fill-green-500">
-                  <use xlink:href="#income-icon"></use>
-                </svg>`)
-              } else if (cell == "Expense") {
-                return gridjs.html(`<svg viewBox="0 0 22 22" class="svg-icon fill-red-500">
-                  <use xlink:href="#expense-icon"></use>
-                </svg>`)
-              } else if (cell == "Transfer") {
-                return gridjs.html(`<svg viewBox="0 0 22 22" class="svg-icon fill-blue-500">
-                  <use xlink:href="#transfer-icon"></use>
-                </svg>`)
-              }
-            },
-            },
-            "Transaction",
-            "Category",
-            {
-              name: "Amount",
-              formatter: (cell) => `${cell} {{ user_settings.currency }}`
-            },
-            "Account",
-            "Date"
-          ],
-          data: {{ trsansactions_json|safe }},
-          fixedHeader: true,
-          search: true,
-          sort: true,
-          width: "100%",
-          pagination: {
-            limit: 10,
-            summary: false
-          },
-          language: {
-            search: {
-              placeholder: 'Search transactions',
-            },
-            pagination: {
-              previous: 'Previous',
-              next: 'Next',
-              showing: 'Showing',
-              results: () => 'Results',
-            },
-            sort: {
-              sortAsc: 'Sort in ascending order',
-              sortDesc: 'Sort in descending order',
-            },
-          },
-        }).render(document.getElementById("wrapper"));
-
-      </script>
-
-
 
       <!-- Mobile View (grid of cards) -->
       <div class="flex flex-col gap-4 md:hidden">

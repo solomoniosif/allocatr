@@ -141,7 +141,6 @@ function getSelectedMonth() {
 
 window.allTransactionsList = function () {
     return {
-        sortMenuOpen: false,
         filterMenuOpen: false,
         transactionList: new List('transactions-table', {
             valueNames: ['tr__type', 'tr__category', 'tr__title', 'tr__amount', 'tr__account', 'tr__date'],
@@ -198,6 +197,23 @@ window.allTransactionsList = function () {
                 let total = this.transactionList.size();
                 this.listDisplay = `Showing&nbsp;<span class="pagination-pill">${visible}&nbsp;of&nbsp;${total}</span>&nbsp;transactions`;
             }
+        },
+        sortingState: {
+            trType: "unsorted",
+            trTitle: "unsorted",
+            trCategory: "unsorted",
+            trAmount: "unsorted",
+            trAccount: "unsorted",
+            trDate: "unsorted",
+        },
+        sortByColumn(column) {
+            Object.keys(this.sortingState).forEach(key => {
+                if (key === column) {
+                    this.sortingState[key] = this.sortingState[key] === "asc" ? "desc" : "asc";
+                } else {
+                    this.sortingState[key] = "unsorted";
+                }
+            });
         },
     }
 }
