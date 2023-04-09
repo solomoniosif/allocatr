@@ -5,8 +5,8 @@ from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.utils.translation import gettext_lazy as _
 
-from .models import Account, Month, UserSettings
-from .utils import get_month_range
+from ..models import Account, Month, UserSettings
+from ..utils import get_month_range
 
 User = get_user_model()
 
