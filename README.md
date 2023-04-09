@@ -1,6 +1,18 @@
 # allocatr
 
-Allocatr is a personal finance management and budgeting web application built with Django. The app allows users to manage their personal finances by tracking their income, expenses, and savings goals.
+:warning: Work in progress
+
+Allocatr is a web application that helps you track your personal expenses and plan your budget. It allows you to create budgets for different categories such as groceries, rent, entertainment, etc. You can also set spending limits for each category and track your progress throughout the month. Allocatr provides you with a clear overview of your spending habits and helps you make informed decisions about your finances. It's a great tool for anyone who wants to take control of their finances and save money.
+
+- **Expense tracking**: Allow users to track their expenses by category and date. This will help them understand where their money is going and identify areas where they can cut back.
+
+- **Budget planning**: Allow users to create budgets for different categories such as groceries, rent, entertainment, etc. You can also set spending limits for each category and track your progress throughout the month.
+
+- **Goal setting**: Allow users to set financial goals such as saving for a vacation or paying off debt. You can provide them with tools to help them achieve these goals such as a savings calculator or debt payoff planner.
+
+- **Reminders**: Allow users to set reminders for upcoming bills or payments. This will help them avoid late fees and keep their finances organized.
+
+- **Reports**: Provide users with detailed reports on their spending habits and budget progress. This will help them make informed decisions about their finances and identify areas where they can improve.
 
 [![Built with Cookiecutter Django](https://img.shields.io/badge/built%20with-Cookiecutter%20Django-ff69b4.svg?logo=cookiecutter)](https://github.com/cookiecutter/cookiecutter-django/)
 [![Black code style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
