@@ -139,7 +139,7 @@ function getSelectedMonth() {
     }
 }
 
-window.allTransactionsList = function () {
+window.transactionTableData = function () {
     return {
         filterMenuOpen: false,
         transactionList: new List('transactions-table', {

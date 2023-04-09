@@ -5,7 +5,7 @@
 <section id="transactions" hx-get="{% url 'wallet:planned_transactions' %}"
   hx-trigger="accounts-changed from:body, planned-transactions-changed from:body, month-selected from:body"
   hx-target="#dashboard-main" hx-vals='js:{month: getSelectedMonth()}' class="overflow-y-auto"
-  x-data="allTransactionsList()" @htmx:after-settle.window="updateListDisplay()">
+  x-data="transactionTableData()" @htmx:after-settle.window="updateListDisplay()">
   <div class="container px-6 mx-auto">
 
     <div class=" mt-10 w-full overflow-hidden h-screen">

@@ -126,3 +126,15 @@ li.active {
 tbody.list tr:nth-child(even) {
     @apply bg-white dark:bg-gray-950 dark:hover:bg-gray-800;
 }
+
+.rotate {
+    @apply transition-all duration-[1s] ease-linear;
+    -moz-transition: all 1s linear;
+    -webkit-transition: all 1s linear;
+}
+.rotate.down {
+    @apply rotate-180 fill-red-500 dark:fill-red-500;
+    -ms-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+}
