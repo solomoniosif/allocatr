@@ -235,7 +235,6 @@ class Category(TimeStampedUUIDModel):
         on_delete=models.SET_NULL,
         blank=True,
         null=True,
-        editable=False,
     )
     name = models.CharField(_("Name"), max_length=100)
     active = models.BooleanField(verbose_name=_("Active"), default=True)
@@ -268,12 +267,14 @@ class Category(TimeStampedUUIDModel):
         self.text_color = "white" if is_color_dark(self.color) else "black"
         if (
             self._state.adding
-            or self.parent != self.__class__.objects.get(pk=self.pk).parent
+            or self.parent != self.__class__.objects.get(pkid=self.pkid).parent
         ):
             if self.parent:
                 self.root_category = self.parent.root_category
             else:
+                super().save(*args, **kwargs)
                 self.root_category = self
+                self.save()
             for child in self.subcategories.all():
                 child.save()
         super().save(*args, **kwargs)
@@ -537,10 +538,7 @@ class Budget(TimeStampedUUIDModel):
     is_master = models.BooleanField(default=False)
 
     class Meta:
-        unique_together = (
-            ("user", "category", "month"),
-            ("user", "is_master", "month"),
-        )
+        unique_together = ("user", "category", "month")
 
     def __str__(self):
         return self.name
@@ -557,12 +555,4 @@ class Budget(TimeStampedUUIDModel):
                 self.name = f"{self.category.name} budget for {self.month}"
             else:
                 self.name = f"Master budget for {self.month}"
-        if not self.budgeted_amount and self.is_master:
-            last_master_budget = Budget.objects.filter(
-                user=self.user, is_master=True
-            ).last()
-            if last_master_budget:
-                self.budgeted_amount = last_master_budget.budgeted_amount
-            else:
-                self.budgeted_amount = 0
         super().save(*args, **kwargs)
