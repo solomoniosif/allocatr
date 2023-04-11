@@ -125,7 +125,17 @@ def get_budget_stats(budget: Budget) -> dict:
     }
 
 
+def get_or_create_master_budget(month: Month) -> Budget:
+    """Returns the master budget for the given month.
+    If the master budget does not exist, it creates it."""
+    master_budget, _ = Budget.objects.get_or_create(
+        user=month.user, is_master=True, month=month
+    )
+    return master_budget
+
+
 def get_category_stats(category: Category, month: Month) -> dict:
+    """A helper function to get the stats for a category."""
     transactions = Transaction.objects.filter(
         account__user=category.user,
         category=category,
@@ -168,6 +178,7 @@ def get_category_stats(category: Category, month: Month) -> dict:
 
 
 def get_master_budget_stats(month: Month) -> dict:
+    """Returns the stats for the master budget for the given month."""
     master_budget, _ = Budget.objects.get_or_create(
         user=month.user, month=month, is_master=True
     )

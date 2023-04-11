@@ -186,16 +186,36 @@ window.transactionTableData = function () {
         updateSearched() {
             this.searched = this.transactionList.searched;
         },
-        listDisplay: "",
-        updateListDisplay() {
-            if (this.transactionList.searched || this.transactionList.filtered) {
-                let visible = this.transactionList.visibleItems.length;
-                let total = this.transactionList.matchingItems.length;
-                this.listDisplay = `Showing&nbsp;<span class="pagination-pill">${visible}&nbsp;of&nbsp;${total}</span>&nbsp;<span class="text-red-500">filtered</span>&nbsp;transactions`;
+        paginationDisplay: "",
+        updatePaginationDisplay() {
+            var total = this.transactionList.size();
+            var matching = this.transactionList.matchingItems.length;
+            var firstShownItem = this.transactionList.i;
+            if (total === 0) {
+                this.paginationDisplay = "No transactions";
+                return;
+            } else if (this.transactionList.searched || this.transactionList.filtered) {
+                if (matching === 0) {
+                    this.paginationDisplay = "No matching transactions";
+                    return;
+                } else if (matching === 1) {
+                    this.paginationDisplay = `Showing&nbsp;<span class="pagination-pill">1</span>&nbsp;transaction&nbsp;(filtered&nbsp;from&nbsp;${total})`;
+                    return;
+                } else {
+                    var lastShownItem = firstShownItem + this.transactionList.visibleItems.length - 1;
+                    this.paginationDisplay = `Showing&nbsp;<span class="pagination-pill">${firstShownItem}&nbsp;to&nbsp;${lastShownItem}</span>&nbsp;of&nbsp;${matching}&nbsp;transactions&nbsp;(filtered&nbsp;from&nbsp;${total})`;
+                    return;
+                }
+
             } else {
-                let visible = this.transactionList.visibleItems.length;
-                let total = this.transactionList.size();
-                this.listDisplay = `Showing&nbsp;<span class="pagination-pill">${visible}&nbsp;of&nbsp;${total}</span>&nbsp;transactions`;
+                if (total === 1) {
+                    this.paginationDisplay = `Showing&nbsp;<span class="pagination-pill">1</span>&nbsp;transaction&nbsp;of&nbsp;${total}&nbsp;transactions`;
+                    return;
+                } else {
+                    var lastShownItem = firstShownItem + this.transactionList.visibleItems.length - 1;
+                    this.paginationDisplay = `Showing&nbsp;<span class="pagination-pill">${firstShownItem}&nbsp;to&nbsp;${lastShownItem}</span>&nbsp;of&nbsp;${total}&nbsp;transactions`;
+                    return;
+                }
             }
         },
         sortingState: {

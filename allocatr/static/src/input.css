@@ -80,8 +80,8 @@
     @apply inline-block px-2 py-1 text-gray-900 dark:text-white;
 }
 
-li.active {
-    @apply rounded-lg bg-accentLight text-center font-bold text-white dark:text-white;
+.pagination li.active {
+    @apply rounded-full bg-accentLight text-center font-bold text-white dark:text-white;
 }
 
 .svg-icon {
@@ -89,7 +89,7 @@ li.active {
 }
 
 .pagination-pill {
-    @apply mx-1 rounded-lg bg-accentLight px-2 py-1 text-center font-bold text-white dark:text-white;
+    @apply whitespace-nowrap px-1 font-bold text-white  dark:text-white;
 }
 
 .autoComplete_wrapper {

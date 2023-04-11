@@ -25,7 +25,7 @@
       <!-- Category -->
       <div class="w-1/2 px-2">
         <label for="{{ form.category.id_for_label }}" class="input-label">{{ form.category.label }}</label>
-        {% render_field form.category class+="text-input" type="date" placeholder="Date" %}
+        {% render_field form.category class+="text-input" %}
         {% for error in form.category.errors %}<p class="text-red-500 text-xs italic">{{ error }}</p>
         {% endfor %}
       </div>

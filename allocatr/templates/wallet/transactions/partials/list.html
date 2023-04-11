@@ -5,7 +5,7 @@
 <section id="transactions" hx-get="{% url 'wallet:transactions' %}"
   hx-trigger="reload-transactions, accounts-changed from:body, transactions-changed from:body, month-selected from:body"
   hx-target="#dashboard-main" hx-vals='js:{month: getSelectedMonth()}' class="overflow-y-auto"
-  x-data="transactionTableData()" @htmx:after-settle.window="updateListDisplay()">
+  x-data="transactionTableData()" @htmx:after-settle.window="updatePaginationDisplay()">
   <div class="container px-6 mx-auto">
 
     <div class=" mt-10 w-full overflow-hidden h-screen">
@@ -43,15 +43,14 @@
                     <input
                       class="search block w-full p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                       :class="{'shadow-red-500': searched }" placeholder="Search"
-                      @input.debounce.200ms="updateListDisplay(); updateSearched()">
+                      @input.debounce.200ms="updatePaginationDisplay(); updateSearched()">
                   </div>
                 </div>
 
                 <div x-data="{reloading: false}" class="justify-self-start px-4 py-1">
                   <button @click="reloading = !reloading" @click.debounce.800ms="$dispatch('reload-transactions')">
                     <span>
-                      <svg viewBox="0 0 20 20" class="svg-icon fill-gray-500 rotate"
-                        :class="{'down': reloading}">
+                      <svg viewBox="0 0 20 20" class="svg-icon fill-gray-500 rotate" :class="{'down': reloading}">
                         <use xlink:href="#reload"></use>
                       </svg>
                     </span>
@@ -90,7 +89,7 @@
                       <ul class="space-y-2 text-sm" aria-labelledby="dropdownDefault">
                         <li class="flex items-center">
                           <input id="remove-filters" type="radio" name="filter-radio"
-                            @click="removeFilters(); updateListDisplay()"
+                            @click="removeFilters(); updatePaginationDisplay()"
                             class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500 dark:checked:bg-accent" />
                           <label for="remove-filters"
                             class="ml-2 text-sm font-medium whitespace-nowrap text-gray-900 dark:text-gray-100">
@@ -99,7 +98,7 @@
                         </li>
                         <li class="flex items-center">
                           <input id="income-filter" type="radio" name="filter-radio"
-                            @click="filterIncome(); updateListDisplay()"
+                            @click="filterIncome(); updatePaginationDisplay()"
                             class=" filter w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500 dark:checked:bg-accent" />
                           <label for="income-filter" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">
                             Income
@@ -107,7 +106,7 @@
                         </li>
                         <li class="flex items-center">
                           <input id="expenses-filter" type="radio" name="filter-radio"
-                            @click="filterExpenses(); updateListDisplay()"
+                            @click="filterExpenses(); updatePaginationDisplay()"
                             class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500 dark:checked:bg-accent" />
                           <label for="expenses-filter"
                             class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">
@@ -116,7 +115,7 @@
                         </li>
                         <li class="flex items-center">
                           <input id="transfers-filter" type="radio" name="filter-radio"
-                            @click="filterTransfers(); updateListDisplay()"
+                            @click="filterTransfers(); updatePaginationDisplay()"
                             class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500 dark:checked:bg-accent" />
                           <label for="transfers-filter"
                             class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">
@@ -334,14 +333,15 @@
 
         <!-- Pagination -->
         <div
-          class="hidden px-4 py-2.5 text-xs font-semibold tracking-wide text-gray-800 uppercase bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800 md:grid">
-          <span class="flex col-span-4 mt-2 sm:mt-auto sm:justify-start">
+          class="hidden px-4 py-2.5 text-xs font-semibold tracking-wide text-gray-800 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800 md:grid">
+          <span class="flex items-center col-span-3 justify-start font-semibold" x-html="paginationDisplay"></span>
+          <span class="col-span-2"></span>
+          <span class="flex col-span-4 mt-2 sm:mt-auto sm:justify-end">
             <nav aria-label="Table navigation">
-              <ul class="pagination inline-flex items-center space-x-1" @click.debounce="updateListDisplay"></ul>
+              <ul class="pagination inline-flex items-center space-x-1" @click.debounce="updatePaginationDisplay"></ul>
             </nav>
           </span>
-          <span class="col-span-2"></span>
-          <span class="flex items-center col-span-3 justify-end font-semibold" x-html="listDisplay"></span>
+
         </div>
 
       </div>
@@ -405,13 +405,9 @@
               </div>
 
             </div>
-
           </div>
-
-
         </div>
         {% endfor %}
       </div>
-
     </div>
 </section>
