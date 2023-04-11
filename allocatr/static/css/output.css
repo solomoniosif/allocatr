@@ -871,6 +871,22 @@ select {
   top: 0px;
 }
 
+.-left-0 {
+  left: -0px;
+}
+
+.-left-5 {
+  left: -1.25rem;
+}
+
+.-left-2 {
+  left: -0.5rem;
+}
+
+.-left-4 {
+  left: -1rem;
+}
+
 .z-10 {
   z-index: 10;
 }
@@ -2592,11 +2608,9 @@ select {
 
 .pagination-pill {
   white-space: nowrap;
-  padding-left: 0.25rem;
-  padding-right: 0.25rem;
   font-weight: 700;
   --tw-text-opacity: 1;
-  color: rgb(255 255 255 / var(--tw-text-opacity));
+  color: rgb(0 0 0 / var(--tw-text-opacity));
 }
 
 :is(.dark .pagination-pill) {

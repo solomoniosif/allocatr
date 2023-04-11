@@ -301,24 +301,24 @@
               </td>
 
               <!-- Transaction Title -->
-              <td class="p-3 text-sm whitespace-nowrap tr__title">
+              <td class="p-3 text-sm whitespace-nowrap tracking-wide tr__title">
                 {{ tr.title|capfirst }}
               </td>
 
               <!-- Transaction Category -->
               <td class="p-3 text-sm whitespace-nowrap tr__category">
-                <span class="px-2 py-1 text-xs font-medium uppercase tracking-wider rounded-lg"
-                  style="background-color: {{ tr.category.color }}; color: {{ tr.category.text_color }}; opacity: 0.8;">{{ tr.category }}
+                <span class="px-2 py-1 text-xs font-medium uppercase rounded-lg"
+                  style="background-color: {{ tr.category.color }}; color: {{ tr.category.text_color }};">{{ tr.category }}
                 </span>
               </td>
 
               <!-- Transaction Amount -->
-              <td class="p-3 text-sm whitespace-nowrap tr__amount">{{ user_settings.currency }}
+              <td class="p-3 text-sm whitespace-nowrap tracking-wide font-semibold tr__amount">{{ user_settings.currency }}
                 {{ tr.amount|floatformat:0 }}</td>
 
               <!-- Transaction Account -->
               <td class="p-3 text-sm whitespace-nowrap tr__account">
-                <span class="px-2 py-1 text-xs font-medium uppercase tracking-wider rounded-lg"
+                <span class="px-2 py-1 text-xs font-medium uppercase rounded-lg"
                   style="background-color: {{ tr.account.color }}; color: {{ tr.account.text_color }}">
                   {{ tr.account.name }}
                 </span>

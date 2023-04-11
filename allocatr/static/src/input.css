@@ -89,7 +89,7 @@
 }
 
 .pagination-pill {
-    @apply whitespace-nowrap px-1 font-bold text-white  dark:text-white;
+    @apply whitespace-nowrap font-bold text-black dark:text-white;
 }
 
 .autoComplete_wrapper {
