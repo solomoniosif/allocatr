@@ -53,6 +53,7 @@ class Month(models.Model):
         ],
     )
     override_last_day = models.BooleanField(default=True)
+    month_days = models.PositiveSmallIntegerField(default=0, editable=False)
 
     def get_or_create_next_month(self):
         next_month = (
@@ -86,6 +87,7 @@ class Month(models.Model):
         self.month_code = datetime.strftime(self.first_day, "%y%m")
         if self.override_last_day:
             _, self.last_day = get_month_range(self.first_day.day, self.first_day)
+        self.month_days = (self.last_day - self.first_day).days + 1
         super().save(*args, **kwargs)
 
     def __str__(self):
