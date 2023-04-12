@@ -31,23 +31,11 @@ class TransactionListView(LoginRequiredMixin, HtmxListView):
             account__user=self.request.user,
             date__gte=month.first_day,
             date__lte=month.last_day,
-        )
+        ).prefetch_related("account", "category")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user_settings = UserSettings.objects.get(user=self.request.user)
-        tr = [
-            [
-                str(t.get_transaction_type_display()),
-                t.title,
-                t.category.name,
-                int(t.amount),
-                t.account.name,
-                t.date.isoformat(),
-            ]
-            for t in self.get_queryset()
-        ]
-        context["trsansactions_json"] = json.dumps(tr)
         context["user_settings"] = user_settings
         return context
 
