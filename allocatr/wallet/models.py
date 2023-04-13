@@ -53,7 +53,7 @@ class Month(models.Model):
         ],
     )
     override_last_day = models.BooleanField(default=True)
-    month_days = models.PositiveSmallIntegerField(default=0, editable=False)
+    month_days = models.PositiveSmallIntegerField(default=30, editable=False)
 
     def get_or_create_next_month(self):
         next_month = (
