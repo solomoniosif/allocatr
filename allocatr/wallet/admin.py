@@ -18,7 +18,14 @@ class UserSettingsAdmin(admin.ModelAdmin):
 
 @admin.register(Month)
 class MonthAdmin(admin.ModelAdmin):
-    list_display = ("__str__", "user", "first_day", "last_day", "month_code")
+    list_display = (
+        "__str__",
+        "user",
+        "first_day",
+        "last_day",
+        "month_code",
+        "month_days",
+    )
 
 
 @admin.register(Account)
