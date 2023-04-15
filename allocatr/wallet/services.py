@@ -1,4 +1,4 @@
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from typing import Union
 
 from dateutil.relativedelta import relativedelta
@@ -217,4 +217,38 @@ def get_master_budget_stats(month: Month) -> dict:
         "incomeCategories": income_categories,
         "unallocatedAmount": unallocated,
         "monthName": month.__str__(),
+    }
+
+
+def get_expense_data_for_month(month: Month) -> dict:
+    user = month.user
+    month_days = [month.first_day + timedelta(days=i) for i in range(month.month_days)]
+    all_month_expenses = Transaction.objects.filter(
+        account__user=user,
+        date__gte=month.first_day,
+        date__lte=month.last_day,
+        transaction_type="EX",
+    )
+    actual_expenses = [None for _ in range(month.month_days)]
+    for index, day in enumerate(month_days):
+        if day <= date.today():
+            day_expenses = all_month_expenses.filter(date=day)
+            day_expense_amount = int(sum(t.amount for t in day_expenses)) or 0
+            actual_expenses[index] = day_expense_amount
+    rest_of_month_planned_expenses = PlannedTransaction.objects.filter(
+        account__user=user,
+        date__gte=date.today(),
+        date__lte=month.last_day,
+    )
+    planned_expenses = [None for _ in range(month.month_days)]
+    for index, day in enumerate(month_days):
+        if day >= date.today():
+            day_expenses = rest_of_month_planned_expenses.filter(date=day)
+            day_expense_amount = int(sum(t.amount for t in day_expenses)) or 0
+            planned_expenses[index] = day_expense_amount
+    month_days_str = [day.strftime("%d-%m") for day in month_days]
+    return {
+        "monthDays": month_days_str,
+        "actualExpenses": [None if i == 0 else i for i in actual_expenses],
+        "plannedExpenses": [None if i == 0 else i for i in planned_expenses],
     }
