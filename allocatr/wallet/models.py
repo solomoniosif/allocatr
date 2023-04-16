@@ -298,7 +298,11 @@ class Transaction(TimeStampedUUIDModel):
         choices=TransactionType.choices,
     )
     category = models.ForeignKey(
-        Category, verbose_name=_("Category"), on_delete=models.PROTECT
+        Category,
+        verbose_name=_("Category"),
+        on_delete=models.PROTECT,
+        blank=True,
+        null=True,
     )
     account = models.ForeignKey(
         Account,
