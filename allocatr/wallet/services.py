@@ -220,8 +220,9 @@ def get_master_budget_stats(month: Month) -> dict:
     }
 
 
-def get_expense_data_for_month(month: Month) -> dict:
-    user = month.user
+def get_current_month_expenses(user: User) -> dict:
+    """Returns the current month's expenses."""
+    month = get_or_create_month(user, date.today())
     month_days = [month.first_day + timedelta(days=i) for i in range(month.month_days)]
     all_month_expenses = Transaction.objects.filter(
         account__user=user,
@@ -229,23 +230,34 @@ def get_expense_data_for_month(month: Month) -> dict:
         date__lte=month.last_day,
         transaction_type="EX",
     )
-    actual_expenses = [None for _ in range(month.month_days)]
+    actual_expenses = [0 for _ in range(month.month_days)]
     for index, day in enumerate(month_days):
         if day <= date.today():
             day_expenses = all_month_expenses.filter(date=day)
             day_expense_amount = int(sum(t.amount for t in day_expenses)) or 0
-            actual_expenses[index] = day_expense_amount
+            if index == 0:
+                actual_expenses[index] = day_expense_amount
+            else:
+                actual_expenses[index] = actual_expenses[index - 1] + day_expense_amount
     rest_of_month_planned_expenses = PlannedTransaction.objects.filter(
         account__user=user,
         date__gte=date.today(),
         date__lte=month.last_day,
+        transaction_type="EX",
     )
-    planned_expenses = [None for _ in range(month.month_days)]
+    planned_expenses = [0 for _ in range(month.month_days)]
     for index, day in enumerate(month_days):
+        if day == date.today():
+            planned_expenses[index] = actual_expenses[index]
         if day >= date.today():
             day_expenses = rest_of_month_planned_expenses.filter(date=day)
             day_expense_amount = int(sum(t.amount for t in day_expenses)) or 0
-            planned_expenses[index] = day_expense_amount
+            if index == 0:
+                planned_expenses[index] = day_expense_amount
+            else:
+                planned_expenses[index] = (
+                    planned_expenses[index - 1] + day_expense_amount
+                )
     month_days_str = [day.strftime("%d-%m") for day in month_days]
     return {
         "monthDays": month_days_str,
