@@ -112,6 +112,11 @@ urlpatterns = [
         name="edit_account",
     ),
     path(
+        "accounts/<int:pk>/update-balance/",
+        views.AccountBalanceUpdateView.as_view(),
+        name="update_account_balance",
+    ),
+    path(
         "accounts/<int:pk>/delete/",
         views.AccountDeleteView.as_view(),
         name="delete_account",

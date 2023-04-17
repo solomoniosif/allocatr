@@ -5,7 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.http import HttpResponse
 
-from ..forms import AccountForm
+from ..forms import AccountBalanceForm, AccountForm
 from ..htmx_views import (
     HtmxDetailView,
     HtmxListView,
@@ -145,6 +145,39 @@ class AccountUpdateView(LoginRequiredMixin, HtmxOnlyUpdateView):
                     "account-edited": None,
                     "accounts-changed": None,
                     "show-message": f"Account {form.instance.name} updated",
+                }
+            )
+        }
+        return HttpResponse(status=204, headers=headers)
+
+
+class AccountBalanceUpdateView(LoginRequiredMixin, HtmxOnlyUpdateView):
+    model = Account
+    form_class = AccountBalanceForm
+    context_object_name = "account"
+    template_name = "wallet/accounts/partials/update_account_balance.html"
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["instance"] = self.get_object()
+        return kwargs
+
+    def form_valid(self, form):
+        old_balance = form.initial["current_balance"]
+        new_balance = form.cleaned_data["current_balance"]
+        Transaction.objects.create(
+            transaction_type="AD",
+            amount=old_balance - new_balance,
+            title=f"Balance adjustment for {form.instance.name}",
+            account=form.instance,
+        )
+        self.object = form.save()  # noqa
+        headers = {
+            "HX-Trigger": json.dumps(
+                {
+                    "account-edited": None,
+                    "accounts-changed": None,
+                    "show-message": f"Account {form.instance.name} balance adjusted",
                 }
             )
         }
