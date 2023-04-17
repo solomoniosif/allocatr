@@ -53,6 +53,13 @@
                     Edit
                   </button>
 
+                  <!-- Adjust Balance -->
+                  <button hx-get="{% url 'wallet:update_account_balance' account.details.pk %}" hx-trigger="click"
+                    hx-target="#modal" hx-replace-url="false" hx-vals="" @click="openModal"
+                    class="block px-3 py-2 w-full text-left hover:bg-gray-200 hover:text-gray-800 focus:outline-none">
+                    Adjust balance
+                  </button>
+
                   <!-- Delete Button -->
                   <button hx-post="{% url 'wallet:delete_account' account.details.pk %}" hx-trigger="isConfirmed"
                     @click="twSwal.fire({title: 'Are you sure?', text:'This account will be deleted! You will not be able to revert this!', icon: 'warning', showConfirmButton: true, showCancelButton: true, confirmButtonText: 'Yes, delete it!'}).then(result => {if (result.isConfirmed) {$dispatch('isConfirmed')}})"

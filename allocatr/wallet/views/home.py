@@ -1,3 +1,4 @@
+import json
 from datetime import date
 
 from django.contrib.auth import get_user_model
@@ -5,8 +6,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 
 from ..htmx_views import HtmxTemplateView
-from ..models import UserSettings
-from ..services import get_or_create_month
+from ..models import Transaction, UserSettings
+from ..services import get_current_month_expenses, get_or_create_month
 
 User = get_user_model()
 
@@ -19,6 +20,18 @@ class DashboardHome(LoginRequiredMixin, HtmxTemplateView):
         context = super().get_context_data(**kwargs)
         user_settings = UserSettings.objects.get(user=self.request.user)
         context["user_settings"] = user_settings
+        day_or_month = self.request.GET.get("month", date.today())
+        month = get_or_create_month(self.request.user, day_or_month)
+        transactions = Transaction.objects.filter(
+            account__user=self.request.user,
+            date__gte=month.first_day,
+            date__lte=month.last_day,
+        ).prefetch_related("account", "category")
+        context["transactions"] = transactions
+        expense_data = get_current_month_expenses(self.request.user)
+        context["monthDays"] = json.dumps(expense_data["monthDays"])
+        context["actualExpenses"] = json.dumps(expense_data["actualExpenses"])
+        context["plannedExpenses"] = json.dumps(expense_data["plannedExpenses"])
         return context
 
 

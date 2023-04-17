@@ -88,6 +88,10 @@
     @apply inline-block h-5 w-5;
 }
 
+.svg-icon-sm {
+    @apply inline-block h-4 w-4;
+}
+
 .pagination-pill {
     @apply whitespace-nowrap font-bold text-black dark:text-white;
 }

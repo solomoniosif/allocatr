@@ -3,22 +3,122 @@
 </head>
 
 <main class="overflow-y-auto">
-  <div class="container px-6 mx-auto">
-    <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+  <div class="mt-4 grid grid-cols-12 gap-4 px-6 transition-all duration-[.25s] sm:mt-5 sm:gap-5 lg:mt-6 lg:gap-6">
+    <h2 class="col-span-12 my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
       Welcome {{ user.first_name|title }}
     </h2>
 
     <!-- User accounts -->
-    <div hx-get="{% url 'wallet:accounts_list' %}" hx-trigger="load, transactions-changed from:body" hx-target="this">
+    <div class="col-span-12" hx-get="{% url 'wallet:accounts_list' %}" hx-trigger="load, transactions-changed from:body" hx-target="this">
     </div>
 
-    <!-- Transactions -->
-    <div hx-get="{% url 'wallet:transaction_list_partial' %}"
-      hx-trigger="load delay:200ms, transactions-changed from:body, month-selected from:body" hx-target="this"
-      hx-vals='js:{month: getSelectedMonth()}'>
+    <div class="col-span-6 relative w-full h-0 pb-[60%] dark:bg-slate-900 rounded-lg">
+      <div id="expenses-chart"  class="absolute w-full h-full left-0 top-0 rounded-lg overflow-hidden"></div>
+    </div>
+
+    <div class="col-span-12 lg:col-span-8">
+      {% include 'wallet/home/partials/transaction_table.html' %}
     </div>
 
   </div>
+
+
+  <script>
+      // Initialize chart
+      var expensesChart = echarts.init(document.getElementById('expenses-chart'));
+
+      // Define x axis for current month
+      var daysInMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate();
+      var daysArray = Array.from({length: daysInMonth}, (_, i) => i + 1);
+      var currentMonthData = {{ monthDays|safe }};
+
+      // Define current and planned expenses
+      var currentExpenses = {{ actualExpenses|safe }};
+      var plannedExpenses = {{ plannedExpenses|safe }};
+
+      // Create options object
+      var options = {
+        title: {
+            text: 'Expenses',
+            left: 10,
+            top: 10,
+            textStyle: {
+                color: 'white',
+                fontSize: 20,
+            }
+        },
+        grid: {
+            top: 50,
+            bottom: 0,
+            left: -10,
+            right: -10,
+            show: false,
+          },
+          tooltip: {
+              trigger: 'axis',
+              axisPointer: {
+                  type: 'line',
+                  label: {
+                      backgroundColor: '#6a7985'
+                  }
+              },
+              backgroundColor: 'rgba(0, 0, 0, 0.6)',
+              textStyle: {
+                  color: 'white',
+                  fontSize: 12,
+              },
+              borderWidth: 0,
+
+          },
+          xAxis: {
+              type: 'category',
+              data: currentMonthData,
+              splitLine: {}, // Remove grid lines
+              axisLine: {
+                  show: false
+              },
+              xisTick: {
+                  show: false
+              },
+          },
+          yAxis: {
+              type: 'value',
+              splitLine: {
+                show: false
+              },
+              axisLine: {
+                show: false
+              },
+              xisTick: {
+                show: false
+              },
+          },
+          series: [{
+              name: 'Current expenses',
+              type: 'line',
+              data: currentExpenses,
+              areaStyle: {},
+              smooth: true,
+              showSymbol: false
+          }, {
+              name: 'Planned expenses',
+              type: 'line',
+              data: plannedExpenses,
+              areaStyle: {
+                color: 'rgba(169, 169, 169, 0.2)'
+              },
+              lineStyle: {
+                color: 'rgba(255, 255, 255, 0.7)',
+                type: 'dotted'
+              },
+              smooth: true,
+              showSymbol: false
+          }]
+      };
+
+      // Set options on chart instance
+      expensesChart.setOption(options);
+  </script>
 
 </main>
 
