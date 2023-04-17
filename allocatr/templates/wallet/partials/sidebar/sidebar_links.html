@@ -11,7 +11,9 @@
       <a class="inline-flex items-center w-full text-sm font-semibold text-gray-800 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 dark:text-gray-100"
         hx-get="{% url 'wallet:home' %}" hx-trigger="click" hx-target="#dashboard-main" hx-replace-url="true"
         @click="closeSideMenu, activeLink = 'home' ">
-        <i class="bi bi-house-door text-lg"></i>
+        <svg viewBox="0 0 22 22" class="svg-icon dark:fill-white">
+          <use xlink:href="#home-icon"></use>
+        </svg>
         <span class="ml-4">Home</span>
       </a>
     </li>
@@ -24,7 +26,9 @@
       <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
         hx-get="{% url 'wallet:accounts' %}" hx-trigger="click" hx-target="#dashboard-main"
         hx-vals='js:{month: getSelectedMonth()}' hx-replace-url="/accounts/" @click="closeSideMenu, activeLink = 'accounts' ">
-        <i class="bi bi-window-stack"></i>
+        <svg viewBox="0 0 22 22" class="svg-icon dark:fill-white">
+          <use xlink:href="#wallet-icon"></use>
+        </svg>
         <span class="ml-4">Accounts</span>
       </a>
     </li>
@@ -35,7 +39,9 @@
         class="inline-flex items-center justify-between w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 focus:outline-none"
         @click="toggleTransactionsMenu, activeLink = 'transactions' " aria-haspopup="true">
         <span class="inline-flex items-center">
-          <i class="bi bi-list-task"></i>
+          <svg viewBox="0 0 22 22" class="svg-icon dark:fill-white">
+            <use xlink:href="#list-icon"></use>
+          </svg>
           <span class="ml-4">Transactions</span>
         </span>
         <i class="bi bi-chevron-down"></i>
@@ -52,7 +58,9 @@
             <span x-show="activeLink === 'allTransactions'" class="absolute inset-y-0 -left-2 w-1.5 bg-accent rounded-tr-lg rounded-br-lg" aria-hidden="true"></span>
             <a class="w-full" hx-get="{% url 'wallet:transactions' %}" hx-trigger="click" hx-target="#dashboard-main"
               hx-vals='js:{month: getSelectedMonth()}' hx-replace-url="/transactions/" @click="closeSideMenu, activeLink = 'allTransactions' ">
-              <i class="bi bi-list"></i>
+              <svg viewBox="0 0 22 22" class="svg-icon dark:fill-white">
+                <use xlink:href="#list-icon"></use>
+              </svg>
               <span class="ml-2">All Transactions</span>
             </a>
           </li>
@@ -60,19 +68,28 @@
           <li
             class="relative px-2 py-1 cursor-pointer transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
             <span x-show="activeLink === 'incomes'" class="absolute inset-y-0 -left-2 w-1.5 bg-accent rounded-tr-lg rounded-br-lg" aria-hidden="true"></span>
-            <a class="w-full" href="#" @click="closeSideMenu, activeLink = 'incomes' "><i class="bi bi-arrow-up-right"></i>
+            <a class="w-full" href="#" @click="closeSideMenu, activeLink = 'incomes' ">
+              <svg viewBox="0 0 22 22" class="svg-icon dark:fill-white">
+                <use xlink:href="#income-icon"></use>
+              </svg>
               <span class="ml-2">Incomes</span></a>
           </li>
           <li
             class="relative px-2 py-1 cursor-pointer transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
             <span x-show="activeLink === 'expenses'" class="absolute inset-y-0 -left-2 w-1.5 bg-accent rounded-tr-lg rounded-br-lg" aria-hidden="true"></span>
-            <a class="w-full" href="#" @click="closeSideMenu, activeLink = 'expenses' "><i class="bi bi-arrow-down-right"></i>
+            <a class="w-full" href="#" @click="closeSideMenu, activeLink = 'expenses' ">
+              <svg viewBox="0 0 22 22" class="svg-icon dark:fill-white">
+                <use xlink:href="#expense-icon"></use>
+              </svg>
               <span class="ml-2">Expenses</span></a>
           </li>
           <li
             class="relative px-2 py-1 cursor-pointer transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
             <span x-show="activeLink === 'transfers'" class="absolute inset-y-0 -left-2 w-1.5 bg-accent rounded-tr-lg rounded-br-lg" aria-hidden="true"></span>
-            <a class="w-full" href="#" @click="closeSideMenu, activeLink = 'transfers' "><i class="bi bi-arrow-left-right"></i>
+            <a class="w-full" href="#" @click="closeSideMenu, activeLink = 'transfers' ">
+              <svg viewBox="0 0 22 22" class="svg-icon dark:fill-white">
+                <use xlink:href="#transfer-icon"></use>
+              </svg>
               <span class="ml-2">Transfers</span></a>
           </li>
           <li
@@ -80,7 +97,10 @@
             <span x-show="activeLink === 'plannedTransactions'" class="absolute inset-y-0 -left-2 w-1.5 bg-accent rounded-tr-lg rounded-br-lg" aria-hidden="true"></span>
             <a class="w-full" hx-get="{% url 'wallet:planned_transactions' %}" hx-trigger="click"
               hx-target="#dashboard-main" hx-vals='js:{month: getSelectedMonth()}'
-              hx-replace-url="/transactions/planned/" @click="closeSideMenu, activeLink = 'plannedTransactions' "><i class="bi bi-arrow-left-right"></i>
+              hx-replace-url="/transactions/planned/" @click="closeSideMenu, activeLink = 'plannedTransactions' ">
+              <svg viewBox="0 0 22 22" class="svg-icon dark:fill-white">
+                <use xlink:href="#calendar-icon"></use>
+              </svg>
               <span class="ml-2">Planned transactions</span></a>
           </li>
           <li
@@ -88,7 +108,10 @@
             <span x-show="activeLink === 'recurringTransactions'" class="absolute inset-y-0 -left-2 w-1.5 bg-accent rounded-tr-lg rounded-br-lg" aria-hidden="true"></span>
             <a class="w-full" hx-get="{% url 'wallet:planned_transactions' %}" hx-trigger="click"
               hx-target="#dashboard-main" hx-vals='js:{month: getSelectedMonth()}'
-              hx-replace-url="/transactions/recurring/" @click="closeSideMenu, activeLink = 'recurringTransactions' "><i class="bi bi-arrow-left-right"></i>
+              hx-replace-url="/transactions/recurring/" @click="closeSideMenu, activeLink = 'recurringTransactions' ">
+              <svg viewBox="0 0 22 22" class="svg-icon dark:fill-white">
+                <use xlink:href="#recurring-icon"></use>
+              </svg>
               <span class="ml-2">Recurring transactions</span></a>
           </li>
         </ul>
@@ -101,7 +124,9 @@
       <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
         hx-get="{% url 'wallet:categories' %}" hx-trigger="click" hx-target="#dashboard-main"
         hx-vals='js:{month: getSelectedMonth()}' hx-replace-url="/categories/" @click="closeSideMenu, activeLink = 'categories' ">
-        <i class="bi bi-tags"></i>
+        <svg viewBox="0 0 22 22" class="svg-icon dark:fill-white">
+          <use xlink:href="#swatch-icon"></use>
+        </svg>
         <span class="ml-4">Categories</span>
       </a>
     </li>
@@ -111,7 +136,9 @@
       <span x-show="activeLink === 'reports'" class="absolute inset-y-0 left-0 w-1.5 bg-accent rounded-tr-lg rounded-br-lg" aria-hidden="true"></span>
       <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
         href="#" @click="closeSideMenu, activeLink = 'reports' ">
-        <i class="bi bi-graph-up-arrow"></i>
+        <svg viewBox="0 0 22 22" class="svg-icon dark:fill-white">
+          <use xlink:href="#chart-icon"></use>
+        </svg>
         <span class="ml-4">Reports</span>
       </a>
     </li>
@@ -122,7 +149,9 @@
       <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
         hx-get="{% url 'wallet:budgets' %}" hx-trigger="click" hx-target="#dashboard-main"
         hx-vals='js:{month: getSelectedMonth()}' hx-replace-url="/budgets/" @click="closeSideMenu, activeLink = 'budgets' ">
-        <i class="bi bi-wallet-fill"></i>
+        <svg viewBox="0 0 22 22" class="svg-icon dark:fill-white">
+          <use xlink:href="#banknotes-icon"></use>
+        </svg>
         <span class="ml-4">Budgets</span>
       </a>
     </li>
@@ -132,7 +161,9 @@
       <span x-show="activeLink === 'settings'" class="absolute inset-y-0 left-0 w-1.5 bg-accent rounded-tr-lg rounded-br-lg" aria-hidden="true"></span>
       <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
         href="#" @click="closeSideMenu, activeLink = 'settings' ">
-        <i class="bi bi-sliders"></i>
+        <svg viewBox="0 0 22 22" class="svg-icon dark:fill-white">
+          <use xlink:href="#settings-icon"></use>
+        </svg>
         <span class="ml-4">Settings</span>
       </a>
     </li>
