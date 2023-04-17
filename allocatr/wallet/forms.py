@@ -112,6 +112,12 @@ class AccountForm(forms.ModelForm):
         self.fields["color"].widget = forms.TextInput()
 
 
+class AccountBalanceForm(forms.ModelForm):
+    class Meta:
+        model = Account
+        fields = ("current_balance",)
+
+
 class CategoryForm(forms.ModelForm):
     class Meta:
         model = Category
