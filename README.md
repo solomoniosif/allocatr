@@ -31,7 +31,7 @@ License: MIT
 - [Python 3.10.8](https://www.python.org/)
 - [Django 4.0.10](https://www.djangoproject.com/)
 - [Alpine.js 3.12](https://alpinejs.dev/)
-- [htmx 1.8.6](https://htmx.org/)
+- [htmx 1.9.0](https://htmx.org/)
 - [Tailwind CSS 3.3.1](https://tailwindcss.com/)
 - Charts.js 4.2.1 | to be replaced
 - [Apache Echarts 5.4.2](https://echarts.apache.org/)
