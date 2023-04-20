@@ -237,3 +237,19 @@ window.transactionTableData = function () {
         },
     }
 }
+
+var sidebar = document.getElementById("sidebar");
+var previousPeriodButton = document.getElementById("previous-period-button");
+var nextPeriodButton = document.getElementById("next-period-button");
+
+sidebar.addEventListener("reload-context", function () {
+    setTimeout(function () {
+        if (window.location.pathname === "/") {
+            previousPeriodButton.classList.add("hidden");
+            nextPeriodButton.classList.add("hidden");
+        } else {
+            previousPeriodButton.classList.remove("hidden");
+            nextPeriodButton.classList.remove("hidden");
+        }
+    }, 750);
+});

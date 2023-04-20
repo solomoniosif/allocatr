@@ -1,8 +1,6 @@
-<ul
-  x-init="getAndSetCurrentPeriod"
-  class="inline-flex items-center -space-x-px text-md md:text-xl">
-  <li>
-    <button @click="getAndSetPreviousPeriod"
+<ul x-init="getAndSetCurrentPeriod" class="inline-flex items-center -space-x-px text-md md:text-xl">
+  <li x-show="!ctx.home">
+    <button @click="getAndSetPreviousPeriod" id="previous-period-button"
       class="block px-0 md:px-1 py-2 ml-0 leading-tight text-gray-500 bg-white rounded-l-lg scale-100 hover:scale-110  hover:text-gray-900 dark:bg-gray-800  dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white">
       <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
         xmlns="http://www.w3.org/2000/svg">
@@ -20,9 +18,8 @@
     </div>
   </li>
 
-  <li>
-    <button
-      @click="getAndSetNextPeriod"
+  <li x-show="!ctx.home">
+    <button @click="getAndSetNextPeriod" id="next-period-button"
       class="block px-0 md:px-1 py-2 leading-tight text-gray-500 bg-white rounded-r-lg scale-100 hover:scale-110 hover:text-gray-900 dark:bg-gray-800  dark:text-gray-400 dark:hover:text-white">
       <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
         xmlns="http://www.w3.org/2000/svg">

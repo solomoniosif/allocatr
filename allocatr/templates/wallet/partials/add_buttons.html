@@ -1,5 +1,5 @@
 <!-- Add Income -->
-<li x-show="ctx.transactionsContext" class="flex rounded-md bg-white text-gray-800 dark:bg-gray-800 dark:text-white">
+<li x-show="ctx.transactions" class="flex rounded-md bg-white text-gray-800 dark:bg-gray-800 dark:text-white">
   <button hx-get="{% url 'wallet:add_income' %}" hx-trigger="click" hx-target="#modal" @click="openAddTransactionModal"
     class="inline-flex items-center w-full px-4 py-2 md:py-1 text-xl md:text-lg font-semibold transition-colors duration-150 rounded-md shadow-md group hover:bg-accent hover:text-white">
     <svg class="w-5 md:w-4 h-5 md:h-4 mr-4 text-green-600 group-hover:text-green-400" fill="none" stroke="currentColor"
@@ -11,7 +11,7 @@
 </li>
 
 <!-- Add Expense -->
-<li x-show="ctx.transactionsContext" class="flex rounded-md bg-white text-gray-800 dark:bg-gray-800 dark:text-white">
+<li x-show="ctx.transactions" class="flex rounded-md bg-white text-gray-800 dark:bg-gray-800 dark:text-white">
   <button hx-get="{% url 'wallet:add_expense' %}" hx-trigger="click" hx-target="#modal"
     @click.prevent="openAddTransactionModal"
     class="inline-flex items-center w-full px-4 py-2 md:py-1 text-xl md:text-lg font-semibold transition-colors duration-150 rounded-md shadow-md group hover:bg-accent hover:text-white">
@@ -24,7 +24,7 @@
 </li>
 
 <!-- Add Transfer -->
-<li x-show="ctx.transactionsContext" class="flex rounded-md bg-white text-gray-800 dark:bg-gray-800 dark:text-white">
+<li x-show="ctx.transactions" class="flex rounded-md bg-white text-gray-800 dark:bg-gray-800 dark:text-white">
   <button hx-get="{% url 'wallet:add_transfer' %}" hx-trigger="click" hx-target="#modal"
     @click="openAddTransactionModal"
     class="inline-flex items-center w-full px-4 py-2 md:py-1 text-xl md:text-lg font-semibold transition-colors duration-150 rounded-md shadow-md group hover:bg-accent hover:text-white">
@@ -38,7 +38,7 @@
 </li>
 
 <!-- Add Planned Expense -->
-<li x-show="ctx.transactionsContext" class="flex rounded-md bg-white text-gray-800 dark:bg-gray-800 dark:text-white">
+<li x-show="ctx.transactions" class="flex rounded-md bg-white text-gray-800 dark:bg-gray-800 dark:text-white">
   <button hx-get="{% url 'wallet:add_planned_expense' %}" hx-trigger="click" hx-target="#modal"
     @click="openAddTransactionModal"
     class="inline-flex items-center w-full px-4 py-2 md:py-1 text-xl md:text-lg font-semibold transition-colors duration-150 rounded-md shadow-md group hover:bg-accent hover:text-white">
@@ -52,7 +52,7 @@
 </li>
 
 <!-- Add Planned Income -->
-<li x-show="ctx.transactionsContext" class="flex rounded-md bg-white text-gray-800 dark:bg-gray-800 dark:text-white">
+<li x-show="ctx.transactions" class="flex rounded-md bg-white text-gray-800 dark:bg-gray-800 dark:text-white">
   <button hx-get="{% url 'wallet:add_planned_income' %}" hx-trigger="click" hx-target="#modal"
     @click="openAddTransactionModal"
     class="inline-flex items-center w-full px-4 py-2 md:py-1 text-xl md:text-lg font-semibold transition-colors duration-150 rounded-md shadow-md group hover:bg-accent hover:text-white">
@@ -67,7 +67,7 @@
 
 
 <!-- Add Account -->
-<li x-show="ctx.accountsContext" class="flex rounded-md bg-white text-gray-800 dark:bg-gray-800 dark:text-white">
+<li x-show="ctx.accounts" class="flex rounded-md bg-white text-gray-800 dark:bg-gray-800 dark:text-white">
   <button hx-get="{% url 'wallet:add_account' %}" hx-trigger="click" hx-target="#modal" @click="openAddTransactionModal"
     class="inline-flex items-center w-full px-4 py-2 md:py-1 text-xl md:text-lg font-semibold transition-colors duration-150 rounded-md shadow-md group hover:bg-accent hover:text-white">
     <svg class="w-5 md:w-4 h-5 md:h-4 mr-4 text-teal-500 group-hover:text-teal-300" fill="none" stroke="currentColor"
@@ -81,7 +81,7 @@
 </li>
 
 <!-- Add Category -->
-<li x-show="ctx.categoriesContext" class="flex rounded-md bg-white text-gray-800 dark:bg-gray-800 dark:text-white">
+<li x-show="ctx.categories" class="flex rounded-md bg-white text-gray-800 dark:bg-gray-800 dark:text-white">
   <button hx-get="{% url 'wallet:add_category' %}" hx-trigger="click" hx-target="#modal"
     @click="openAddTransactionModal"
     class="inline-flex items-center w-full px-4 py-2 md:py-1 text-xl md:text-lg font-semibold transition-colors duration-150 rounded-md shadow-md group hover:bg-accent hover:text-white">
@@ -98,7 +98,7 @@
 </li>
 
 <!-- Add Budget -->
-<li x-show="ctx.budgetsContext" class="flex rounded-md bg-white text-gray-800 dark:bg-gray-800 dark:text-white">
+<li x-show="ctx.budgets" class="flex rounded-md bg-white text-gray-800 dark:bg-gray-800 dark:text-white">
   <button hx-get="{% url 'wallet:add_budget' %}" hx-trigger="click" hx-target="#modal" @click="openAddTransactionModal"
     class="inline-flex items-center w-full px-4 py-2 md:py-1 text-xl md:text-lg font-semibold transition-colors duration-150 rounded-md shadow-md group hover:bg-accent hover:text-white">
     <svg class="w-5 md:w-4 h-5 md:h-4 mr-4 text-purple-600 group-hover:text-purple-500" fill="none"

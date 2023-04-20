@@ -1,7 +1,7 @@
 <div class="relative hidden md:block">
     <button
       class="p-1.5 align-middle rounded-full bg-accent text-white focus:outline-none"
-      @click="toggleAddMenu; $dispatch('reload-menu')"
+      @click="toggleAddMenu; $dispatch('reload-context')"
       @keydown.escape="closeAddMenu"
       aria-label="Add transaction"
       aria-haspopup="true"
@@ -24,8 +24,6 @@
     </button>
     <div x-show="isAddMenuOpen">
       <ul
-        x-data="{ctx: getContext()}"
-        @reload-menu.window="ctx = getContext()"
         x-transition:leave="transition ease-in duration-150"
         x-transition:leave-start="opacity-100"
         x-transition:leave-end="opacity-0"

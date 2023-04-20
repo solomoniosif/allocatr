@@ -1,4 +1,6 @@
-<header class="z-10 py-4 bg-white shadow-md dark:bg-gray-800 md:ml-64">
+<header class="z-10 py-4 bg-white shadow-md dark:bg-gray-800 md:ml-64"
+    x-data="{ctx: getContext()}"
+    @reload-context.window="ctx = getContext()">
   <div
     class="container flex items-center justify-between px-3 md:px-6 mx-auto text-accent dark:text-accentLightest">
     <!-- Mobile hamburger -->
